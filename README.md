@@ -25,3 +25,5 @@ Version 6 oder 7 am Rechner installiert ist:
 ```
 dotnet --version
 ```
+
+![](./SpengerLogo_720px.png)
