@@ -1,4 +1,4 @@
-# SPengergasse FIT
+# Spengergasse FIT
 
 Klone das Repository mit folgendem Befehl :
 
