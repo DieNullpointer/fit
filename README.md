@@ -27,6 +27,7 @@ dotnet --version
 ```
 
 Falls Docker Desktop noch nicht installiert ist, bitte installieren: [docs.docker.com](https://docs.docker.com/get-docker/).
+
 Teste mit dem Befehl, ob du Docker installiert hast mit:
 
 ```
