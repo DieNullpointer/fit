@@ -26,4 +26,8 @@ Version 6 oder 7 am Rechner installiert ist:
 dotnet --version
 ```
 
+```
+docker run -d -p 1433:1433  --name sqlserver2019 -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=SqlServer2019" mcr.microsoft.com/azure-sql-edge
+```
+
 ![](./SpengerLogo_720px.png)
