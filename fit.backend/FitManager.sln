@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitManager.Webapi", "FitManager.Webapi\FitManager.Webapi.csproj", "{CDD2E5ED-3FF3-4D86-8B51-EDE06355BB9F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitManager.Application", "FitManager.Application\FitManager.Application.csproj", "{DCA5D8A4-BE35-4152-B295-49F2B55F3872}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CDD2E5ED-3FF3-4D86-8B51-EDE06355BB9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDD2E5ED-3FF3-4D86-8B51-EDE06355BB9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDD2E5ED-3FF3-4D86-8B51-EDE06355BB9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDD2E5ED-3FF3-4D86-8B51-EDE06355BB9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DCA5D8A4-BE35-4152-B295-49F2B55F3872}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCA5D8A4-BE35-4152-B295-49F2B55F3872}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCA5D8A4-BE35-4152-B295-49F2B55F3872}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCA5D8A4-BE35-4152-B295-49F2B55F3872}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
