@@ -26,6 +26,13 @@ Version 6 oder 7 am Rechner installiert ist:
 dotnet --version
 ```
 
+Falls Docker Desktop noch nicht installiert ist, bitte installieren: [docs.docker.com](https://docs.docker.com/get-docker/).
+Teste mit dem Befehl, ob du Docker installiert hast mit:
+
+```
+docker --version
+```
+
 ```
 docker run -d -p 1433:1433  --name sqlserver2019 -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=SqlServer2019" mcr.microsoft.com/azure-sql-edge
 ```
