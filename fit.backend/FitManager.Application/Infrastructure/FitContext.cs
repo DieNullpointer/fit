@@ -31,10 +31,17 @@ namespace FitManager.Application.Infrastructure
             SaveChanges();
 
             var partners = new Faker<Model.ContactPartner>("de").CustomInstantiator(f =>
-            {
-                return new Model.ContactPartner(title: f.Random.Word(), firstname: f.Person.FirstName, lastname: f.Person.LastName, email: f.Person.Email, telNr: f.Person.Phone, company: companies.Where(a => a.ContactPartners.Count == 0).First(), mainPartner: true, function: f.Name.JobDescriptor());
+            { 
+                return new Model.ContactPartner(title: f.Random.Word(), firstname: f.Person.FirstName, lastname: f.Person.LastName, email: f.Person.Email, telNr: f.Person.Phone, company: f.PickRandom(companies), mainPartner: true, function: f.Name.JobTitle());
             }).Generate(10).ToList();
             ContactPartners.AddRange(partners);
+            SaveChanges();
+
+            var events = new Faker<Model.Event>("de").CustomInstantiator(f =>
+            {
+                return new Model.Event(name: f.Name.JobTitle(), date: f.Date.Future(refDate: DateTime.UtcNow, yearsToGoForward: 5));
+            }).Generate(5).ToList();
+            Events.AddRange(events);
             SaveChanges();
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
