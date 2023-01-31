@@ -10,13 +10,14 @@ namespace FitManager.Application.Model
 {
     public class Company
     {
-        public Company(string name, string address, string country, string plz, string billAddress)
+        public Company(string name, string address, string country, string plz, string place, string billAddress)
         {
             Name = name;
             Address = address;
             Country = country;
             Plz = plz;
             BillAddress = billAddress;
+            Place = place;
         }
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
@@ -31,6 +32,7 @@ namespace FitManager.Application.Model
         public string Address { get; set; }
         public string Country { get; set; }
         public string Plz { get; set; }
+        public string Place { get; set; }
         public string BillAddress { get; set; }
 
         public List<ContactPartner> ContactPartners = new();

@@ -22,7 +22,7 @@ namespace FitManager.Application.Infrastructure
 
             var companies = new Faker<Model.Company>("de").CustomInstantiator(f =>
             {
-                return new Model.Company(name: f.Company.CompanyName(), address: f.Address.StreetAddress(), country: f.Address.Country(), plz: f.Address.ZipCode(), billAddress: f.Address.StreetAddress())
+                return new Model.Company(name: f.Company.CompanyName(), address: f.Address.StreetAddress(), country: f.Address.Country(), plz: f.Address.ZipCode(), place: f.Address.City(), billAddress: f.Address.StreetAddress())
                 { Guid = faker.Random.Guid() };
             })
             .Generate(10)
@@ -39,7 +39,7 @@ namespace FitManager.Application.Infrastructure
 
             var events = new Faker<Model.Event>("de").CustomInstantiator(f =>
             {
-                return new Model.Event(name: f.Name.JobTitle(), date: f.Date.Future(refDate: DateTime.UtcNow, yearsToGoForward: 5));
+                return new Model.Event(name: f.Name.JobTitle(), date: new DateTime(year: f.Date.Future(refDate: DateTime.UtcNow, yearsToGoForward: 5).Year, month: f.Date.Future(refDate: DateTime.UtcNow, yearsToGoForward: 5).Month, day: f.Date.Future(refDate: DateTime.UtcNow, yearsToGoForward: 5).Day));
             }).Generate(5).ToList();
             Events.AddRange(events);
             SaveChanges();
