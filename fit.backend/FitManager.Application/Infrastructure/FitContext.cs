@@ -22,7 +22,7 @@ namespace FitManager.Application.Infrastructure
 
             var companies = new Faker<Model.Company>("de").CustomInstantiator(f =>
             {
-                return new Model.Company(name: f.Company.CompanyName(), address: f.Address.StreetAddress(), country: f.Address.Country(), plz: f.Address.ZipCode(), bIllAddress: f.Address.StreetAddress())
+                return new Model.Company(name: f.Company.CompanyName(), address: f.Address.StreetAddress(), country: f.Address.Country(), plz: f.Address.ZipCode(), billAddress: f.Address.StreetAddress())
                 { Guid = faker.Random.Guid() };
             })
             .Generate(10)
