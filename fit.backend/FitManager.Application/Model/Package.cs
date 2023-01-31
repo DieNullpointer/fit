@@ -8,31 +8,24 @@ using System.Threading.Tasks;
 
 namespace FitManager.Application.Model
 {
-    public class Company
+    public class Package
     {
-        public Company(string name, string address, string country, string plz, string bIllAddress)
+        public Package(string name, decimal price)
         {
             Name = name;
-            Address = address;
-            Country = country;
-            Plz = plz;
-            BillAddress = bIllAddress;
+            Price = price;
         }
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        protected Company() { }
+        protected Package() { }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; private set; }
-        public Guid Guid { get; set; }
-        public string Name { get; set; }
-        public string Address { get; set; }
-        public string Country { get; set; }
-        public string Plz { get; set; }
-        public string BillAddress { get; set; }
 
-        public List<ContactPartner> ContactPartners = new();
+        public string Name { get; set; }
+
+        public decimal Price { get; set; }
     }
 }

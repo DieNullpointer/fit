@@ -13,6 +13,8 @@ namespace FitManager.Application.Infrastructure
     {
         public FitContext(DbContextOptions<FitContext> opt): base(opt) { }
         public DbSet<Model.Company> Companies => Set<Model.Company>();
+        public DbSet<Model.ContactPartner> ContactPartners => Set<Model.ContactPartner>();
+        public DbSet<Model.Event> Events => Set<Model.Event>();
         public void Seed()
         {
             Randomizer.Seed = new Random(1039);
@@ -20,12 +22,26 @@ namespace FitManager.Application.Infrastructure
 
             var companies = new Faker<Model.Company>("de").CustomInstantiator(f =>
             {
-                return new Model.Company(name: f.Company.CompanyName())
+                return new Model.Company(name: f.Company.CompanyName(), address: f.Address.StreetAddress(), country: f.Address.Country(), plz: f.Address.ZipCode(), bIllAddress: f.Address.StreetAddress())
                 { Guid = faker.Random.Guid() };
             })
             .Generate(10)
             .ToList();
             Companies.AddRange(companies);
+            SaveChanges();
+
+            var partners = new Faker<Model.ContactPartner>("de").CustomInstantiator(f =>
+            { 
+                return new Model.ContactPartner(title: f.Random.Word(), firstname: f.Person.FirstName, lastname: f.Person.LastName, email: f.Person.Email, telNr: f.Person.Phone, company: f.PickRandom(companies), mainPartner: true, function: f.Name.JobTitle());
+            }).Generate(10).ToList();
+            ContactPartners.AddRange(partners);
+            SaveChanges();
+
+            var events = new Faker<Model.Event>("de").CustomInstantiator(f =>
+            {
+                return new Model.Event(name: f.Name.JobTitle(), date: f.Date.Future(refDate: DateTime.UtcNow, yearsToGoForward: 5));
+            }).Generate(5).ToList();
+            Events.AddRange(events);
             SaveChanges();
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
