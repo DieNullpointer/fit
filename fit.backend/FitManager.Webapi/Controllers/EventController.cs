@@ -20,6 +20,7 @@ namespace FitManager.Webapi.Controllers
             _db = db;
         }
 
+        //  api/event
         [HttpGet]
         public IActionResult GetAllEvents()
         {
@@ -27,6 +28,7 @@ namespace FitManager.Webapi.Controllers
             return events is null ? BadRequest() : Ok(events);
         }
 
+        //  api/event/{name}
         [HttpGet("{name}")]
         public IActionResult GetEventByName(string name)
         {
@@ -34,6 +36,7 @@ namespace FitManager.Webapi.Controllers
             return events is null ? BadRequest("Event does not exist") : Ok(events);
         }
 
+        //  api/event/add
         [HttpPost("add")]
         public IActionResult AddEvent([FromBody] AddEventDto events)
         {

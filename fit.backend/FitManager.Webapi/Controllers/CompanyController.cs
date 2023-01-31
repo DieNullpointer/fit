@@ -20,6 +20,7 @@ namespace FitManager.Webapi.Controllers
             _db = db;
         }
 
+        //  api/company
         [HttpGet]
         public IActionResult GetAllCompanies()
         {
@@ -27,6 +28,7 @@ namespace FitManager.Webapi.Controllers
             return Ok(companies);
         }
 
+        //  api/company/{guid}
         [HttpGet("{guid:Guid}")]
         public IActionResult GetCompany(Guid guid)
         {
@@ -34,6 +36,7 @@ namespace FitManager.Webapi.Controllers
             return partners is null ? BadRequest() : Ok(partners);
         }
 
+        //  api/company/register
         [HttpPost("register")]
         public IActionResult Register([FromBody] RegisterDto register)
         {
