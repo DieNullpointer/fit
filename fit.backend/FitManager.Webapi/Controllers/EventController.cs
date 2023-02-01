@@ -1,6 +1,7 @@
 ﻿using FitManager.Application.Infrastructure;
 using FitManager.Application.Model;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
@@ -28,6 +29,14 @@ namespace FitManager.Webapi.Controllers
             return events is null ? BadRequest() : Ok(events);
         }
 
+        //  api/event/now
+        [HttpGet("now")]
+        public IActionResult GetCurrentEvent()
+        {
+            var events = _db.Events.Include(a => a.Companies).Where(a => DateTime.UtcNow.Date <= a.Date).OrderBy(a => a.Date).First();
+            return events is null ? BadRequest("No event is planned") : Ok(events);
+        }
+
         //  api/event/{name}
         [HttpGet("{name}")]
         public IActionResult GetEventByName(string name)
@@ -42,7 +51,7 @@ namespace FitManager.Webapi.Controllers
         {
             if(_db.Events.Where(a => a.Name == events.name).Any())
                 return BadRequest("Event already exists");
-            var ev = new Event(name: events.name, date: events.date);
+            var ev = new Event(name: events.name, date: events.date.Date);
             _db.Events.Add(ev);
             _db.SaveChanges();
             return Ok();

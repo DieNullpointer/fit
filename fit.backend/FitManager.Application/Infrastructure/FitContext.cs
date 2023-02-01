@@ -29,9 +29,16 @@ namespace FitManager.Application.Infrastructure
             Packages.AddRange(packages);
             SaveChanges();
 
+            var events = new Faker<Model.Event>("de").CustomInstantiator(f =>
+            {
+                return new Model.Event(name: f.Name.JobTitle(), date: new DateTime(year: f.Date.Future(refDate: DateTime.UtcNow, yearsToGoForward: 5).Year, month: f.Date.Future(refDate: DateTime.UtcNow, yearsToGoForward: 5).Month, day: f.Date.Future(refDate: DateTime.UtcNow, yearsToGoForward: 5).Day));
+            }).Generate(5).ToList();
+            Events.AddRange(events);
+            SaveChanges();
+
             var companies = new Faker<Model.Company>("de").CustomInstantiator(f =>
             {
-                return new Model.Company(name: f.Company.CompanyName(), address: f.Address.StreetAddress(), country: f.Address.Country(), plz: f.Address.ZipCode(), place: f.Address.City(), billAddress: f.Address.StreetAddress(), package: f.Random.ListItem(packages))
+                return new Model.Company(name: f.Company.CompanyName(), address: f.Address.StreetAddress(), country: f.Address.Country(), plz: f.Address.ZipCode(), place: f.Address.City(), billAddress: f.Address.StreetAddress(), package: f.Random.ListItem(packages), @event: f.Random.ListItem(events))
                 { Guid = faker.Random.Guid() };
             })
             .Generate(10)
@@ -40,17 +47,10 @@ namespace FitManager.Application.Infrastructure
             SaveChanges();
 
             var partners = new Faker<Model.ContactPartner>("de").CustomInstantiator(f =>
-            { 
+            {
                 return new Model.ContactPartner(title: f.Random.Word(), firstname: f.Person.FirstName, lastname: f.Person.LastName, email: f.Person.Email, telNr: f.Person.Phone, company: f.PickRandom(companies), mainPartner: true, function: f.Name.JobTitle());
             }).Generate(10).ToList();
             ContactPartners.AddRange(partners);
-            SaveChanges();
-
-            var events = new Faker<Model.Event>("de").CustomInstantiator(f =>
-            {
-                return new Model.Event(name: f.Name.JobTitle(), date: new DateTime(year: f.Date.Future(refDate: DateTime.UtcNow, yearsToGoForward: 5).Year, month: f.Date.Future(refDate: DateTime.UtcNow, yearsToGoForward: 5).Month, day: f.Date.Future(refDate: DateTime.UtcNow, yearsToGoForward: 5).Day));
-            }).Generate(5).ToList();
-            Events.AddRange(events);
             SaveChanges();
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
