@@ -1,3 +1,4 @@
+const { createTheme } = require("@mui/material");
 const tColors = require("tailwindcss/colors");
 
 class Style {
@@ -19,6 +20,21 @@ class Style {
     dimmed: "#ebe8e1",
     lime: tColors.lime,
   };
+  static theme = createTheme({
+    typography: {
+      fontFamily: "Ubuntu",
+    },
+    components: {
+      MuiCssBaseline: {
+        styleOverrides: `
+          @font-face {
+            font-family: "Ubuntu";
+            src: url("../public/fonts/Ubuntu-Regular.ttf"), format('ttf');
+          }      
+        `,
+      },
+    },
+  });
 }
 
 module.exports = Style;

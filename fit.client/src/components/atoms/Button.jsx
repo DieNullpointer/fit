@@ -31,7 +31,7 @@ export default function Button({
 Button.propTypes = {
   text: PropTypes.string,
   onClick: PropTypes.func,
-  focused: PropTypes.string
+  focused: PropTypes.bool
 };
 
 Button.defaultProps = {
