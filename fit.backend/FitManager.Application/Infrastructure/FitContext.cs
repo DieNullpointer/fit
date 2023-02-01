@@ -15,14 +15,23 @@ namespace FitManager.Application.Infrastructure
         public DbSet<Model.Company> Companies => Set<Model.Company>();
         public DbSet<Model.ContactPartner> ContactPartners => Set<Model.ContactPartner>();
         public DbSet<Model.Event> Events => Set<Model.Event>();
+        public DbSet<Model.Package> Packages => Set<Model.Package>();
         public void Seed()
         {
             Randomizer.Seed = new Random(1039);
             var faker = new Faker("de");
 
+            var packages = new List<Model.Package>
+            {
+                new Model.Package(name: "Messestand", price: 600M),
+                new Model.Package(name: "Jahres-Inserat + Messestand", price: 1000M)
+            };
+            Packages.AddRange(packages);
+            SaveChanges();
+
             var companies = new Faker<Model.Company>("de").CustomInstantiator(f =>
             {
-                return new Model.Company(name: f.Company.CompanyName(), address: f.Address.StreetAddress(), country: f.Address.Country(), plz: f.Address.ZipCode(), place: f.Address.City(), billAddress: f.Address.StreetAddress())
+                return new Model.Company(name: f.Company.CompanyName(), address: f.Address.StreetAddress(), country: f.Address.Country(), plz: f.Address.ZipCode(), place: f.Address.City(), billAddress: f.Address.StreetAddress(), package: f.Random.ListItem(packages))
                 { Guid = faker.Random.Guid() };
             })
             .Generate(10)
