@@ -4,8 +4,10 @@ import Button from "../components/atoms/Button";
 
 export default function Home() {
   return (
-    <div>
-      <Button text="Button" className="m-5" sharp />
-    </div>
+    <PageFrame>
+        <div>
+            <Button text="Button" className="m-5" sharp />
+        </div>
+    </PageFrame>
   );
 }
