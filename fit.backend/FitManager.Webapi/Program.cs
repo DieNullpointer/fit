@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using System;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 // JWT Authentication ******************************************************************************
@@ -25,6 +26,12 @@ builder.Services
         };
     });
 // *************************************************************************************************
+
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    //options.JsonSerializerOptions.WriteIndented = true;
+});
 
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(typeof(FitManager.Application.Dto.MappingProfile));
