@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitManager.Webapi", "FitMan
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitManager.Application", "FitManager.Application\FitManager.Application.csproj", "{DCA5D8A4-BE35-4152-B295-49F2B55F3872}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitManager.Test", "FitManager.Test\FitManager.Test.csproj", "{DBE83618-20A2-48C2-B285-8D426B462664}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{DCA5D8A4-BE35-4152-B295-49F2B55F3872}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DCA5D8A4-BE35-4152-B295-49F2B55F3872}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DCA5D8A4-BE35-4152-B295-49F2B55F3872}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBE83618-20A2-48C2-B285-8D426B462664}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBE83618-20A2-48C2-B285-8D426B462664}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBE83618-20A2-48C2-B285-8D426B462664}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBE83618-20A2-48C2-B285-8D426B462664}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

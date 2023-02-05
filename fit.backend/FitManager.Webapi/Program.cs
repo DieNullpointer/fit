@@ -9,69 +9,78 @@ using System;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text.Json.Serialization;
+using System.Linq;
 
-var builder = WebApplication.CreateBuilder(args);
-// JWT Authentication ******************************************************************************
-byte[] secret = Convert.FromBase64String(builder.Configuration["JwtSecret"]);
-builder.Services
-    .AddAuthentication(options => options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
+internal class Program
+{
+    private static void Main(string[] args)
     {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(secret),
-            ValidateAudience = false,
-            ValidateIssuer = false
-        };
-    });
-// *************************************************************************************************
 
-builder.Services.AddControllers().AddJsonOptions(options =>
-{
-    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-    //options.JsonSerializerOptions.WriteIndented = true;
-});
-
-builder.Services.AddControllers();
-builder.Services.AddAutoMapper(typeof(FitManager.Application.Dto.MappingProfile));
-builder.Services.AddDbContext<FitContext>(opt =>
-{
-    opt.UseSqlServer(
-        builder.Configuration.GetConnectionString("SqlServer"),
-        o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery));
-});
-
-if (builder.Environment.IsDevelopment())
-{
-    builder.Services.AddCors(options =>
-    {
-        options.AddDefaultPolicy(
-            builder =>
+        var builder = WebApplication.CreateBuilder(args);
+        // JWT Authentication ******************************************************************************
+        byte[] secret = Convert.FromBase64String(builder.Configuration["JwtSecret"]);
+        builder.Services
+            .AddAuthentication(options => options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
             {
-                builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(secret),
+                    ValidateAudience = false,
+                    ValidateIssuer = false
+                };
             });
-    });
-}
+        // *************************************************************************************************
 
-var app = builder.Build();
-if (app.Environment.IsDevelopment())
-{
-    using (var scope = app.Services.CreateScope())
-    {
-        using (var db = scope.ServiceProvider.GetRequiredService<FitContext>())
+        builder.Services.AddControllers().AddJsonOptions(options =>
         {
-            db.Database.EnsureDeleted();
-            db.Database.EnsureCreated();
-            db.Seed();
-        }
-    }
-    app.UseCors();
-}
+            options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+            //options.JsonSerializerOptions.WriteIndented = true;
+        });
 
-app.MapControllers();
-app.UseAuthentication();
-app.UseAuthorization();
-app.UseStaticFiles();
-app.MapFallbackToFile("index.html");
-app.Run();
+        builder.Services.AddControllers();
+        builder.Services.AddAutoMapper(typeof(FitManager.Application.Dto.MappingProfile));
+        builder.Services.AddDbContext<FitContext>(opt =>
+        {
+            opt.UseSqlServer(
+                builder.Configuration.GetConnectionString("SqlServer"),
+                o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery));
+        });
+
+        if (builder.Environment.IsDevelopment())
+        {
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                    });
+            });
+        }
+
+        var app = builder.Build();
+        Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(builder.Configuration["SyncfusionKey"]);
+        if (app.Environment.IsDevelopment())
+        {
+            using (var scope = app.Services.CreateScope())
+            {
+                using (var db = scope.ServiceProvider.GetRequiredService<FitContext>())
+                {
+                    db.Database.EnsureDeleted();
+                    db.Database.EnsureCreated();
+                    db.Seed();
+                }
+            }
+            app.UseCors();
+        }
+
+        app.MapControllers();
+        app.UseAuthentication();
+        app.UseAuthorization();
+        app.UseStaticFiles();
+        app.MapFallbackToFile("index.html");
+        app.Run();
+    }
+}
