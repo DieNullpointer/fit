@@ -17,7 +17,8 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 12
-      - run: RUN startServer.cmd
+      - shell: cmd
+        run: RUN startServer.cmd
       - run: cd fit.client
       - run: npm ci
       - run: npm start
