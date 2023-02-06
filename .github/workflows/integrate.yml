@@ -22,4 +22,4 @@ jobs:
       - working-directory: fit.client
         run: npm ci
       - working-directory: fit.client
-        run: npm start
+        run: npm build
