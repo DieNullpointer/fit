@@ -53,6 +53,16 @@ namespace FitManager.Webapi.Controllers
             return partners is null ? BadRequest() : Ok(partners);
         }
 
+        [HttpDelete("delete/{guid:Guid}")]
+        public IActionResult DeleteCompany(Guid guid)
+        {
+            var company = _db.Companies.Where(a => a.Guid == guid).First();
+            if(company is null)
+                return BadRequest();
+            _db.Companies.Remove(company);
+            return Ok(company);
+        }
+
         //  api/company/register
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto register)
@@ -74,8 +84,8 @@ namespace FitManager.Webapi.Controllers
                 var searchpass = _config["Searchpass"];
                 var a = await SpgMailClient.Create(searchuser, searchpass);
                 var message = new MimeMessage();
-                message.From.Add(new MailboxAddress("Fit-Team", searchuser + "@spengergasse.at"));
-                message.To.Add(new MailboxAddress($"{i.firstname + i.lastname}", i.email));
+                message.From.Add(new MailboxAddress("Fit-Team", $"{searchuser}@spengergasse.at"));
+                message.To.Add(new MailboxAddress($"{i.firstname} {i.lastname}", i.email));
                 message.Subject = "FIT TEST MAIL";
                 //message.Body = new TextPart("plain")
                 //{
