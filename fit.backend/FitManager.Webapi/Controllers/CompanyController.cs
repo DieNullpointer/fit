@@ -85,7 +85,7 @@ namespace FitManager.Webapi.Controllers
                 var a = await SpgMailClient.Create(searchuser, searchpass);
                 var message = new MimeMessage();
                 message.From.Add(new MailboxAddress("Fit-Team", $"{searchuser}@spengergasse.at"));
-                message.To.Add(new MailboxAddress($"{i.firstname + i.lastname}", i.email));
+                message.To.Add(new MailboxAddress($"{i.firstname} {i.lastname}", i.email));
                 message.Subject = "FIT TEST MAIL";
                 //message.Body = new TextPart("plain")
                 //{
