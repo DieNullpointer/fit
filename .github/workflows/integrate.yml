@@ -19,7 +19,6 @@ jobs:
           node-version: 12
       - shell: cmd
         run: startServer.cmd
-      - shell: cmd
       - working-directory: fit.client
         run: npm ci
       - working-directory: fit.client
