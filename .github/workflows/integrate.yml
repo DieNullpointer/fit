@@ -18,8 +18,9 @@ jobs:
         with:
           node-version: 12
       - shell: cmd
-        run: echo startServer.cmd
+        run: startServer.cmd
       - shell: cmd
-        run: cd fit.client
-      - run: npm ci
-      - run: npm start
+      - working-directory: fit.client
+        run: npm ci
+      - working-directory: fit.client
+        run: npm start
