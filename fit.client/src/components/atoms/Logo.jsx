@@ -4,7 +4,7 @@ export default function Logo({ rounded, outline, size, className}) {
   return (
     <img
       src={"../../logo.png"}
-      alt="SPG Logo"
+      alt=""
       className={`${className} ${outline ? "border border-gray-300" : ""} ${
         rounded && "rounded-sm"
       } ${

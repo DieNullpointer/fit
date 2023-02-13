@@ -1,5 +1,6 @@
 import Button from "../components/atoms/Button";
 import Input from "../components/atoms/Input";
+import Select from "../components/atoms/Select";
 import Navbar from "../components/Navbar";
 
 export default function Home() {
@@ -23,6 +24,7 @@ export default function Home() {
           purpose="password"
           type="password"
         />
+        <Select options={["Herbert", "Louis", "Franz", "yusuftoprak"]} label="Name" id="name"  />
       </div>
     </>
   );

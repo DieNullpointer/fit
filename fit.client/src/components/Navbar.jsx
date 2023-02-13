@@ -5,18 +5,15 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
-import { Icon } from "@mui/material";
-import Logo from "./atoms/Logo"
+import Logo from "./atoms/Logo";
 import Style from "../styleConstants";
 
-export default function Navbar({pages, profileSettings}) {
+export default function Navbar({ pages, profileSettings }) {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -35,14 +32,17 @@ export default function Navbar({pages, profileSettings}) {
     setAnchorElUser(null);
   };
 
-
   return (
-    <AppBar position="static" color="primary">
+    <AppBar
+      position="static"
+      color="primary"
+      sx={{ bgcolor: Style.colors.white, color: Style.colors.dark }}
+    >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+          <Logo className="mr-2" />
 
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" }, color: Style.colors.dark }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -51,7 +51,20 @@ export default function Navbar({pages, profileSettings}) {
               onClick={handleOpenNavMenu}
               color="inherit"
             >
-              <Logo /> 
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M3.75 5.25h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5"
+                />
+              </svg>
             </IconButton>
 
             <Menu
@@ -74,7 +87,12 @@ export default function Navbar({pages, profileSettings}) {
             >
               {pages.map?.((page) => (
                 <MenuItem key={page.name} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page.name}</Typography>
+                  <Typography
+                    textAlign="center"
+                    sx={{ color: Style.colors.dark }}
+                  >
+                    {page.name}
+                  </Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -90,7 +108,7 @@ export default function Navbar({pages, profileSettings}) {
               flexGrow: 1,
               fontWeight: 700,
               letterSpacing: ".3rem",
-              color: "inherit",
+              color: Style.colors.dark,
               textDecoration: "none",
             }}
           >
@@ -101,7 +119,7 @@ export default function Navbar({pages, profileSettings}) {
               <Button
                 key={page.name}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
+                sx={{ my: 2, color: Style.colors.dark, display: "block" }}
               >
                 {page.name}
               </Button>
@@ -114,7 +132,7 @@ export default function Navbar({pages, profileSettings}) {
                 <Avatar alt="Robert Kofler" src="/static/images/avatar/2.jpg" />
               </IconButton>
             </Tooltip>
-            
+
             <Menu
               sx={{ mt: "45px" }}
               id="menu-appbar"
@@ -133,7 +151,7 @@ export default function Navbar({pages, profileSettings}) {
             >
               {profileSettings.map?.((setting) => (
                 <MenuItem key={setting.name} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting.name}</Typography>
+                  <Typography textAlign="center" sx={{color: Style.colors.dark}}>{setting.name}</Typography>
                 </MenuItem>
               ))}
             </Menu>
