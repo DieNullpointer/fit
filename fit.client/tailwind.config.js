@@ -6,8 +6,8 @@ module.exports = {
   theme: {
     colors: {
       primary: "#ed1944",
-      primaryHover: "#9f43f0",
-      darkPrimary: "#E20039",
+      primaryHover: "#d40b33",
+      darkPrimary: "#c70234",
       slate: colors.slate,
       white: colors.white,
       blue: colors.blue,
