@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
 		<Nullable>enable</Nullable>
@@ -12,9 +12,41 @@
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.*" />
 		<PackageReference Include="Novell.Directory.Ldap.NETStandard" Version="3.*" />
 		<PackageReference Include="MailKit" Version="2.*" />
+		<PackageReference Include="Syncfusion.Pdf.Net.Core" Version="20.*" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <Folder Include="Extensions\" />
+	  <Folder Include="PdfTemplates\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="PdfTemplates\briefpapier.pdf">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="PdfTemplates\Ubuntu-Bold.ttf">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="PdfTemplates\Ubuntu-BoldItalic.ttf">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="PdfTemplates\Ubuntu-Italic.ttf">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="PdfTemplates\Ubuntu-Light.ttf">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="PdfTemplates\Ubuntu-LightItalic.ttf">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="PdfTemplates\Ubuntu-Medium.ttf">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="PdfTemplates\Ubuntu-MediumItalic.ttf">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="PdfTemplates\Ubuntu-Regular.ttf">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 </Project>
