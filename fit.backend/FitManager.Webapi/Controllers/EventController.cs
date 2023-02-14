@@ -26,7 +26,13 @@ namespace FitManager.Webapi.Controllers
         public IActionResult GetAllEvents()
         {
             var events = _db.Events.OrderBy(a => a.Name).Include(a => a.Companies).ToList();
-            return events is null ? BadRequest() : Ok(events);
+            if(events is null)
+                return BadRequest();
+            var export = events.Select(a => new
+            {
+                a.Name
+            });
+            return Ok(export);
         }
 
         //  api/event/now
