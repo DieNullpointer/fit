@@ -10,6 +10,7 @@ Lege im Verzeichnis *FitManager.Webapi* die Datei *appsettings.Development.json*
   wird deswegen nicht in das Repository übertragen.
 - Lokale Admins können *mit , getrennt* (kein Array) hinterlegt werden. Diese Account bekommen die
   Rolle *Management* im JWT.
+- Der *SyncfusionKey* wurde per Mail ausgeschickt.
 
 ```javascript
 {
@@ -20,6 +21,7 @@ Lege im Verzeichnis *FitManager.Webapi* die Datei *appsettings.Development.json*
   "Searchpass": "",
   "JwtSecret": "",
   "LocalAdmins": "vogl",
+  "SyncfusionKey": "",
   "Logging": {
     "LogLevel": {
       "Default": "Information",
