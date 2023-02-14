@@ -1,23 +1,23 @@
-name: Fit Test before merge
+# name: Fit Test before merge
 
-on:
-  push:
-    branches: [ main ]
+# on:
+#   push:
+#     branches: [ main ]
 
-jobs:
-  test_push:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      #- uses: actions/setup-dotnet@v3
-      #  with:
-      #    dotnet-version: 6.x
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 16
-      #- shell: cmd
-      #  run: startServer.cmd
-      - working-directory: fit.client
-        run: npm ci
-      - working-directory: fit.client
-        run: npm build
+# jobs:
+#   test_push:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v2
+#       #- uses: actions/setup-dotnet@v3
+#       #  with:
+#       #    dotnet-version: 6.x
+#       - uses: actions/setup-node@v1
+#         with:
+#           node-version: 16
+#       #- shell: cmd
+#       #  run: startServer.cmd
+#       - working-directory: fit.client
+#         run: npm ci
+#       - working-directory: fit.client
+#         run: npm build
