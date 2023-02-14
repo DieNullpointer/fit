@@ -3,8 +3,6 @@ name: Fit Test before merge
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 jobs:
   test_push:
@@ -16,7 +14,7 @@ jobs:
       #    dotnet-version: 6.x
       - uses: actions/setup-node@v1
         with:
-          node-version: 12
+          node-version: 16
       #- shell: cmd
       #  run: startServer.cmd
       - working-directory: fit.client
