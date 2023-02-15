@@ -8,7 +8,7 @@ import Navbar from "../components/Navbar";
 
 export default function AddEvent()
 {
-    const [selected, setSelected] = useState(null);
+    const [selected, setSelected] = useState(Date.now());
     const [name, setName] = useState("");
     //let name = null;
     let nameRef = useRef(name);
@@ -18,7 +18,7 @@ export default function AddEvent()
     useEffect(() => {
         setSelected(selectedRef.current);
         setName(nameRef.current)
-    }, [name, selected]);
+    }, [selected]);
 
     function handleChange(value)
     {
@@ -27,7 +27,7 @@ export default function AddEvent()
 
     async function handleClick()
     {
-        console.log(name);
+        console.log(nameRef.current);
         console.log(selectedRef.current);
         //console.log(selectedRef);
         
@@ -36,8 +36,8 @@ export default function AddEvent()
             method: "POST",
             timeout: 5000,
             body: JSON.stringify({
-                "name": name,
-                "date": selectedRef.current,
+                "name": nameRef.current,
+                "date": selectedRef.current.toJSON(),
             }),
             headers: {
                 Accept: "application/json",
