@@ -4,6 +4,8 @@ import { ThemeProvider } from "@mui/material";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
+import Admin from "./pages/Admin";
+import AddEvent from "./pages/AddEvent";
 import Style from "./styleConstants";
 
 export default function App() {
@@ -14,6 +16,8 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="*" exact={true} element={<NotFound />} />
+          <Route path="/admin" element={<Admin />} />
+          <Route path="/event/add" element={<AddEvent />} />
         </Routes>
       </Router>
 
