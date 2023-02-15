@@ -47,7 +47,7 @@ export default function Home() {
           purpose="password"
           type="password"
         />
-        <Select options={eventlist?.map((event) => { return event.name}) ?? ["test"]} label="Event" id="event"  />
+        <Select options={eventlist?.map((event) => { return event.name + " (" + event.date + ")"}) ?? ["test"]} label="Event" id="event"  />
       </div>
       </div>
       <Footer oldschool />

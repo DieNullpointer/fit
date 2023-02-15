@@ -36,7 +36,7 @@ export default function Select({ onChange, value, label, id, options }) {
           return <MenuItem value={item.value}>{item.text}</MenuItem>;
         })}
       </MuiSelect>
-      <BootstrapInput />
+      {/* <BootstrapInput /> */}
     </FormControl>
   );
 }
