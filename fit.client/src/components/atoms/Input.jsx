@@ -1,8 +1,30 @@
+import styled from "@emotion/styled";
 import { TextField } from "@mui/material";
+import Style from "../../styleConstants";
 
 export default function Input({required, value, label, type, purpose, id, onChange, size }) {
+  const ColorTextField = styled(TextField)(({ theme }) => ({
+    '& label.Mui-focused': {
+      color: Style.colors.dark,
+    },
+    '& .MuiInput-underline:after': {
+      borderBottomColor: Style.colors.primary,
+    },
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderColor: Style.colors.primary,
+      },
+      '&:hover fieldset': {
+        borderColor: Style.colors.primary,
+      },
+      '&.Mui-focused fieldset': {
+        borderColor: Style.colors.primary,
+      },
+    },
+  }));
+  
   return (
-    <TextField
+    <ColorTextField
       id={id}
       onChange={onChange}
       label={label}

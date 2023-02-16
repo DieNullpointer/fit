@@ -1,5 +1,5 @@
 import * as React from 'react';
-import InputBase from '@mui/material/InputBase';
+// import InputBase from '@mui/material/InputBase';
 import { styled } from '@mui/material/styles';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -14,16 +14,36 @@ export default function Select({ onChange, value, label, id, options }) {
     return items.push({ value: idx + 1, text: option });
   });
 
-  const BootstrapInput = styled(InputBase)(({ theme }) => ({
+/*   const BootstrapInput = styled(InputBase)(({ theme }) => ({
     '& .MuiInputBase-input': {
       '&:focus': {
         borderColor: Style.colors.primary,
       },
     },
+  })); */
+
+  const ColorForm = styled(FormControl)(({ theme }) => ({
+    '& label.Mui-focused': {
+        color: Style.colors.dark,
+      },
+      '& .MuiInput-underline:after': {
+        borderBottomColor: Style.colors.primary,
+      },
+      '& .MuiOutlinedInput-root': {
+        '& fieldset': {
+          borderColor: Style.colors.primary,
+        },
+        '&:hover fieldset': {
+          borderColor: Style.colors.primary,
+        },
+        '&.Mui-focused fieldset': {
+          borderColor: Style.colors.primary,
+        },
+      },
   }));
 
   return (
-    <FormControl fullWidth>
+    <ColorForm fullWidth>
       <InputLabel id="demo-simple-select-label">{label}</InputLabel>
       <MuiSelect
         labelId={`${id}-label`}
@@ -36,7 +56,7 @@ export default function Select({ onChange, value, label, id, options }) {
           return <MenuItem value={item.value}>{item.text}</MenuItem>;
         })}
       </MuiSelect>
-      <BootstrapInput />
-    </FormControl>
+      {/* <BootstrapInput /> */}
+    </ColorForm>
   );
 }
