@@ -1,8 +1,10 @@
 ﻿using FitManager.Application.Infrastructure;
 using FitManager.Application.Model;
+using FitManager.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.IO;
 using System.Linq;
 
 namespace FitManager.Webapi.Controllers
