@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
 
 namespace FitManager.Webapi.Controllers
 {
@@ -41,6 +40,14 @@ namespace FitManager.Webapi.Controllers
         public IActionResult GetCurrentEvent()
         {
             var events = _db.Events.Include(a => a.Companies).Where(a => DateTime.UtcNow.Date <= a.Date).OrderBy(a => a.Date).First();
+
+            //var settings = Path.Combine("appsettings.Development.json");
+            //var config = System.Text.Json.JsonDocument.Parse(System.IO.File.ReadAllText(settings)).RootElement;
+            //Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(config.GetProperty("SyncfusionKey").GetString());
+
+            //PdfGenerator pdf = new PdfGenerator();
+            //var b = pdf.GenerateInvoice();
+            //return File(b, "application/pdf", "your_filename.pdf");
             return events is null ? BadRequest("No event is planned") : Ok(events);
         }
 
