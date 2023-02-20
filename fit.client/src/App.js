@@ -7,6 +7,7 @@ import NotFound from "./pages/NotFound";
 import Admin from "./pages/Admin";
 import AddEvent from "./pages/AddEvent";
 import Style from "./styleConstants";
+import AddPackage from "./pages/AddPackage";
 
 export default function App() {
   return (
@@ -18,6 +19,9 @@ export default function App() {
           <Route path="*" exact={true} element={<NotFound />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/event/add" element={<AddEvent />} />
+          <Route path="/package/add" element={<AddPackage />} />
+          <Route path="/impressum" />
+          <Route path="/datenschutz" />
         </Routes>
       </Router>
 

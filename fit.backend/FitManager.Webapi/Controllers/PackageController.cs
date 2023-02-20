@@ -1,0 +1,45 @@
+﻿using FitManager.Application.Infrastructure;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System.Linq;
+
+namespace FitManager.Webapi.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class PackageController : ControllerBase
+    {
+        private readonly FitContext _db;
+
+        public record PackageDto(string name, string price);
+
+        public PackageController(FitContext db)
+        {
+            _db = db;
+        }
+
+        [HttpGet]
+        public IActionResult AllPackages()
+        {
+            var p = _db.Packages.ToList();
+            return p is null ? BadRequest() : Ok(p);
+        }
+
+        [HttpPost("add")]
+        public IActionResult CreatePackage([FromBody] PackageDto package)
+        {
+            if(_db.Packages.Where(a => a.Name == package.name).Count() > 0)
+                return BadRequest("gibt es schon");
+            try
+            {
+                _db.Packages.Add(new Application.Model.Package(package.name, decimal.Parse(package.price)));
+                _db.SaveChanges();
+            }
+            catch
+            {
+                return BadRequest("Price ist keine Zahl");
+            }
+            return Ok();
+        }
+    }
+}
