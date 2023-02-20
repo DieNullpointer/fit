@@ -5,6 +5,7 @@ import Paper from "../components/atoms/Paper";
 import Select from "../components/atoms/Select";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
+import PageFrame from "../components/PageFrame";
 
 export default function Home() {
   const [eventlist, setEventlist] = useState();
@@ -27,13 +28,8 @@ export default function Home() {
   }
 
   return (
-    <div>
-      <div className="min-h-screen">
-        <Navbar
-          pages={[{ name: "sign-up" }, { name: "about" }]}
-          profileSettings
-        />
-        <div className="flex flex-col space-y-4 m-5">
+    <PageFrame active="home">
+      <div className="flex flex-col space-y-4 m-5">
           <Button text="Button" sharp />
           <Input
             label="username"
@@ -61,8 +57,6 @@ export default function Home() {
             />
         </div>
         <Paper elevation={3} center > <Button text="Hello"/> </Paper>
-      </div>
-      <Footer oldschool />
-    </div>
+    </PageFrame>
   );
 }

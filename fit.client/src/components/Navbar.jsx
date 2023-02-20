@@ -12,6 +12,7 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import Logo from "./atoms/Logo";
 import Style from "../styleConstants";
+import { useNavigate } from "react-router-dom";
 
 export default function Navbar({ pages, profileSettings }) {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -32,6 +33,8 @@ export default function Navbar({ pages, profileSettings }) {
     setAnchorElUser(null);
   };
 
+  const navigate = useNavigate();
+
   return (
     <AppBar
       position="static"
@@ -42,7 +45,13 @@ export default function Navbar({ pages, profileSettings }) {
         <Toolbar disableGutters>
           <Logo className="mr-2" />
 
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" }, color: Style.colors.dark }}>
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: { xs: "flex", md: "none" },
+              color: Style.colors.dark,
+            }}
+          >
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -118,8 +127,19 @@ export default function Navbar({ pages, profileSettings }) {
             {pages.map?.((page) => (
               <Button
                 key={page.name}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: Style.colors.dark, display: "block" }}
+                onClick={() => navigate(page.href)}
+                sx={{
+                  my: 2,
+                  marginRight: '7px',
+                  color: page.active ? Style.colors.white : Style.colors.dark,
+                  bgcolor: page.active
+                    ? Style.colors.primary
+                    : Style.colors.white,
+                  display: "block",
+                  ":hover": {
+                    backgroundColor: page.active && Style.colors.primaryHover,
+                  },
+                }}
               >
                 {page.name}
               </Button>
@@ -151,7 +171,12 @@ export default function Navbar({ pages, profileSettings }) {
             >
               {profileSettings.map?.((setting) => (
                 <MenuItem key={setting.name} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center" sx={{color: Style.colors.dark}}>{setting.name}</Typography>
+                  <Typography
+                    textAlign="center"
+                    sx={{ color: Style.colors.dark }}
+                  >
+                    {setting.name}
+                  </Typography>
                 </MenuItem>
               ))}
             </Menu>
