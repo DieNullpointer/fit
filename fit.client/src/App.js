@@ -8,6 +8,8 @@ import Admin from "./pages/Admin";
 import AddEvent from "./pages/AddEvent";
 import Style from "./styleConstants";
 import AddPackage from "./pages/AddPackage";
+import Events from "./pages/Events";
+import Packages from "./pages/Packages";
 
 export default function App() {
   return (
@@ -20,6 +22,8 @@ export default function App() {
           <Route path="/admin" element={<Admin />} />
           <Route path="/event/add" element={<AddEvent />} />
           <Route path="/package/add" element={<AddPackage />} />
+          <Route path="/package" element={<Packages />} />
+          <Route path="/event" element={<Events />} />
           <Route path="/impressum" />
           <Route path="/datenschutz" />
         </Routes>
