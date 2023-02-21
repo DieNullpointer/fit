@@ -1,10 +1,10 @@
 import Footer from "./Footer";
 import Navbar from "./Navbar";
 
-export default function PageFrame({ children, active }) {
+export default function PageFrame({ children, active, margin, className }) {
   return (
     <div>
-      <div className="min-h-screen">
+      <div className={`min-h-screen ${className}`}>
         <Navbar
           pages={[
             {name: "home", href: "/", active: active === "home"},
@@ -13,7 +13,9 @@ export default function PageFrame({ children, active }) {
           ]}
           profileSettings
         />
-        {children}
+        <div className={`${margin ? "mt-16" : ""} mx-10`}>
+          {children}
+        </div>
       </div>
       <Footer oldschool />
     </div>
