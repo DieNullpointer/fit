@@ -1,7 +1,7 @@
 import Footer from "./Footer";
 import Navbar from "./Navbar";
 
-export default function PageFrame({ children, active, margin, className }) {
+export default function PageFrame({ children, active, margin, className, oldschool }) {
   return (
     <div>
       <div className={`min-h-screen ${className}`}>
