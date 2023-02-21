@@ -22,7 +22,13 @@ namespace FitManager.Webapi.Controllers
         public IActionResult AllPackages()
         {
             var p = _db.Packages.ToList();
-            return p is null ? BadRequest() : Ok(p);
+            if(p is null)
+                return BadRequest();
+            var export = p.Select(a => new
+            {
+                a.Name
+            });
+            return Ok(export);
         }
 
         [HttpPost("add")]
