@@ -14,8 +14,8 @@ namespace FitManager.Application.Services
 {
     public class PdfGenerator
     {
-        private static string _fontfile = Path.Combine("PdfTemplates", "Ubuntu-Regular.ttf");
-        private static string _invoiceTemplate = Path.Combine("PdfTemplates", "briefpapier.pdf");
+        private static string _fontfile = Path.Combine("..", "FitManager.Application", "PdfTemplates", "Ubuntu-Regular.ttf");
+        private static string _invoiceTemplate = Path.Combine("..", "FitManager.Application", "PdfTemplates", "briefpapier.pdf");
 
         /// <summary>
         /// Generates a PDF Document
