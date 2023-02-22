@@ -3,9 +3,11 @@ import Navbar from "../components/Navbar";
 import Input from "../components/atoms/Input";
 import Button from "../components/atoms/Button";
 import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function AddPackage()
 {
+    const navigate = useNavigate();
     const [name, setName] = useState("");
     const [price, setPrice] = useState("");
     let nameRef = useRef(name);
@@ -31,7 +33,10 @@ export default function AddPackage()
             },
         })
         .then((res) => {
-            if(res.status === 200) return res.json();
+            if(res.status === 200) {
+                navigate('/admin');
+                return res.json();
+            }
             throw new Error(res.status);
         })
         //.then(data => console.log(data))

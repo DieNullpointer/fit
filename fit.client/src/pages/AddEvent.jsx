@@ -4,10 +4,12 @@ import DatePicker from "../components/atoms/DatePicker";
 import Input from "../components/atoms/Input";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
+import { useNavigate } from "react-router-dom";
 
 
 export default function AddEvent()
 {
+    const navigate = useNavigate();
     const [selected, setSelected] = useState(Date.now());
     const [name, setName] = useState("");
     //let name = null;
@@ -18,7 +20,7 @@ export default function AddEvent()
     useEffect(() => {
         setSelected(selectedRef.current);
         setName(nameRef.current)
-    }, [selected]);
+    }, []);
 
     function handleChange(value)
     {
@@ -45,7 +47,10 @@ export default function AddEvent()
             },
         })
         .then((res) => {
-            if(res.status === 200) return res.json();
+            if(res.status === 200) {
+                navigate('/admin');
+                return res.json();
+            }
             throw new Error(res.status);
         })
         //.then(data => console.log(data))
