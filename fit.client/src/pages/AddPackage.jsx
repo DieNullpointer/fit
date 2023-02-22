@@ -31,16 +31,19 @@ export default function AddPackage()
                 Accept: "application/json",
                 "Content-Type": "application/json",
             },
-        })
-        .then((res) => {
+        }).then((res) => {
             if(res.status === 200) {
                 navigate('/admin');
                 return res.json();
             }
-            throw new Error(res.status);
-        })
+            if(res.status === 400) {
+                console.log(res);
+                return res.json();
+            }
+            //throw new Error(res.status);
+        }).catch((err) => console.log(err));
         //.then(data => console.log(data))
-        .catch((error) => console.log(error));
+        
     }
 
     return(
