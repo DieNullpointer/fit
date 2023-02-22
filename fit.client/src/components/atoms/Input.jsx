@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { TextField } from "@mui/material";
 import Style from "../../styleConstants";
 
-export default function Input({required, value, label, type, purpose, id, onChange, size, block, full }) {
+export default function Input({required, value, label, type, purpose, id, onChange, size, block, full, disabled }) {
   const ColorTextField = styled(TextField)(({ theme }) => ({
     display: block ? 'block' : 'inline-block',
     '& label.Mui-focused': {
@@ -35,6 +35,7 @@ export default function Input({required, value, label, type, purpose, id, onChan
       autoComplete={purpose === "password" ? "current-password" : purpose}
       variant="standard"
       fullWidth={full}
+      disabled={disabled}
     />
   );
 }

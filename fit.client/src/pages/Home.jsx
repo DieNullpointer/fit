@@ -3,8 +3,6 @@ import Button from "../components/atoms/Button";
 import Input from "../components/atoms/Input";
 import Paper from "../components/atoms/Paper";
 import Select from "../components/atoms/Select";
-import Footer from "../components/Footer";
-import Navbar from "../components/Navbar";
 import PageFrame from "../components/PageFrame";
 
 export default function Home() {
