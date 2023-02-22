@@ -12,6 +12,7 @@ export default function AddEvent()
     const navigate = useNavigate();
     const [selected, setSelected] = useState(Date.now());
     const [name, setName] = useState("");
+    let validation;
     //let name = null;
     let nameRef = useRef(name);
     let selectedRef = useRef(selected);
@@ -51,7 +52,7 @@ export default function AddEvent()
                 navigate('/admin');
                 return res.json();
             }
-            throw new Error(res.status);
+            
         })
         //.then(data => console.log(data))
         .catch((error) => console.log(error));

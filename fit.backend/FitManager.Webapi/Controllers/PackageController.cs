@@ -1,6 +1,8 @@
 ﻿using FitManager.Application.Infrastructure;
+using FitManager.Application.Dto;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+
 using System.Linq;
 
 namespace FitManager.Webapi.Controllers
@@ -10,8 +12,6 @@ namespace FitManager.Webapi.Controllers
     public class PackageController : ControllerBase
     {
         private readonly FitContext _db;
-
-        public record PackageDto(string name, string price);
 
         public PackageController(FitContext db)
         {

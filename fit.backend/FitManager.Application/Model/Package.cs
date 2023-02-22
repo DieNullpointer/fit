@@ -24,6 +24,8 @@ namespace FitManager.Application.Model
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; private set; }
 
+        public Guid Guid { get; private set; }
+
         public string Name { get; set; }
 
         public decimal Price { get; set; }
