@@ -9,7 +9,7 @@ export default function Home() {
   const [eventlist, setEventlist] = useState();
   useEffect(() => {
     init();
-  }, []);
+  });
 
   async function fetchAllEvents() {
     await fetch(`https://localhost:5001/api/Event`)

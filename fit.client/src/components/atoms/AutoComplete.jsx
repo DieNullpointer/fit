@@ -2,7 +2,7 @@ import { Autocomplete, TextField, FormControl } from "@mui/material";
 import Style from "../../styleConstants";
 import styled from "@emotion/styled";
 
-export default function AutoComplete({ options, label, id, required, full }) {
+export default function AutoComplete({ options, label, id, required, full, onChange }) {
   let items = [];
   options.map((option, idx) => {
     return items.push({ value: idx + 1, text: option });
@@ -35,6 +35,7 @@ export default function AutoComplete({ options, label, id, required, full }) {
         id={id}
         autoHighlight
         fullWidth
+        onChange={onChange}
         renderInput={(params) => (
           <TextField
             {...params}
