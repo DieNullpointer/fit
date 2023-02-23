@@ -46,13 +46,13 @@ export default function Signup() {
         </Typography>
       </Box>
       <Paper elevation={3} className="mt-12">
-        <Form className="py-4 px-8">
+        <Form.Body className="py-4 px-8">
           <div className="w-full">
             <Typography variant="h6">Firmendetails</Typography>
             <div className="pl-3 w-full">
               <div className="mt-2 border-l border-l-dark px-4 py-2 w-full">
                 <div className="grid grid-cols-1 md:grid-cols-2">
-                  <div className="md:pr-3">
+                  <Form.Section className="md:pr-3">
                     <Input
                       id="in-comp-name"
                       label="Firmenname"
@@ -60,7 +60,7 @@ export default function Signup() {
                       required
                       block
                       full
-                      onChange={(e) => (refName.current = e.target.value)}
+                      {...Form.Child("input")}
                     />
                     <Input
                       id="in-comp-address"
@@ -92,7 +92,7 @@ export default function Signup() {
                         />
                       </div>
                     </div>
-                  </div>
+                  </Form.Section>
                   <div className="md:pl-3">
                     <Input
                       id="in-comp-payaddress"
@@ -117,7 +117,7 @@ export default function Signup() {
             </div>
           </div>
           <Button id="submit" text="Absenden" onClick={handleSubmit} />
-        </Form>
+        </Form.Body>
       </Paper>
     </PageFrame>
   );
