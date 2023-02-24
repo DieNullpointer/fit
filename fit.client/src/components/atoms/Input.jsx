@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { IconButton, TextField } from "@mui/material";
 import Style from "../../styleConstants";
 
-export default function Input({required, value, label, type, purpose, id, onChange, size, block, full, disabled }) {
+export default function Input({adornment, required, value, label, type, purpose, id, onChange, size, block, full, disabled }) {
   const ColorTextField = styled(TextField)(({ theme }) => ({
     display: block ? 'block' : 'inline-block',
     '& label.Mui-focused': {
