@@ -2,17 +2,15 @@ import { useEffect, useState } from "react";
 import Button from "../components/atoms/Button";
 import Input from "../components/atoms/Input";
 import Select from "../components/atoms/Select";
-import Footer from "../components/Footer";
-import Navbar from "../components/Navbar";
+import PageFrame from "../components/PageFrame";
 
 export default function Home() {
   const [eventlist, setEventlist] = useState();
   useEffect(() => {
     init();
-  }, []);
+  });
 
-  async function fetchAllEvents()
-  {
+  async function fetchAllEvents() {
     await fetch(`https://localhost:5001/api/Event`)
       .then((res) => res.json())
       .then((data) => {
@@ -27,9 +25,7 @@ export default function Home() {
   }
 
   return (
-    <div>
-      <div className="min-h-screen">
-      <Navbar pages={[{name: "sign-up"}, {name: "about"}]} profileSettings />
+    <PageFrame active="home">
       <div className="flex flex-col space-y-4 m-5">
         <Button text="Button" sharp />
         <Input
@@ -49,8 +45,7 @@ export default function Home() {
         />
         <Select options={eventlist?.map((event) => { return event.name + " (" + event.date + ")"}) ?? ["-"]} label="Event" id="event"  />
       </div>
-      </div>
-      <Footer oldschool />
-    </div>
+      
+      </PageFrame>
   );
 }

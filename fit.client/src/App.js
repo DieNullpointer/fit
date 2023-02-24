@@ -10,6 +10,7 @@ import Style from "./styleConstants";
 import AddPackage from "./pages/AddPackage";
 import Events from "./pages/Events";
 import Packages from "./pages/Packages";
+import Signup from "./pages/Signup";
 
 export default function App() {
   return (
@@ -26,6 +27,7 @@ export default function App() {
           <Route path="/event" element={<Events />} />
           <Route path="/impressum" />
           <Route path="/datenschutz" />
+          <Route path="/signup" element={<Signup />} />
         </Routes>
       </Router>
 

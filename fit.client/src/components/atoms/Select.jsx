@@ -53,7 +53,7 @@ export default function Select({ onChange, value, label, id, options }) {
         onChange={onChange}
       >
         {items.map((item) => {
-          return <MenuItem value={item.value}>{item.text}</MenuItem>;
+          return <MenuItem key={item.value} value={item.value}>{item.text}</MenuItem>;
         })}
       </MuiSelect>
       {/* <BootstrapInput /> */}
