@@ -37,4 +37,4 @@ class Style {
   });
 }
 
-module.exports = Style;
+export default Style;
