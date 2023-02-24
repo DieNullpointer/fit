@@ -5,37 +5,12 @@ import PageFrame from "../components/PageFrame";
 import Input from "../components/atoms/Input";
 import AutoComplete from "../components/atoms/AutoComplete";
 import Checkbox from "../components/atoms/Checkbox";
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import Button from "../components/atoms/Button";
 import Form from "../components/form/Form";
 
 export default function Signup() {
   const [payDisabled, setPayDisabled] = useState(false);
-
-  const [inName, setInName] = useState("");
-  const [inAddress, setInAddress] = useState("");
-  const [inPayAddress, setInPayAddress] = useState("");
-  const [inZipcode, setInZipcode] = useState("");
-  const [inCountry, setInCountry] = useState("");
-  const refName = useRef(inName);
-  const refAddress = useRef(inAddress);
-  const refPayAddress = useRef(inPayAddress);
-  const refZipcode = useRef(inZipcode);
-  const refCountry = useRef(inCountry);
-
-  const handleSubmit = () =>
-    console.log(
-      `${refName.current}, ${refAddress.current}, ${refPayAddress.current}, ${refZipcode.current}, ${refCountry.current}`
-    );
-
-  // eslint-disable-next-line
-  useEffect(() => {
-    setInName(refName.current);
-    setInAddress(refAddress.current);
-    setInPayAddress(refPayAddress.current);
-    setInZipcode(refZipcode.current);
-    setInCountry(refCountry.current);
-  }, []);
 
   return (
     <PageFrame active={"sign-up"} margin className="bg-primary">
@@ -60,7 +35,7 @@ export default function Signup() {
                       required
                       block
                       full
-                      {...Form.Child("input")}
+                      {...Form.Child("input", "name")}
                     />
                     <Input
                       id="in-comp-address"
@@ -69,15 +44,15 @@ export default function Signup() {
                       required
                       block
                       full
-                      onChange={(e) => (refAddress.current = e.target.value)}
+                      {...Form.Child("input", "address")}
                     />
                     <div className="grid grid-cols-3">
                       <Input
-                        id="in-comp-plz"
+                        id="in-comp-zip"
                         label="PLZ"
                         purpose="text"
                         required
-                        onChange={(e) => (refZipcode.current = e.target.value)}
+                        {...Form.Child("input", "zip")}
                       />
                       <div className="col-span-2 ml-4">
                         <AutoComplete
@@ -86,9 +61,7 @@ export default function Signup() {
                           options={["Österreich", "Deutschland", "Schweiz"]}
                           required
                           full
-                          onChange={(e) =>
-                            (refCountry.current = e.target.value)
-                          }
+                          {...Form.Child("autocomplete", "country")}
                         />
                       </div>
                     </div>
@@ -102,7 +75,7 @@ export default function Signup() {
                       disabled={payDisabled}
                       block
                       full
-                      onChange={(e) => (refPayAddress.current = e.target.value)}
+                      {...Form.Child("input", "payaddress")}
                     />
                     <div className="-mt-6">
                       <Checkbox
@@ -116,7 +89,7 @@ export default function Signup() {
               </div>
             </div>
           </div>
-          <Button id="submit" text="Absenden" onClick={handleSubmit} />
+          <Button id="submit" text="Absenden" {...Form.Submit()} />
         </Form.Body>
       </Paper>
     </PageFrame>
