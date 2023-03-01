@@ -5,6 +5,9 @@ import Input from "../components/atoms/Input";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { Typography } from "@mui/material";
+import Style from "../styleConstants";
 
 
 export default function AddEvent()
@@ -12,7 +15,7 @@ export default function AddEvent()
     const navigate = useNavigate();
     const [selected, setSelected] = useState(Date.now());
     const [name, setName] = useState("");
-    let validation;
+    const [validation, setValidation] = useState({});
     //let name = null;
     let nameRef = useRef(name);
     let selectedRef = useRef(selected);
@@ -30,12 +33,27 @@ export default function AddEvent()
 
     async function handleClick()
     {
+        console.log(validation);
         console.log(nameRef.current);
         console.log(selectedRef.current);
         //console.log(selectedRef);
-        
+        var model = {name: nameRef.current, date: selectedRef.current.toJSON()}
+        try {
+            await (await axios.post('https://localhost:5001/api/event/add', model))
+        } catch(e) {
+            if(e.response.status === 400)
+            {
+                console.log(e.response.data.errors);
+                setValidation(Object.keys(e.response.data.errors).reduce((prev, key) => {
+                    const newKey = key.charAt(0).toLowerCase() + key.slice(1);
+                    prev[newKey] = e.response.data.errors[key][0];
+                    return prev;
+                }, {}));
+                console.log(validation);
+            }
+        }
 
-        await fetch(`https://localhost:5001/api/Event/add`, {
+        /* await fetch(`https://localhost:5001/api/Event/add`, {
             method: "POST",
             timeout: 5000,
             body: JSON.stringify({
@@ -55,7 +73,7 @@ export default function AddEvent()
             
         })
         //.then(data => console.log(data))
-        .catch((error) => console.log(error));
+        .catch((error) => console.log(error)); */
     }
     
     return(
@@ -74,6 +92,7 @@ export default function AddEvent()
                     value={name}
                     />
                     <DatePicker value={selected} accepted={(val) => setSelected(val)} onchange={(val) => handleChange(val)}/>
+                    {validation.name === null ? null : <Typography color={Style.colors.primary} variant="h6">{validation.name}</Typography>}
                     <Button text="Senden" sharp onClick={handleClick}/>
                 </div>
             </div>

@@ -25,6 +25,7 @@ namespace FitManager.Application.Model
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; private set; }
+        public Guid Guid { get; private set; }
         public DateTime Date { get; set; }
         public string Name { get; set; }
 
