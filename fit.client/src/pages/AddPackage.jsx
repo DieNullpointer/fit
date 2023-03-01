@@ -4,6 +4,7 @@ import Input from "../components/atoms/Input";
 import Button from "../components/atoms/Button";
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import PageFrame from "../components/PageFrame";
 
 export default function AddPackage()
 {
@@ -47,9 +48,8 @@ export default function AddPackage()
     }
 
     return(
-        <div>
+        <PageFrame>
             <div className="min-h-screen">
-                <Navbar pages={[{name: "sign-up"}, {name: "about"}]} profileSettings />
                 <div className="flex flex-col space-y-4 m-5">
                     <Input
                     label="Package Name"
@@ -73,7 +73,6 @@ export default function AddPackage()
                     <Button text="Senden" sharp onClick={handleClick}/>
                 </div>
             </div>
-            <Footer oldschool />
-        </div>
+        </PageFrame>
     );
 }
