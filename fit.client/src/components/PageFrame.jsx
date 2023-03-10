@@ -3,8 +3,8 @@ import Navbar from "./Navbar";
 
 export default function PageFrame({ children, active, margin, className, oldschool }) {
   return (
-    <div>
-      <div className={`min-h-screen ${className}`}>
+    <>
+      <div className={`min-h-screen h-full ${className} mb-0`}>
         <Navbar
           pages={[
             {name: "home", href: "/", active: active === "home"},
@@ -18,6 +18,6 @@ export default function PageFrame({ children, active, margin, className, oldscho
         </div>
       </div>
       <Footer oldschool />
-    </div>
+    </>
   );
 }

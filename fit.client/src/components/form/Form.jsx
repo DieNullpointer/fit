@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 
 let stateArray = [];
 let refArray = [];
@@ -49,19 +50,29 @@ function Child(type, name) {
     count = idArray.indexOf(name);
   }
   const onChange = (e) => {
-    refArray[count].current = (type === "autocomplete") ? e.target.innerText : e.target.value;
+    refArray[count].current =
+      type === "autocomplete" ? e.target.innerText : e.target.value;
   };
   return { as: Get(type, name), onChange };
 }
 
-function Submit() {
+function Submit(route) {
   // eslint-disable-next-line
   const [submit, setSubmit] = React.useState(false);
 
   return {
-    onClick: () => {
+    onClick: async () => {
+      var exportObj = getExport();
       setSubmit(true);
-      getExport();
+      console.log(exportObj);
+      await axios
+        .post(route, exportObj)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
   };
 }
@@ -87,7 +98,7 @@ function getExport() {
       writable: true,
     });
   }
-  console.log(exportObj);
+  return exportObj;
 }
 
 // eslint-disable-next-line
