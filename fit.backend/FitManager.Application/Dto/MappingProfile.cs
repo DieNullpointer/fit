@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FitManager.Application.Model;
 
 namespace FitManager.Application.Dto
 {
@@ -6,7 +7,7 @@ namespace FitManager.Application.Dto
     {
         public MappingProfile()
         {
-
+            CreateMap<RegisterDto, Company>(); //RegisterDto --> Company
         }
     }
 }

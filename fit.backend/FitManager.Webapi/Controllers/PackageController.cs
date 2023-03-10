@@ -26,7 +26,8 @@ namespace FitManager.Webapi.Controllers
                 return BadRequest();
             var export = p.Select(a => new
             {
-                a.Name
+                a.Name,
+                a.Guid
             });
             return Ok(export);
         }
