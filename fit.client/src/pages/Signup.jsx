@@ -5,13 +5,27 @@ import PageFrame from "../components/PageFrame";
 import Input from "../components/atoms/Input";
 import AutoComplete from "../components/atoms/AutoComplete";
 import Checkbox from "../components/atoms/Checkbox";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Button from "../components/atoms/Button";
 import Form from "../components/form/Form";
 import APIConstants from "../apiConstants";
 
 export default function Signup() {
   const [payDisabled, setPayDisabled] = useState(false);
+  const [events, setEvents] = useState([]);
+
+  useEffect(() => {
+    init();
+  }, []);
+
+  async function init() {
+    let newEvents = [];
+    let resEvents = await APIConstants.getAllEvents();
+    resEvents.map((event) => {
+      newEvents.push(`${event.name} (${event.date})`);
+    });
+    return setEvents(newEvents);
+  }
 
   return (
     <PageFrame active={"sign-up"} margin className="bg-primary">
@@ -104,7 +118,30 @@ export default function Signup() {
               </div>
             </div>
           </div>
+
           <div className="w-full">
+            <Typography variant="h6">Paketauswahl</Typography>
+            <div className="pl-3 w-full">
+              <div className="mt-2 border-l border-l-dark px-4 py-2 w-full">
+                <Form.Section className="grid grid-cols-2">
+                  <AutoComplete id="in-fit" options={events} full label="FIT" required />
+                </Form.Section>
+              </div>
+            </div>
+          </div>
+          <Button
+            id="submit"
+            text="Absenden"
+            {...Form.Submit(APIConstants.COMPANY_URL + "/register")}
+          />
+        </Form.Body>
+      </Paper>
+    </PageFrame>
+  );
+}
+
+/**
+ * <div className="w-full">
             <Typography variant="h6">Ansprechpartner</Typography>
             <div className="pl-3 w-full">
               <div className="mt-2 border-l border-l-dark px-4 py-2 w-full">
@@ -180,21 +217,4 @@ export default function Signup() {
               </div>
             </div>
           </div>
-          <div className="w-full">
-            <Typography variant="h6">Paketauswahl</Typography>
-            <div className="pl-3 w-full">
-              <div className="mt-2 border-l border-l-dark px-4 py-2 w-full">
-                
-              </div>
-            </div>
-          </div>
-          <Button
-            id="submit"
-            text="Absenden"
-            {...Form.Submit(APIConstants.COMPANY_URL + "/register")}
-          />
-        </Form.Body>
-      </Paper>
-    </PageFrame>
-  );
-}
+ */
