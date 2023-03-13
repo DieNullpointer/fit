@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 export default function AddEvent()
 {
     const navigate = useNavigate();
-    const [selected, setSelected] = useState(Date.now());
+    const [selected, setSelected] = useState(new Date(Date.now())); 
     const [name, setName] = useState("");
     let validation;
     //let name = null;
