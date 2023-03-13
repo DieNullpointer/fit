@@ -91,8 +91,8 @@ export default function AddEvent()
                     onChange={(e) => nameRef.current=e.target.value}
                     value={name}
                     />
+                    {validation.name === null ? null : <Typography color={Style.colors.primary} variant="subtitle1">{validation.name}</Typography>}
                     <DatePicker value={selected} accepted={(val) => setSelected(val)} onchange={(val) => handleChange(val)}/>
-                    {validation.name === null ? null : <Typography color={Style.colors.primary} variant="h6">{validation.name}</Typography>}
                     <Button text="Senden" sharp onClick={handleClick}/>
                 </div>
             </div>

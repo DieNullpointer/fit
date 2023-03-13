@@ -78,6 +78,7 @@ export default function AddPackage()
                     size={"medium"}
                     onChange={(e) => nameRef.current=e.target.value}
                     value={name}/>
+                    {validation.name === null ? null : <Typography color={Style.colors.primary} variant="subtitle1">{validation.name}</Typography>}
                     <Input
                     label="Package Price"
                     required
@@ -88,8 +89,7 @@ export default function AddPackage()
                     adornment="€"
                     onChange={(e) => priceRef.current=e.target.value}
                     value={price}/>
-                    {validation.name === null ? null : <Typography color={Style.colors.primary} variant="h6">{validation.name}</Typography>}
-                    {validation.price === null ? null : <Typography color={Style.colors.primary} variant="h6">{validation.price}</Typography>}
+                    {validation.price === null ? null : <Typography color={Style.colors.primary} variant="subtitle1">{validation.price}</Typography>}
                     <Button text="Senden" sharp onClick={handleClick}/>
                 </div>
             </div>
