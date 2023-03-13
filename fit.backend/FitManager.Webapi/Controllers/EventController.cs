@@ -25,11 +25,12 @@ namespace FitManager.Webapi.Controllers
         [HttpGet]
         public IActionResult GetAllEvents()
         {
-            var events = _db.Events.OrderBy(a => a.Name).Include(a => a.Companies).Where(a => a.Date > DateTime.UtcNow.Date).OrderBy(a => a.Date).ToList();
+            var events = _db.Events.Where(a => a.Date > DateTime.UtcNow.Date).OrderBy(a => a.Date).ToList();
             if(events is null)
                 return BadRequest();
             var export = events.Select(a => new
             {
+                a.Guid,
                 a.Name,
                 Date = a.Date.ToString("dd/MM/yyyy")
             });
