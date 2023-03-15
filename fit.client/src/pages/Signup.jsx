@@ -13,6 +13,7 @@ import APIConstants from "../apiConstants";
 export default function Signup() {
   const [payDisabled, setPayDisabled] = useState(false);
   const [events, setEvents] = useState([]);
+  const [packages, setPackages] = useState([]);
 
   useEffect(() => {
     init();
@@ -24,7 +25,14 @@ export default function Signup() {
     resEvents.map((event) => {
       newEvents.push(`${event.name} (${event.date})`);
     });
-    return setEvents(newEvents);
+    setEvents(newEvents);
+
+    let newPackages = [];
+    let resPackages = await APIConstants.getAllPackages();
+    resPackages.map((p) => {
+      newPackages.push(p.name);
+    });
+    setPackages(newPackages);
   }
 
   return (
@@ -36,12 +44,7 @@ export default function Signup() {
         </Typography>
       </Box>
       <Paper elevation={3} className="mt-12 relative">
-        <Typography
-          variant="subtitle1"
-          className="absolute right-[1.35rem] top-2.5"
-        >
-          1/2
-        </Typography>
+        
         <Form.Body className="py-4 px-8">
           <div className="w-full">
             <Typography variant="h6">Firmendetails</Typography>
@@ -124,17 +127,38 @@ export default function Signup() {
             <div className="pl-3 w-full">
               <div className="mt-2 border-l border-l-dark px-4 py-2 w-full">
                 <Form.Section className="grid grid-cols-2">
-                  <AutoComplete id="in-fit" options={events} full label="FIT" required />
+                  <AutoComplete
+                    id="in-fit"
+                    options={events}
+                    full
+                    label="FIT"
+                    required
+                  />
+                  <div className="md:ml-3">
+                    <AutoComplete
+                      id="in-package"
+                      options={packages}
+                      full
+                      label="Paket"
+                      required
+                    />
+                  </div>
                 </Form.Section>
               </div>
             </div>
           </div>
           <Button
             id="submit"
-            text="Absenden"
+            text="Weiter"
             {...Form.Submit(APIConstants.COMPANY_URL + "/register")}
           />
         </Form.Body>
+        <Typography
+          variant="subtitle1"
+          className="absolute right-[1.35rem] bottom-2.5"
+        >
+          1/2
+        </Typography>
       </Paper>
     </PageFrame>
   );
