@@ -1,9 +1,10 @@
-﻿using FitManager.Application.Infrastructure;
+﻿using AutoMapper;
+using FitManager.Application.Dto;
+using FitManager.Application.Infrastructure;
 using FitManager.Application.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using MimeKit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,14 +17,12 @@ namespace FitManager.Webapi.Controllers
     public class CompanyController : ControllerBase
     {
         private readonly FitContext _db;
+        private readonly IMapper _mapper;
 
-        private readonly IConfiguration _config;
-        public record PartnerDto(string title, string firstname, string lastname, string email, string telNr, string function, string? mobilNr = null, bool mainPartner = false);
-        public record RegisterDto(string name, string address, string country, string plz, string place, string billAddress, List<PartnerDto> partners, string package, string eventName);
-        public CompanyController(FitContext db, IConfiguration config)
+        public CompanyController(FitContext db, IMapper mapper)
         {
             _db = db;
-            _config = config;
+            _mapper = mapper;
         }
 
         //  api/company
@@ -54,9 +53,9 @@ namespace FitManager.Webapi.Controllers
         }
 
         [HttpDelete("delete/{guid:Guid}")]
-        public IActionResult DeleteCompany(Guid guid)
+        public async Task<IActionResult> DeleteCompany(Guid guid)
         {
-            var company = _db.Companies.Where(a => a.Guid == guid).First();
+            var company = await _db.Companies.FirstAsync(a => a.Guid == guid);
             if(company is null)
                 return BadRequest();
             _db.Companies.Remove(company);
@@ -67,17 +66,22 @@ namespace FitManager.Webapi.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto register)
         {
-            var package = _db.Packages.Where(a => a.Name == register.package).First();
-            var events = _db.Events.Where(a => a.Name == register.eventName).First();
-            var company = new Company(register.name, register.address, register.country, register.plz, register.place, register.billAddress, package, events);
+            var company = _mapper.Map<Company>(register, opt => opt.AfterMap(async(dto, entity) =>
+            {
+                entity.Event = await _db.Events.FirstAsync(a => a.Guid == register.eventGuid);
+                entity.Package = await _db.Packages.FirstAsync(a => a.Guid == register.packageGuid);
+            }));
+            //var package = await _db.Packages.FirstAsync(a => a.Name == register.package);
+            //var events = await _db.Events.FirstAsync(a => a.Name == register.eventName);
+            //var company = new Company(register.name, register.address, register.country, register.plz, register.place, register.billAddress, package, events);
             foreach(var i in register.partners)
             {
-                _db.ContactPartners.Add(new ContactPartner(i.title, i.firstname, i.lastname, i.email, i.telNr, i.function, company, i.mobilNr, i.mainPartner));
+                await _db.ContactPartners.AddAsync(new ContactPartner(i.title, i.firstname, i.lastname, i.email, i.telNr, i.function, company, i.mobilNr, i.mainPartner));
             }
-            _db.Companies.Add(company);
-            _db.SaveChanges();
+            await _db.Companies.AddAsync(company);
+            await _db.SaveChangesAsync();
 
-            foreach (var i in register.partners)
+            /* foreach (var i in register.partners)
             {
                 //SpgMailClient client = new SpgMailClient(new MailKit.Net.Smtp.SmtpClient());
                 var searchuser = _config["Searchuser"];
@@ -95,7 +99,7 @@ namespace FitManager.Webapi.Controllers
                 builder.HtmlBody = string.Format(@"<p>Diese Mail wird zur Bestätigung der Anmeldung vom " + register.eventName + " versendet.</p><p>Wir freuen uns auf euch.</p><br><p>Mit freundlichen Grüßen</p><p>Das Fit-Team.</p>");
                 message.Body = builder.ToMessageBody();
                 await a.SendMailAsync(message);
-            }
+            } */
             return Ok(company);
         }
     }

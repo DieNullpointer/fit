@@ -1,5 +1,6 @@
 ﻿using FitManager.Application.Infrastructure;
 using FitManager.Application.Model;
+using FitManager.Application.Dto;
 using FitManager.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,8 +16,6 @@ namespace FitManager.Webapi.Controllers
     {
         private readonly FitContext _db;
 
-        public record AddEventDto(string name, DateTime date);
-
         public EventController(FitContext db)
         {
             _db = db;
@@ -26,11 +25,12 @@ namespace FitManager.Webapi.Controllers
         [HttpGet]
         public IActionResult GetAllEvents()
         {
-            var events = _db.Events.OrderBy(a => a.Name).Include(a => a.Companies).Where(a => a.Date > DateTime.UtcNow.Date).OrderBy(a => a.Date).ToList();
+            var events = _db.Events.Where(a => a.Date > DateTime.UtcNow.Date).OrderBy(a => a.Date).ToList();
             if(events is null)
                 return BadRequest();
             var export = events.Select(a => new
             {
+                a.Guid,
                 a.Name,
                 Date = a.Date.ToString("dd/MM/yyyy")
             });
@@ -63,7 +63,7 @@ namespace FitManager.Webapi.Controllers
 
         //  api/event/add
         [HttpPost("add")]
-        public IActionResult AddEvent([FromBody] AddEventDto events)
+        public IActionResult AddEvent([FromBody] EventDto events)
         {
             if(_db.Events.Where(a => a.Name == events.name).Any())
                 return BadRequest("Event already exists");
