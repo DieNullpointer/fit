@@ -9,8 +9,7 @@ class APIConstants {
   static async getAllEvents() {
     let response;
     try {
-      response = await axios.get(this.EVENT_URL)
-      console.log(response);
+      response = await axios.get(this.EVENT_URL);
     } catch (error) {}
     return response.data;
   }
@@ -18,8 +17,7 @@ class APIConstants {
   static async getAllPackages() {
     let response;
     try {
-      response = await axios.get(this.PACKAGE_URL)
-      console.log(response);
+      response = await axios.get(this.PACKAGE_URL);
     } catch (error) {}
     return response.data;
   }

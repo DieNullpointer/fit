@@ -1,7 +1,6 @@
 import Input from "../components/atoms/Input";
 import Button from "../components/atoms/Button";
 import { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import PageFrame from "../components/PageFrame";
 import axios from "axios";
 import { Typography } from "@mui/material";
@@ -9,7 +8,6 @@ import Style from "../styleConstants";
 
 export default function AddPackage()
 {
-    const navigate = useNavigate();
     const [name, setName] = useState("");
     const [price, setPrice] = useState("");
     const [validation, setValidation] = useState({});

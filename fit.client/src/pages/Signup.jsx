@@ -23,14 +23,14 @@ export default function Signup() {
     let newEvents = [];
     let resEvents = await APIConstants.getAllEvents();
     resEvents.map((event) => {
-      newEvents.push(`${event.name} (${event.date})`);
+      return newEvents.push(`${event.name} (${event.date})`);
     });
     setEvents(newEvents);
 
     let newPackages = [];
     let resPackages = await APIConstants.getAllPackages();
     resPackages.map((p) => {
-      newPackages.push(p.name);
+      return newPackages.push(`${p.name} (${p.price}€)`);
     });
     setPackages(newPackages);
   }
@@ -133,6 +133,7 @@ export default function Signup() {
                     full
                     label="FIT"
                     required
+                    {...Form.Child("input", "event")}
                   />
                   <div className="md:ml-3">
                     <AutoComplete
@@ -141,6 +142,7 @@ export default function Signup() {
                       full
                       label="Paket"
                       required
+                      {...Form.Child("input", "package")}
                     />
                   </div>
                 </Form.Section>
