@@ -4,7 +4,7 @@ import styled from "@emotion/styled";
 
 export default function AutoComplete({ options, label, id, required, full, onChange }) {
   let items = [];
-  options.map((option, idx) => {
+  options?.map?.((option, idx) => {
     return items.push({ value: idx + 1, text: option });
   });
   const ColorForm = styled(FormControl)(({ theme }) => ({

@@ -16,7 +16,7 @@ export default function Checkbox({ label, defaultChecked, onChange}) {
               color: Style.colors.primary,
               "&.Mui-checked": { color: Style.colors.primary },
             }}
-            onChange={onChange}
+            onClickCapture={onChange}
           />
         }
         label={label}
