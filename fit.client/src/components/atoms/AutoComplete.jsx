@@ -2,11 +2,23 @@ import { Autocomplete, TextField, FormControl } from "@mui/material";
 import Style from "../../styleConstants";
 import styled from "@emotion/styled";
 
-export default function AutoComplete({ options, label, id, required, full, onChange }) {
+export default function AutoComplete({
+  options,
+  label,
+  id,
+  required,
+  full,
+  onChange,
+}) {
   let items = [];
-  options?.map?.((option, idx) => {
-    return items.push({ value: idx + 1, text: option });
-  });
+  if (!options[0]?.guid)
+    options?.map?.((option, idx) => {
+      return items.push({ value: idx + 1, text: option });
+    });
+  else
+    options?.map?.((option, idx) => {
+      return items.push({ value: option.guid, text: option.text });
+    });
   const ColorForm = styled(FormControl)(({ theme }) => ({
     "& label.Mui-focused": {
       color: Style.colors.dark,
@@ -35,7 +47,8 @@ export default function AutoComplete({ options, label, id, required, full, onCha
         id={id}
         autoHighlight
         fullWidth
-        onChange={onChange}
+        onInputChange={onChange}
+        
         renderInput={(params) => (
           <TextField
             {...params}

@@ -44,15 +44,20 @@ function Section({ children, className }) {
 /**
  * @param {"input" | "button" | "checkbox" | "autocomplete"} type Type of FormChild
  */
-function Child(type, name) {
+function Child(type, name, onChangeOverride) {
   let count = 0;
   if (idArray.includes(name)) {
     count = idArray.indexOf(name);
   }
+
   const onChange = (e) => {
+    if(!onChangeOverride)
     refArray[count].current =
-      type === "autocomplete" ? e.target.innerText : e.target.value;
+      type === "autocomplete" ? e.target.innerText :  e.target.value;
+      else
+      refArray[count].current = onChangeOverride(e);
   };
+
   return { as: Get(type, name), onChange };
 }
 
@@ -102,4 +107,4 @@ function getExport() {
 }
 
 // eslint-disable-next-line
-export default { Body, Section, Child, Submit };
+export default { Body, Section, Child, Submit, getExport };
