@@ -44,7 +44,7 @@ chmod a+x startServer.sh
 ./startServer.sh
 ```
 
-![](./SpengerLogo_720px.png)
+![](./spengerlogo.svg)
 
 ### Projektbeschreibung
 
