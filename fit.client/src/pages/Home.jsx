@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
-import Button from "../components/atoms/Button";
-import Input from "../components/atoms/Input";
-import Select from "../components/atoms/Select";
 import PageFrame from "../components/PageFrame";
+import Image from "../components/atoms/Image";
 
 export default function Home() {
   const [eventlist, setEventlist] = useState();
@@ -26,26 +24,11 @@ export default function Home() {
 
   return (
     <PageFrame active="home">
-      <div className="flex flex-col space-y-4 m-5">
-        <Button text="Button" sharp />
-        <Input
-          label="username"
-          required
-          id="in-name"
-          purpose="username"
-          type="text"
-          size={"medium"}
-        />
-        <Input
-          label="password"
-          required
-          id="in-pw"
-          purpose="password"
-          type="password"
-        />
-        <Select options={eventlist?.map((event) => { return event.name + " (" + event.date + ")"}) ?? ["-"]} label="Event" id="event"  />
+      <Image src="Y:\Projekte\fit\Logo">
+      </Image>
+      <div className="text-center">
+        <p>WILLKOMMEN zum FIT 23!</p>
       </div>
-      
-      </PageFrame>
+    </PageFrame>
   );
 }
