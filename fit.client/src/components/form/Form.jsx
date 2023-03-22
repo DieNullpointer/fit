@@ -106,5 +106,14 @@ function getExport() {
   return exportObj;
 }
 
+function reset() {
+  let exportObj = getExport();
+  stateArray = [];
+  refArray = [];
+  idArray = [];
+  sections = [];
+  return exportObj;
+}
+
 // eslint-disable-next-line
-export default { Body, Section, Child, Submit, getExport };
+export default { Body, Section, Child, Submit, getExport, reset };

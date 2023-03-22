@@ -10,94 +10,24 @@ import { useState, useEffect, useRef } from "react";
 import Button from "../components/atoms/Button";
 import Form from "../components/form/Form";
 import APIConstants from "../apiConstants";
+import { useNavigate, useParams } from "react-router-dom";
 
-let personDivChildrenLength = 0;
 
 export default function Signup() {
-  const person = (
-    <Paper elevation={3} id="person-paper" key={"paper-key-person-" + (personDivChildrenLength++)} >
-      <Form.Section className="px-3">
-        <div className="grid md:grid-cols-3 grid-flow-column">
-          <Input
-            id="in-title"
-            label="Titel"
-            required
-            purpose={"text"}
-            full
-            className="m-3"
-            {...Form.Child("input", "title")}
-          />
-          <Input
-            id="in-firstname"
-            label="Vorname"
-            required
-            purpose={"text"}
-            full
-            className="m-3"
-            {...Form.Child("input", "firstname")}
-          />
-          <Input
-            id="in-lastname"
-            label="Nachname"
-            required
-            purpose={"text"}
-            full
-            className="m-3"
-            {...Form.Child("input", "lastname")}
-          />
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2">
-          <div className="pr-3">
-            <Input
-              id="in-telnr"
-              label="Telefonnummer"
-              required
-              purpose={"text"}
-              full
-              {...Form.Child("input", "telnr")}
-            />
-            <Input
-              id="in-mobilnr"
-              label="Mobilnummer"
-              required
-              purpose={"text"}
-              full
-              {...Form.Child("input", "mobilnr")}
-            />
-            <Input
-              id="in-email"
-              label="Email"
-              required
-              purpose={"text"}
-              full
-              {...Form.Child("input", "email")}
-            />
-          </div>
-          <div>
-            <Input
-              id="in-function"
-              label="Funktion i. d. Firma"
-              required
-              purpose={"text"}
-              full
-              {...Form.Child("input", "function")}
-            />
-          </div>
-        </div>
-      </Form.Section>
-    </Paper>
-  );
+  
 
   const [payDisabled, setPayDisabled] = useState(false);
   const [events, setEvents] = useState([]);
   const [packages, setPackages] = useState([]);
   const [step, setStep] = useState(1);
-  const [personDivChildren, setPersonDivChildren] = useState([person]);
-  const personDivRef = useRef();
+
+  const { page } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
+    console.log(page);
     init();
-  }, []);
+  }, [page]);
 
   async function init() {
     let newEvents = [];
@@ -255,7 +185,103 @@ export default function Signup() {
               </div>
             </div>
           </div>
-          <div
+          
+          <Button
+            id="submit"
+            text={step === 1 ? "Weiter" : "Abschicken"}
+            onClick={() => {
+              
+              console.log(Form.reset());
+            }}
+          />
+        </Form.Body>
+        <Typography
+          variant="subtitle1"
+          className="absolute right-[1.35rem] bottom-2.5"
+        >
+          {step}/2
+        </Typography>
+      </Paper>
+    </PageFrame>
+  );
+}
+
+/**
+ *const person = (
+    <Paper elevation={3} id="person-paper" key={"paper-key-person-" + (personDivChildrenLength++)} >
+      <Form.Section className="px-3">
+        <div className="grid md:grid-cols-3 grid-flow-column">
+          <Input
+            id="in-title"
+            label="Titel"
+            required
+            purpose={"text"}
+            full
+            className="m-3"
+            {...Form.Child("input", "title")}
+          />
+          <Input
+            id="in-firstname"
+            label="Vorname"
+            required
+            purpose={"text"}
+            full
+            className="m-3"
+            {...Form.Child("input", "firstname")}
+          />
+          <Input
+            id="in-lastname"
+            label="Nachname"
+            required
+            purpose={"text"}
+            full
+            className="m-3"
+            {...Form.Child("input", "lastname")}
+          />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2">
+          <div className="pr-3">
+            <Input
+              id="in-telnr"
+              label="Telefonnummer"
+              required
+              purpose={"text"}
+              full
+              {...Form.Child("input", "telnr")}
+            />
+            <Input
+              id="in-mobilnr"
+              label="Mobilnummer"
+              required
+              purpose={"text"}
+              full
+              {...Form.Child("input", "mobilnr")}
+            />
+            <Input
+              id="in-email"
+              label="Email"
+              required
+              purpose={"text"}
+              full
+              {...Form.Child("input", "email")}
+            />
+          </div>
+          <div>
+            <Input
+              id="in-function"
+              label="Funktion i. d. Firma"
+              required
+              purpose={"text"}
+              full
+              {...Form.Child("input", "function")}
+            />
+          </div>
+        </div>
+      </Form.Section>
+    </Paper>
+  );
+
+  <div
             className={`transition ease-in-out duration-200 ${
               step === 1 ? "hidden" : "block"
             }`}
@@ -277,26 +303,4 @@ export default function Signup() {
               </div>
             </div>
           </div>
-          <Button
-            id="submit"
-            text={step === 1 ? "Weiter" : "Abschicken"}
-            onClick={() => {
-              setStep(2);
-              console.log(Form.getExport());
-            }}
-          />
-        </Form.Body>
-        <Typography
-          variant="subtitle1"
-          className="absolute right-[1.35rem] bottom-2.5"
-        >
-          {step}/2
-        </Typography>
-      </Paper>
-    </PageFrame>
-  );
-}
-
-/**
- *
  */
