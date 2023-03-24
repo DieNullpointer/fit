@@ -20,6 +20,7 @@ export default function Signup() {
 
   const [queryParameters] = useSearchParams();
   const [page, setPage] = useState(queryParameters.get("p"));
+  const internalPage = useRef(1);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -278,8 +279,10 @@ export default function Signup() {
                 onClick={() => {
                   console.log(Form.reset());
                   navigate("/signup?p=2");
+                  internalPage.current = 2
                   window.location.reload(false);
                 }}
+                loading={internalPage.current === 2}
               />
             </Form.Body>
             <Typography
