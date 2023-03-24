@@ -37,7 +37,7 @@ function Body({ className, children }) {
   return <form className={className}>{children}</form>;
 }
 
-function Section({ children, className }) {
+function Section({ children, className, array }) {
   return <div className={className}>{children}</div>;
 }
 
@@ -115,5 +115,12 @@ function reset() {
   return exportObj;
 }
 
+function Reload() {
+  const [reload, setReload] = React.useState(false);
+  setReload(false);
+  reset();
+  return <></>
+}
+
 // eslint-disable-next-line
-export default { Body, Section, Child, Submit, getExport, reset };
+export default { Body, Section, Child, Submit, getExport, reset, Reload };

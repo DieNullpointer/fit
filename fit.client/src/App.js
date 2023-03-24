@@ -27,7 +27,7 @@ export default function App() {
           <Route path="/event" element={<Events />} />
           <Route path="/impressum" />
           <Route path="/datenschutz" />
-          <Route path="/signup/:page" element={<Signup />} />
+          <Route path="/signup" element={<Signup />} />
         </Routes>
       </Router>
 
