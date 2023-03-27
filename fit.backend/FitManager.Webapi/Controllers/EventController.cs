@@ -5,7 +5,6 @@ using FitManager.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.IO;
 using System.Linq;
 
 namespace FitManager.Webapi.Controllers
@@ -25,16 +24,7 @@ namespace FitManager.Webapi.Controllers
         [HttpGet]
         public IActionResult GetAllEvents()
         {
-            var events = _db.Events.Where(a => a.Date > DateTime.UtcNow.Date).OrderBy(a => a.Date).ToList();
-            if(events is null)
-                return BadRequest();
-            var export = events.Select(a => new
-            {
-                a.Guid,
-                a.Name,
-                Date = a.Date.ToString("dd/MM/yyyy")
-            });
-            return Ok(export);
+            
         }
 
         //  api/event/now
@@ -63,11 +53,11 @@ namespace FitManager.Webapi.Controllers
 
         //  api/event/add
         [HttpPost("add")]
-        public IActionResult AddEvent([FromBody] EventDto events)
+        public IActionResult AddEvent([FromBody] EventCmd events)
         {
             if(_db.Events.Where(a => a.Name == events.name).Any())
                 return BadRequest("Event already exists");
-            var ev = new Event(name: events.name, date: events.date.Date);
+            
             _db.Events.Add(ev);
             _db.SaveChanges();
             return Ok();

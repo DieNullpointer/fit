@@ -9,9 +9,8 @@ using System.Threading.Tasks;
 
 namespace FitManager.Application.Dto
 {
-    public record RegisterDto
+    public record CompanyCmd
     (
-        Guid guid,
         [StringLength(255, MinimumLength = 3, ErrorMessage = "Die Länge des Firmennamens ist ungültig")]
         string name,
         [StringLength(255, MinimumLength = 3, ErrorMessage = "Die Länge der Adresse ist ungültig")]
