@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace FitManager.Webapi.Controllers
 {
@@ -14,17 +15,23 @@ namespace FitManager.Webapi.Controllers
     public class EventController : ControllerBase
     {
         private readonly FitContext _db;
+        private readonly EventService _service;
 
-        public EventController(FitContext db)
+        public EventController(FitContext db, EventService service)
         {
             _db = db;
+            _service = service;
         }
 
         //  api/event
         [HttpGet]
-        public IActionResult GetAllEvents()
+        public async Task<IActionResult> GetAllEvents()
         {
-            
+            try
+            {
+                return Ok(await _service.GetAllEvents());
+            }
+            catch(ServiceException e) { return BadRequest(e.Message); }
         }
 
         //  api/event/now
@@ -57,7 +64,7 @@ namespace FitManager.Webapi.Controllers
         {
             if(_db.Events.Where(a => a.Name == events.name).Any())
                 return BadRequest("Event already exists");
-            
+            var ev = new Event(name: events.name, date: events.date.Date);
             _db.Events.Add(ev);
             _db.SaveChanges();
             return Ok();
