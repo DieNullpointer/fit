@@ -36,11 +36,11 @@ namespace FitManager.Webapi.Controllers
         [HttpPost("add")]
         public IActionResult CreatePackage([FromBody] PackageCmd package)
         {
-            if(_db.Packages.Where(a => a.Name == package.name).Count() > 0)
+            if(_db.Packages.Where(a => a.Name == package.Name).Count() > 0)
                 return BadRequest("gibt es schon");
             try
             {
-                _db.Packages.Add(new Application.Model.Package(package.name, decimal.Parse(package.price)));
+                _db.Packages.Add(new Application.Model.Package(package.Name, decimal.Parse(package.Price)));
                 _db.SaveChanges();
             }
             catch

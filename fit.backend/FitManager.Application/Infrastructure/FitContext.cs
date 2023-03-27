@@ -33,6 +33,7 @@ namespace FitManager.Application.Infrastructure
             {
                 return new Model.Event(name: f.Name.JobTitle(), date: new DateTime(year: f.Date.Future(refDate: DateTime.UtcNow, yearsToGoForward: 5).Year, month: f.Date.Future(refDate: DateTime.UtcNow, yearsToGoForward: 5).Month, day: f.Date.Future(refDate: DateTime.UtcNow, yearsToGoForward: 5).Day));
             }).Generate(5).ToList();
+            events.Add(new Model.Event(new DateTime(year: 2024, month: 3, day: 23), "FIT24"));
             events.Add(new Model.Event(new DateTime(year: 2023, month: 3, day: 23), "FIT23"));
             events.Add(new Model.Event(new DateTime(year: 2022, month: 3, day: 23), "FIT22"));
             Events.AddRange(events);

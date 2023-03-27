@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text.Json.Serialization;
 using System.Linq;
+using FitManager.Application.Services;
 
 internal class Program
 {
@@ -41,6 +42,7 @@ internal class Program
 
         builder.Services.AddControllers();
         builder.Services.AddAutoMapper(typeof(FitManager.Application.Dto.MappingProfile));
+        builder.Services.AddTransient<EventService>();
         builder.Services.AddDbContext<FitContext>(opt =>
         {
             opt.UseSqlServer(

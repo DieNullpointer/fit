@@ -9,7 +9,7 @@ namespace FitManager.Application.Dto
 {
     public record PackageDto
     (
-            Guid Guid
+            Guid Guid,
             [StringLength(255, MinimumLength = 3, ErrorMessage = "Die Länge des Namens ist ungültig.")]
             string Name,
             [StringLength(255, MinimumLength = 1, ErrorMessage = "Die Länge des Preises ist ungültig")]
