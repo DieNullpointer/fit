@@ -30,6 +30,8 @@ namespace FitManager.Application.Model
 
         public decimal Price { get; set; }
 
+        public List<Event> Events { get; } = new();
+
         public List<Company> Companys { get; } = new();
     }
 }

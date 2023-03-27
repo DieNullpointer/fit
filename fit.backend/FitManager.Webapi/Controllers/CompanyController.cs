@@ -46,9 +46,9 @@ namespace FitManager.Webapi.Controllers
 
         //  api/company/{guid}
         [HttpGet("{guid:Guid}")]
-        public IActionResult GetCompany(Guid guid)
+        public async Task<IActionResult> GetCompany(Guid guid)
         {
-            var partners = _db.ContactPartners.Where(a => a.Company.Guid== guid).ToList();
+            var partners = await _db.ContactPartners.Where(a => a.Company.Guid== guid).ToListAsync();
             return partners is null ? BadRequest() : Ok(partners);
         }
 
@@ -64,13 +64,15 @@ namespace FitManager.Webapi.Controllers
 
         //  api/company/register
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterDto register)
+        public async Task<IActionResult> Register([FromBody] CompanyCmd register)
         {
             var company = _mapper.Map<Company>(register, opt => opt.AfterMap(async(dto, entity) =>
             {
                 entity.Event = await _db.Events.FirstAsync(a => a.Guid == register.eventGuid);
                 entity.Package = await _db.Packages.FirstAsync(a => a.Guid == register.packageGuid);
             }));
+            if (company.Event.Packages.Contains(company.Package))
+                return BadRequest();
             //var package = await _db.Packages.FirstAsync(a => a.Name == register.package);
             //var events = await _db.Events.FirstAsync(a => a.Name == register.eventName);
             //var company = new Company(register.name, register.address, register.country, register.plz, register.place, register.billAddress, package, events);

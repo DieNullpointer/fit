@@ -34,7 +34,7 @@ namespace FitManager.Webapi.Controllers
         }
 
         [HttpPost("add")]
-        public IActionResult CreatePackage([FromBody] PackageDto package)
+        public IActionResult CreatePackage([FromBody] PackageCmd package)
         {
             if(_db.Packages.Where(a => a.Name == package.name).Count() > 0)
                 return BadRequest("gibt es schon");
