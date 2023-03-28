@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import PageFrame from "../components/PageFrame";
-import Image from "../components/atoms/Image";
+import { Typography } from "@mui/material";
+import { Box } from "@mui/system";
+import Carousel, {CarouselItem} from "../components/Carousel";
 
 export default function Home() {
   const [eventlist, setEventlist] = useState();
@@ -24,10 +26,17 @@ export default function Home() {
 
   return (
     <PageFrame active="home">
-      <Image src="Y:\Projekte\fit\Logo">
-      </Image>
-      <div className="text-center">
-        <p>WILLKOMMEN zum FIT 23!</p>
+      <Box sx={{ color: "dark", textAlign: "center" }}>
+        <Typography variant="h4">Willkommen zum FIT 23!</Typography>
+        <Typography variant="subtitle1" gutterBottom>
+          Firmeninformationstag
+        </Typography>
+      </Box>
+      <div className="app">
+        <Carousel>
+          <CarouselItem>Item 1</CarouselItem>
+          <CarouselItem>Item 2</CarouselItem>
+        </Carousel>
       </div>
     </PageFrame>
   );
