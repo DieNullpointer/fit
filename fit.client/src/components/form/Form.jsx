@@ -6,37 +6,42 @@ let refArray = [];
 let idArray = [];
 let sections = [];
 
-function Body({ className, children }) {
-  React.useEffect(() => {
-    for (let i = 0; i < idArray.length; i++) {
-      stateArray[i][1](refArray[i].current);
-    }
-  });
-
-  function walkAllChildren(root, callback) {
-    function walk(e, parents) {
-      callback(e, parents);
-      const newParents = [...parents, e];
-      React.Children.toArray(e.props?.children).forEach((c) => {
-        walk(c, newParents);
-      });
-    }
-    walk(root, []);
+function walkAllChildren(root, callback) {
+  function walk(e, parents) {
+    callback(e, parents);
+    const newParents = [...parents, e];
+    React.Children.toArray(e.props?.children).forEach((c) => {
+      walk(c, newParents);
+    });
   }
+  walk(root, []);
+}
 
-  walkAllChildren(<>{children}</>, (e, parents) => {
-    if (e.type?.name === "Section") sections.push(e);
+function Body({ className, children, active, id }) {
+  React.useEffect(() => {
+    if (active) {
+      for (let i = 0; i < idArray.length; i++) {
+        stateArray[i][1](refArray[i].current);
+      }
+    }
   });
 
-  if (!sections.length) {
-    console.error(
-      "[FIT-Manager Component] Form.Body must have at least one Form.Section element!"
-    );
+  if (active) {
+    walkAllChildren(<>{children}</>, (e, parents) => {
+      if (e.type?.name === "Section") sections.push(e.as);
+    });
+
+    if (!sections.length) {
+      console.error(
+        "[FIT-Manager Component] Form.Body must have at least one Form.Section element!"
+      );
+    }
   }
 
   return <form className={className}>{children}</form>;
 }
 
+// check for formchild of active body
 function Section({ children, className, array }) {
   return <div className={className}>{children}</div>;
 }
@@ -51,11 +56,10 @@ function Child(type, name, onChangeOverride) {
   }
 
   const onChange = (e) => {
-    if(!onChangeOverride)
-    refArray[count].current =
-      type === "autocomplete" ? e.target.innerText :  e.target.value;
-      else
-      refArray[count].current = onChangeOverride(e);
+    if (!onChangeOverride)
+      refArray[count].current =
+        type === "autocomplete" ? e.target.innerText : e.target.value;
+    else refArray[count].current = onChangeOverride(e);
   };
 
   return { as: Get(type, name), onChange };
@@ -86,7 +90,7 @@ function Get(type, name) {
   const idString = name;
   const [state, setState] = React.useState(type === "input" ? "" : false);
   const ref = React.useRef(state);
-  if (!idArray.includes(idString)) {
+  if (!idArray.includes(idString) ) {
     idArray.push(idString);
     stateArray.push([state, setState]);
     refArray.push(ref);
@@ -119,7 +123,7 @@ function Reload() {
   const [reload, setReload] = React.useState(false);
   setReload(false);
   reset();
-  return <></>
+  return <></>;
 }
 
 // eslint-disable-next-line

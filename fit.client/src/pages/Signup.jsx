@@ -147,7 +147,7 @@ export default function Signup() {
           transition={{ duration: 0.85 }}
         >
           <Paper elevation={3} className="mt-12 mb-24 relative">
-            <Form.Body className="py-4 px-8">
+            <Form.Body active={internalPage.current === 1} className="py-4 px-8" id="form-1" >
               <div className={`transition ease-in-out duration-700`}>
                 <div className="w-full">
                   <Typography variant="h6">Firmendetails</Typography>
@@ -278,9 +278,6 @@ export default function Signup() {
                 text="Weiter"
                 onClick={() => {
                   console.log(Form.reset());
-                  navigate("/signup?p=2");
-                  internalPage.current = 2
-                  window.location.reload(false);
                 }}
                 loading={internalPage.current === 2}
               />
@@ -300,7 +297,7 @@ export default function Signup() {
           transition={{ duration: 0.85 }}
         >
           <Paper elevation={3} className="mt-12 mb-24 relative">
-            <Form.Body className="py-4 px-8">
+            <Form.Body className="py-4 px-8" id="form-2">
               <div className={`transition ease-in-out duration-700`}>
                 <div className="w-full">
                   <Typography variant="h6">Ansprechpartner</Typography>
@@ -335,11 +332,3 @@ export default function Signup() {
     </PageFrame>
   );
 }
-
-/**
- *const person = (
-    
-  );
-
-  
- */
