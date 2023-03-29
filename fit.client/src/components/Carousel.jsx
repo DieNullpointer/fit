@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSwipeable } from "react-swipeable";
 
-import "../components/Carousel.css";
+import "../components/css/Carousel.css";
 
 export const CarouselItem = ({ children, width }) => {
   return (
@@ -67,18 +67,6 @@ const Carousel = ({ children }) => {
         >
           Prev
         </button>
-        {React.Children.map(children, (child, index) => {
-          return (
-            <button
-              className={`${index === activeIndex ? "active" : ""}`}
-              onClick={() => {
-                updateIndex(index);
-              }}
-            >
-              {index + 1}
-            </button>
-          );
-        })}
         <button
           onClick={() => {
             updateIndex(activeIndex + 1);

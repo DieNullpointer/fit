@@ -3,6 +3,8 @@ import PageFrame from "../components/PageFrame";
 import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import Carousel, {CarouselItem} from "../components/Carousel";
+import Image from "../components/atoms/Image";
+import Logo from "../components/atoms/Logo";
 
 export default function Home() {
   const [eventlist, setEventlist] = useState();
@@ -34,8 +36,12 @@ export default function Home() {
       </Box>
       <div className="app">
         <Carousel>
-          <CarouselItem>Item 1</CarouselItem>
-          <CarouselItem>Item 2</CarouselItem>
+          <CarouselItem>  
+            <Image src="../../titlepicture.png"></Image>
+          </CarouselItem>
+          <CarouselItem>  
+            <Image src="../../logo.png"></Image>
+          </CarouselItem>
         </Carousel>
       </div>
     </PageFrame>
