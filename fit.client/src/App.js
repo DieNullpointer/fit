@@ -19,7 +19,6 @@ export default function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="*" exact={true} element={<NotFound />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/event/add" element={<AddEvent />} />
           <Route path="/package/add" element={<AddPackage />} />
@@ -28,6 +27,7 @@ export default function App() {
           <Route path="/impressum" />
           <Route path="/datenschutz" />
           <Route path="/signup" element={<Signup />} />
+          <Route path="*" exact={true} element={<NotFound />} />
         </Routes>
       </Router>
 

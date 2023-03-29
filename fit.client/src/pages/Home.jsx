@@ -4,7 +4,6 @@ import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import Carousel, {CarouselItem} from "../components/Carousel";
 import Image from "../components/atoms/Image";
-import Logo from "../components/atoms/Logo";
 
 export default function Home() {
   const [eventlist, setEventlist] = useState();
