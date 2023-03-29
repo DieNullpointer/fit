@@ -37,22 +37,27 @@ function Body({ className, children }) {
   return <form className={className}>{children}</form>;
 }
 
-function Section({ children, className }) {
+function Section({ children, className, array }) {
   return <div className={className}>{children}</div>;
 }
 
 /**
  * @param {"input" | "button" | "checkbox" | "autocomplete"} type Type of FormChild
  */
-function Child(type, name) {
+function Child(type, name, onChangeOverride) {
   let count = 0;
   if (idArray.includes(name)) {
     count = idArray.indexOf(name);
   }
+
   const onChange = (e) => {
+    if(!onChangeOverride)
     refArray[count].current =
-      type === "autocomplete" ? e.target.innerText : e.target.value;
+      type === "autocomplete" ? e.target.innerText :  e.target.value;
+      else
+      refArray[count].current = onChangeOverride(e);
   };
+
   return { as: Get(type, name), onChange };
 }
 
@@ -101,5 +106,21 @@ function getExport() {
   return exportObj;
 }
 
+function reset() {
+  let exportObj = getExport();
+  stateArray = [];
+  refArray = [];
+  idArray = [];
+  sections = [];
+  return exportObj;
+}
+
+function Reload() {
+  const [reload, setReload] = React.useState(false);
+  setReload(false);
+  reset();
+  return <></>
+}
+
 // eslint-disable-next-line
-export default { Body, Section, Child, Submit };
+export default { Body, Section, Child, Submit, getExport, reset, Reload };

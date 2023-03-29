@@ -4,7 +4,6 @@ import DatePicker from "../components/atoms/DatePicker";
 import Input from "../components/atoms/Input";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Typography } from "@mui/material";
 import Style from "../styleConstants";
@@ -12,7 +11,6 @@ import Style from "../styleConstants";
 
 export default function AddEvent()
 {
-    const navigate = useNavigate();
     const [selected, setSelected] = useState(Date.now());
     const [name, setName] = useState("");
     const [validation, setValidation] = useState({});
