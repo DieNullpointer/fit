@@ -29,3 +29,11 @@ fit.client/package-lock.json
 **npm-debug.log*
 **yarn-debug.log*
 **yarn-error.log*
+fit.client/package-lock.json
+**/.vs
+**/.vscode
+**/bin
+**/obj
+appsettings.Development.json
+**azure_secrets.txt
+**/wwwroot
