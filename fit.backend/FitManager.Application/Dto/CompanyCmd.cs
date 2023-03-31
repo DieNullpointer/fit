@@ -35,11 +35,11 @@ namespace FitManager.Application.Dto
             var db = validationContext.GetRequiredService<FitContext>();
             if (!db.Packages.Any(a => a.Guid == packageGuid))
             {
-                yield return new ValidationResult("Package does not exist", new[] { nameof(packageGuid) });
+                yield return new ValidationResult("Package existiert nicht", new[] { nameof(packageGuid) });
             }
             if (!db.Events.Any(c => c.Guid == eventGuid))
             {
-                yield return new ValidationResult("Event does not exist", new[] { nameof(eventGuid) });
+                yield return new ValidationResult("Event existiert nicht", new[] { nameof(eventGuid) });
             }
         }
     }

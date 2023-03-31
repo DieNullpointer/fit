@@ -25,14 +25,18 @@ namespace FitManager.Application.Services
             _db = db;
         }
 
-        //All Events in the future
-        public async Task<List<AllEventDto>> GetAllEvents()
+        public async Task<Guid> AddEvent(EventCmd events)
         {
-            var events = await _db.Events.Where(a => a.Date > DateTime.UtcNow.Date).OrderBy(a => a.Date).ToListAsync();
-            if (events is null || events.Count == 0)
-                throw new ServiceException("Keine Events in der Zukunft");
-            var export = _mapper.Map<List<Event>, List<AllEventDto>>(events);
-            return export;
+            if (events.Date < DateTime.UtcNow)
+                throw new ServiceException("Datum liegt in der Vergangenheit");
+            var ev = _mapper.Map<Event>(events);
+            await _db.Events.AddAsync(ev);
+            try
+            {
+                await _db.SaveChangesAsync();
+            }
+            catch(DbUpdateException e) { throw new ServiceException(e.InnerException?.Message ?? e.Message, e); }
+            return ev.Guid;
         }
     }
 }
