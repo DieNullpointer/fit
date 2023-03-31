@@ -64,16 +64,15 @@ internal class Program
         Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(builder.Configuration["SyncfusionKey"]);
         if (app.Environment.IsDevelopment())
         {
-            using (var scope = app.Services.CreateScope())
-            {
-                using (var db = scope.ServiceProvider.GetRequiredService<FitContext>())
-                {
-                    db.Database.EnsureDeleted();
-                    db.Database.EnsureCreated();
-                    db.Seed();
-                }
-            }
             app.UseCors();
+        }
+
+        using (var scope = app.Services.CreateScope())
+        {
+            using (var db = scope.ServiceProvider.GetRequiredService<FitContext>())
+            {
+                db.CreateDatabase(isDevelopment: app.Environment.IsDevelopment());
+            }
         }
 
         app.MapControllers();

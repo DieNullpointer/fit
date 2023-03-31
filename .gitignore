@@ -1,1 +1,7 @@
 fit.client/package-lock.json
+**/.vs
+**/.vscode
+**/bin
+**/obj
+appsettings.Development.json
+**azure_secrets.txt
