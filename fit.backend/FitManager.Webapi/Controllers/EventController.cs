@@ -27,11 +27,16 @@ namespace FitManager.Webapi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllEvents()
         {
-            try
+            var events = await _db.Events.Where(a => a.Date > DateTime.UtcNow.Date).OrderBy(a => a.Date).ToListAsync();
+            if (events is null)
+                return BadRequest();
+            var export = events.Select(a => new
             {
-                return Ok(await _service.GetAllEvents());
-            }
-            catch(ServiceException e) { return BadRequest(e.Message); }
+                a.Guid,
+                a.Name,
+                Date = a.Date.ToString("dd/MM/yyyy")
+            });
+            return Ok(export);
         }
 
         //  api/event/now
@@ -39,14 +44,6 @@ namespace FitManager.Webapi.Controllers
         public IActionResult GetCurrentEvent()
         {
             var events = _db.Events.Include(a => a.Companies).Where(a => DateTime.UtcNow.Date <= a.Date).OrderBy(a => a.Date).First();
-
-            //var settings = Path.Combine("appsettings.Development.json");
-            //var config = System.Text.Json.JsonDocument.Parse(System.IO.File.ReadAllText(settings)).RootElement;
-            //Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(config.GetProperty("SyncfusionKey").GetString());
-
-            //PdfGenerator pdf = new PdfGenerator();
-            //var b = pdf.GenerateInvoice();
-            //return File(b, "application/pdf", "your_filename.pdf");
             return events is null ? BadRequest("No event is planned") : Ok(events);
         }
 
@@ -60,14 +57,14 @@ namespace FitManager.Webapi.Controllers
 
         //  api/event/add
         [HttpPost("add")]
-        public IActionResult AddEvent([FromBody] EventCmd events)
+        public async Task<IActionResult> AddEvent([FromBody] EventCmd events)
         {
-            if(_db.Events.Where(a => a.Name == events.name).Any())
-                return BadRequest("Event already exists");
-            var ev = new Event(name: events.name, date: events.date.Date);
-            _db.Events.Add(ev);
-            _db.SaveChanges();
-            return Ok();
+            try
+            {
+                var guid = await _service.AddEvent(events);
+                return Ok(guid);
+            }
+            catch(ServiceException e) { return BadRequest(e.Message); }
         }
     }
 }
