@@ -26,18 +26,6 @@ function Body({ className, children, active, id }) {
     }
   });
 
-  if (active) {
-    walkAllChildren(<>{children}</>, (e, parents) => {
-      if (e.type?.name === "Section") sections.push(e.as);
-    });
-
-    if (!sections.length) {
-      console.error(
-        "[FIT-Manager Component] Form.Body must have at least one Form.Section element!"
-      );
-    }
-  }
-
   return <form className={className}>{children}</form>;
 }
 
@@ -55,11 +43,11 @@ function Child(type, name, onChangeOverride) {
     count = idArray.indexOf(name);
   }
 
-  const onChange = (e) => {
+  const onChange = (e, newval) => {
     if (!onChangeOverride)
       refArray[count].current =
-        type === "autocomplete" ? e.target.innerText : e.target.value;
-    else refArray[count].current = onChangeOverride(e);
+        type === "autocomplete" ? newval.text : e.target.value;
+    else refArray[count].current = onChangeOverride(e, newval);
   };
 
   return { as: Get(type, name), onChange };
@@ -105,6 +93,7 @@ function getExport() {
     Object.defineProperty(exportObj, idArray[i], {
       value: refArray[i].current,
       writable: true,
+      enumerable: true,
     });
   }
   return exportObj;
