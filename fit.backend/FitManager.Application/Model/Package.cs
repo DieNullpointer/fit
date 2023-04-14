@@ -5,9 +5,11 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace FitManager.Application.Model
 {
+    [Index(nameof(Name), IsUnique = true)]
     public class Package
     {
         public Package(string name, decimal price)
