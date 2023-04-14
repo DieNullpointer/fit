@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using System.Linq;
+using FitManager.Application.Services;
+using System.Threading.Tasks;
 
 namespace FitManager.Webapi.Controllers
 {
@@ -12,12 +14,15 @@ namespace FitManager.Webapi.Controllers
     public class PackageController : ControllerBase
     {
         private readonly FitContext _db;
+        private readonly PackageEventService _service;
 
-        public PackageController(FitContext db)
+        public PackageController(FitContext db, PackageEventService service)
         {
             _db = db;
+            _service = service;
         }
 
+        // api/package
         [HttpGet]
         public IActionResult AllPackages()
         {
@@ -33,21 +38,15 @@ namespace FitManager.Webapi.Controllers
             return Ok(export);
         }
 
+        // api/package/add
         [HttpPost("add")]
-        public IActionResult CreatePackage([FromBody] PackageCmd package)
+        public async Task<IActionResult> CreatePackage([FromBody] PackageCmd package)
         {
-            if(_db.Packages.Where(a => a.Name == package.Name).Count() > 0)
-                return BadRequest("gibt es schon");
             try
             {
-                _db.Packages.Add(new Application.Model.Package(package.Name, decimal.Parse(package.Price)));
-                _db.SaveChanges();
+                return Ok(await _service.AddPackage(package));
             }
-            catch
-            {
-                return BadRequest("Price ist keine Zahl");
-            }
-            return Ok();
+            catch(ServiceException e) { return BadRequest(e.Message); }
         }
     }
 }

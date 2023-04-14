@@ -42,7 +42,8 @@ internal class Program
 
         builder.Services.AddControllers();
         builder.Services.AddAutoMapper(typeof(FitManager.Application.Dto.MappingProfile));
-        builder.Services.AddTransient<EventService>();
+        builder.Services.AddTransient<PackageEventService>();
+        builder.Services.AddTransient<CompanyService>();
         builder.Services.AddDbContext<FitContext>(opt =>
         {
             opt.UseSqlServer(

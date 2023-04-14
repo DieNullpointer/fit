@@ -15,9 +15,9 @@ namespace FitManager.Webapi.Controllers
     public class EventController : ControllerBase
     {
         private readonly FitContext _db;
-        private readonly EventService _service;
+        private readonly PackageEventService _service;
 
-        public EventController(FitContext db, EventService service)
+        public EventController(FitContext db, PackageEventService service)
         {
             _db = db;
             _service = service;
@@ -61,8 +61,7 @@ namespace FitManager.Webapi.Controllers
         {
             try
             {
-                var guid = await _service.AddEvent(events);
-                return Ok(guid);
+                return Ok(await _service.AddEvent(events));
             }
             catch(ServiceException e) { return BadRequest(e.Message); }
         }
