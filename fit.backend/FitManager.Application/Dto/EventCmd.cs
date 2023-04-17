@@ -8,11 +8,10 @@ using System.Threading.Tasks;
 
 namespace FitManager.Application.Dto
 {
-    public record EventDto
+    public record EventCmd
     (
-            Guid Guid,
             [StringLength(255, MinimumLength = 1, ErrorMessage = "Die Länge des Namens ist ungültig.")]
-            string name,
-            DateTime date
+            string Name,
+            DateTime Date
     );
 }

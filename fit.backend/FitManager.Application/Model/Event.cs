@@ -29,6 +29,8 @@ namespace FitManager.Application.Model
         public DateTime Date { get; set; }
         public string Name { get; set; }
 
+        public List<Package> Packages { get; } = new();
+
         public List<Company> Companies { get; } = new();
     }
 }

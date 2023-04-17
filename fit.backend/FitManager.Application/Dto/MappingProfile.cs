@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FitManager.Application.Model;
+using System.Diagnostics.Tracing;
 
 namespace FitManager.Application.Dto
 {
@@ -7,7 +8,9 @@ namespace FitManager.Application.Dto
     {
         public MappingProfile()
         {
-            CreateMap<RegisterDto, Company>(); //RegisterDto --> Company
+            CreateMap<CompanyCmd, Company>(); //CompanyCmd --> Company
+            CreateMap<EventCmd, Event>(); //EventCmd --> Event
+            CreateMap<PackageCmd, Package>(); //PackageCmd --> Package
         }
     }
 }
