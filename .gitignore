@@ -5,3 +5,4 @@ fit.client/package-lock.json
 **/obj
 appsettings.Development.json
 **azure_secrets.txt
+**/wwwroot
