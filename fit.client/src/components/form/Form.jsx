@@ -30,8 +30,8 @@ function Body({ className, children, active, id }) {
 }
 
 // check for formchild of active body
-function Section({ children, className, array }) {
-  return <div className={className}>{children}</div>;
+function Section({ children, className, array, id }) {
+  return <div id={id} className={className}>{children}</div>;
 }
 
 /**
