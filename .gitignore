@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 fit.client/package-lock.json
 **/.vs
 **/.vscode
@@ -39,7 +38,6 @@ fit.client/package-lock.json
 **npm-debug.log*
 **yarn-debug.log*
 **yarn-error.log*
-=======
 fit.client/package-lock.json
 **/.vs
 **/.vscode
@@ -48,4 +46,3 @@ fit.client/package-lock.json
 appsettings.Development.json
 **azure_secrets.txt
 **/wwwroot
->>>>>>> ad2d359df6b4c9d27fb4fa3fb023ea92f8ac63c9
