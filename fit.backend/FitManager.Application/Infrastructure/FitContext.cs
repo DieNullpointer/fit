@@ -84,5 +84,22 @@ namespace FitManager.Application.Infrastructure
             }
 
         }
+
+        private void Initialize()
+        {
+            // Your code
+        }
+        /// <summary>
+        /// Creates the database. Called once at application startup.
+        /// </summary>
+        public void CreateDatabase(bool isDevelopment)
+        {
+            if (isDevelopment) { Database.EnsureDeleted(); }
+            // EnsureCreated only creates the model if the database does not exist or it has no
+            // tables. Returns true if the schema was created.  Returns false if there are
+            // existing tables in the database. This avoids initializing multiple times.
+            if (Database.EnsureCreated()) { Initialize(); }
+            if (isDevelopment) Seed();
+        }
     }
 }
