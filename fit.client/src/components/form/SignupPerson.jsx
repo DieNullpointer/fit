@@ -1,13 +1,36 @@
-import Form from "./Form";
 import Paper from "../atoms/Paper";
 import Input from "../atoms/Input";
 import Checkbox from "../atoms/Checkbox";
 
-export function SignupPerson({ number, mainPartnerDisabled }) {
+export function SignupPerson({
+  number,
+  mainPartnerDisabled,
+  disabled,
+  onChange,
+}) {
+  //not using form component due to reworks
+  let data = { _intern: number };
+  
+
+  const sharedProps = (registry) => {
+    return {
+      disabled: disabled,
+      onChange: (e) => {
+        Object.defineProperty(data, registry, {
+          value: e.target.value,
+          enumerable: true,
+          writable: true,
+        });
+        console.log(`changed input of ${registry} to ${e.target.value}`);
+        onChange?.(number, data, e);
+      },
+    };
+  };
+
   return (
-    <Form.Body key={"paper-key-person-" + number}>
-      <Paper elevation={3} >
-        <Form.Section className="px-3" id={"person-" + number}>
+    <form key={"paper-key-person-" + number}>
+      <Paper elevation={3}>
+        <div className="px-3" id={"person-" + number}>
           <div className="grid md:grid-cols-3 grid-flow-column">
             <Input
               id="in-title"
@@ -16,7 +39,7 @@ export function SignupPerson({ number, mainPartnerDisabled }) {
               purpose={"text"}
               full
               className="m-3"
-              {...Form.Child("input", "title")}
+              {...sharedProps("title")}
             />
             <Input
               id="in-firstname"
@@ -25,7 +48,7 @@ export function SignupPerson({ number, mainPartnerDisabled }) {
               purpose={"text"}
               full
               className="m-3"
-              {...Form.Child("input", "firstname")}
+              {...sharedProps("firstname")}
             />
             <Input
               id="in-lastname"
@@ -34,7 +57,7 @@ export function SignupPerson({ number, mainPartnerDisabled }) {
               purpose={"text"}
               full
               className="m-3"
-              {...Form.Child("input", "lastname")}
+              {...sharedProps("lastname")}
             />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2">
@@ -45,14 +68,14 @@ export function SignupPerson({ number, mainPartnerDisabled }) {
                 required
                 purpose={"text"}
                 full
-                {...Form.Child("input", "telnr")}
+                {...sharedProps("telnr")}
               />
               <Input
                 id="in-mobilnr"
                 label="Mobilnummer"
                 purpose={"text"}
                 full
-                {...Form.Child("input", "mobilnr")}
+                {...sharedProps("mobilnr")}
               />
               <Input
                 id="in-email"
@@ -60,7 +83,7 @@ export function SignupPerson({ number, mainPartnerDisabled }) {
                 required
                 purpose={"text"}
                 full
-                {...Form.Child("input", "email")}
+                {...sharedProps("email")}
               />
             </div>
             <div>
@@ -70,7 +93,7 @@ export function SignupPerson({ number, mainPartnerDisabled }) {
                 required
                 purpose={"text"}
                 full
-                {...Form.Child("input", "function")}
+                {...sharedProps("function")}
               />
               <div className="-mt-6">
                 <Checkbox
@@ -84,23 +107,8 @@ export function SignupPerson({ number, mainPartnerDisabled }) {
               </div>
             </div>
           </div>
-        </Form.Section>
+        </div>
       </Paper>
-    </Form.Body>
+    </form>
   );
-}
-
-export function getExport() {
-  Form.getExport();
-}
-
-export function isReady() {
-    const exportObj = getExport();
-    if(exportObj) {
-        var allGood = true;
-        console.log(Object.entries(exportObj));
-        Object.entries(exportObj).forEach((val, idx) => {
-            if(val === "") allGood = false; 
-        })
-    }
 }

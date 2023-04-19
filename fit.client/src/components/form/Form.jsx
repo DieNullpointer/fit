@@ -17,12 +17,13 @@ function walkAllChildren(root, callback) {
   walk(root, []);
 }
 
-function Body({ className, children, active, id }) {
+function Body({ className, children, active, id, definedUseEffect }) {
   React.useEffect(() => {
     if (active) {
       for (let i = 0; i < idArray.length; i++) {
         stateArray[i][1](refArray[i].current);
       }
+      if (definedUseEffect) definedUseEffect();
     }
   });
 
@@ -31,7 +32,11 @@ function Body({ className, children, active, id }) {
 
 // check for formchild of active body
 function Section({ children, className, array, id }) {
-  return <div id={id} className={className}>{children}</div>;
+  return (
+    <div id={id} className={className}>
+      {children}
+    </div>
+  );
 }
 
 /**
@@ -78,7 +83,7 @@ function Get(type, name) {
   const idString = name;
   const [state, setState] = React.useState(type === "input" ? "" : false);
   const ref = React.useRef(state);
-  if (!idArray.includes(idString) ) {
+  if (!idArray.includes(idString)) {
     idArray.push(idString);
     stateArray.push([state, setState]);
     refArray.push(ref);
