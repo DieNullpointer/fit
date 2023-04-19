@@ -48,7 +48,7 @@ export default function AddPackage()
 
         var model = {name: nameRef.current, price: priceRef.current}
         try {
-            await (await axios.post('https://localhost:5001/api/package/add', model))
+            await (await axios.post('package/add', model))
         } catch(e) {
             if(e.response.status === 400)
             {

@@ -37,7 +37,7 @@ export default function AddEvent()
         //console.log(selectedRef);
         var model = {name: nameRef.current, date: selectedRef.current.toJSON()}
         try {
-            await (await axios.post('https://localhost:5001/api/event/add', model))
+            await (await axios.post('event/add', model))
         } catch(e) {
             if(e.response.status === 400)
             {

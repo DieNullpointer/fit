@@ -19,7 +19,6 @@ namespace FitManager.Webapi.Controllers
 
         public EventController(FitContext db, PackageEventService service)
         {
-            _db = db;
             _service = service;
         }
 
@@ -85,7 +84,7 @@ namespace FitManager.Webapi.Controllers
                 if(await _service.DeleteEvent(guid)) return Ok();
                 return BadRequest();
             }
-            catch(ServiceException e) { return BadRequest(e.Message); }
+            catch(ServiceException e) { return BadRequest(e.Message);  }
         }
 
         //  api/event/add
