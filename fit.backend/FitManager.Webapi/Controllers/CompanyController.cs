@@ -55,6 +55,8 @@ namespace FitManager.Webapi.Controllers
             return partners is null ? BadRequest() : Ok(partners);
         }
 
+        // api/company/delete
+        // FUNTKIONIERT NOCH NICHT
         [HttpDelete("delete/{guid:Guid}")]
         public async Task<IActionResult> DeleteCompany(Guid guid)
         {

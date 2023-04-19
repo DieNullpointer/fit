@@ -1,11 +1,11 @@
 import axios from "axios";
 
 class APIConstants {
-  static BASE_URL = "https://localhost:5001/api";
-  static EVENT_URL = this.BASE_URL + "/event";
-  static COMPANY_URL = this.BASE_URL + "/company";
-  static PACKAGE_URL = this.BASE_URL + "/package";
-
+  
+  static EVENT_URL = "/event";
+  static COMPANY_URL = "/company";
+  static PACKAGE_URL = "/package";
+  
   static async getAllEvents() {
     let response;
     try {
@@ -22,5 +22,4 @@ class APIConstants {
     return response.data;
   }
 }
-
 export default APIConstants;
