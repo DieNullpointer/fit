@@ -35,11 +35,8 @@ export default function Home() {
       </Box>
       <div className="app">
         <Carousel>
-          <CarouselItem>  
-            <Image src="../../titlepicture.png"></Image>
-          </CarouselItem>
-          <CarouselItem>  
-            <Image src="../../logo.png"></Image>
+          <CarouselItem>
+              
           </CarouselItem>
         </Carousel>
       </div>

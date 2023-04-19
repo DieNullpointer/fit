@@ -12,9 +12,13 @@
     align-items: center;
     justify-content: center;
     height: 200px;
-    background-color: red;
     color: #fff;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
   }
+  
+
   
   .indicators {
     display: flex;
