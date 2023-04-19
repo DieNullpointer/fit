@@ -12,5 +12,8 @@
 	<ItemGroup>
 		<ProjectReference Include="..\FitManager.Application\FitManager.Application.csproj" />
 	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Files\" />
+	</ItemGroup>
 
 </Project>
