@@ -2,15 +2,12 @@ import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import Paper from "../components/atoms/Paper";
 import PageFrame from "../components/PageFrame";
-import Input from "../components/atoms/Input";
-import Checkbox from "../components/atoms/Checkbox";
 import { useState, useEffect, useRef } from "react";
 import Button from "../components/atoms/Button";
 import Form from "../components/form/Form";
-import APIConstants from "../apiConstants";
 import { useNavigate } from "react-router-dom";
 import { motion as m } from "framer-motion";
-import {SignupPerson as Person} from "../components/form/SignupPerson";
+import { SignupPerson as Person } from "../components/form/SignupPerson";
 
 /**
  *
@@ -29,15 +26,29 @@ import {SignupPerson as Person} from "../components/form/SignupPerson";
  */
 export default function Signup() {
   const navigate = useNavigate();
-
-  const mainPersonRef = useRef(0);
-  const [personAmount, setPersonAmount] = useState(0);
+  const url = window.location.pathname.split("/").pop();
 
   useEffect(() => {
     if (!sessionStorage.getItem("signup1")) navigate("/signup");
-  });
+  }, [url]);
 
-  const [persons, setPersons] = useState([<Person number={personAmount} />]);
+  const mainPersonId = useRef(0);
+
+  let data = [];
+  const updateData = (number, rdata) => {
+    var found = false;
+    data.forEach((person) => {
+      if(person._intern === number) {
+        person = rdata;
+        found = true;
+      }
+    })
+
+    if(!found) data.push(rdata);
+  }
+
+  const [persons, setPersons] = useState([0]);
+  const [error, setError] = useState({});
 
   return (
     <PageFrame active={"sign-up"} margin className="bg-primary" noFullScreen>
@@ -63,14 +74,22 @@ export default function Signup() {
                     className="mt-2 border-l border-l-dark px-4 py-2 w-full"
                     id="person-parent"
                   >
-                    {persons}
+                    {persons.map((value, idx) => (
+                      <Person
+                        number={value}
+                        onChange={(number, rdata, e) => {
+                          //recieved data = rdata from person component
+                          updateData(number, rdata);
+                          console.log(data);
+                        }}
+                      />
+                    ))}
                     <div className="w-full flex items-center justify-center">
                       <Button
                         text={"+"}
                         onClick={() => {
-                          setPersonAmount(personAmount + 1);
-                          console.log(personAmount);
-                          setPersons([<Person number={personAmount} />, ...persons]);
+                          setPersons([persons.length, ...persons])
+                          console.log(persons.length);
                         }}
                       />
                     </div>
@@ -79,14 +98,21 @@ export default function Signup() {
               </div>
             </div>
             <div className="flex flex-row justify-between mb-3">
-              <Button
-                id="back"
-                text="Zurück"
-                onClick={() => {
-                  Form.reset();
-                  navigate("/signup");
-                }}
-              />
+              <div className="flex flex-col">
+                <Button
+                  id="back"
+                  text="Zurück"
+                  onClick={() => {
+                    Form.reset();
+                    navigate("/signup");
+                  }}
+                />
+                {error.msg && (
+                  <Typography color="crimson" variant="subtitle1">
+                    {error.msg}
+                  </Typography>
+                )}
+              </div>
               <Button
                 id="submit"
                 text="Abschicken"

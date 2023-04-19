@@ -10,7 +10,7 @@ import { useState, useEffect, useRef } from "react";
 import Button from "../components/atoms/Button";
 import Form from "../components/form/Form";
 import APIConstants from "../apiConstants";
-import { useNavigate, } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { motion as m } from "framer-motion";
 
 export default function Signup() {
@@ -18,7 +18,9 @@ export default function Signup() {
   const [events, setEvents] = useState([]);
   const [packages, setPackages] = useState([]);
 
-  const [page, setPage] = useState(1)
+  const [error, setError] = useState({});
+
+  const [page, setPage] = useState(1);
 
   const navigate = useNavigate();
 
@@ -56,7 +58,7 @@ export default function Signup() {
           Dieses Formular dient zur Anmeldung zukünfitger FITs
         </Typography>
       </Box>
-      
+
       <m.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -64,7 +66,6 @@ export default function Signup() {
       >
         <Paper elevation={3} className="mt-12 mb-24 relative">
           <Form.Body
-          
             className="py-4 px-8"
             id="form-1"
           >
@@ -172,15 +173,19 @@ export default function Signup() {
                           full
                           label="Paket"
                           required
-                          {...Form.Child("autocomplete", "package", (e, newval) => {
-                            const text = newval.text;
-                            let correctGuid = 1;
-                            packages.forEach((p) => {
-                              if (p.text === text)
-                                return (correctGuid = p.guid);
-                            });
-                            return correctGuid;
-                          })}
+                          {...Form.Child(
+                            "autocomplete",
+                            "package",
+                            (e, newval) => {
+                              const text = newval.text;
+                              let correctGuid = 1;
+                              packages.forEach((p) => {
+                                if (p.text === text)
+                                  return (correctGuid = p.guid);
+                              });
+                              return correctGuid;
+                            }
+                          )}
                         />
                       </div>
                     </Form.Section>
@@ -194,12 +199,26 @@ export default function Signup() {
               text="Weiter"
               className="mb-3"
               onClick={() => {
-                sessionStorage.setItem("signup1", JSON.stringify(Form.getExport()));
+                if (
+                  Object.values(Form.getExport()).some(
+                    (x) => x === null || x === ""
+                  )
+                ) {
+                  return setError({ msg: "*Bitte Füllen Sie jedes Feld aus" });
+                }
+                sessionStorage.setItem(
+                  "signup1",
+                  JSON.stringify(Form.getExport())
+                );
                 console.log(Form.reset());
                 navigate("/signup/continue");
               }}
-              
             />
+            {error.msg && (
+              <Typography color="crimson" variant="subtitle1">
+                {error.msg}
+              </Typography>
+            )}
           </Form.Body>
           <Typography
             variant="subtitle1"
@@ -209,7 +228,6 @@ export default function Signup() {
           </Typography>
         </Paper>
       </m.div>
-      
     </PageFrame>
   );
 }
