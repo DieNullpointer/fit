@@ -65,5 +65,23 @@ namespace FitManager.Webapi.Controllers
             }
             catch(ServiceException e) { return BadRequest(e.Message); }
         }
+
+        [HttpPost("change")]
+        public async Task<IActionResult> ChangeEvent(string name, string newName, DateTime date)
+            {
+                var events = _db.Events.FirstOrDefault(e => e.name.ToLower() == name.ToLower());
+
+                if (events == null)
+                {
+                    return BadRequest("Event does not exist");
+                }
+
+                events.name = newName ?? events.name; // use newName if it's not null, otherwise keep the current value of events.name
+                events.date = date ?? events.date;
+
+                await _db.SaveChangesAsync();
+
+                return Ok(events);
+            }
     }
 }
