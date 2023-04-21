@@ -1,5 +1,6 @@
 ﻿using Bogus;
 using Bogus.DataSets;
+using FitManager.Application.Model;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,17 @@ namespace FitManager.Application.Infrastructure
         public DbSet<Model.ContactPartner> ContactPartners => Set<Model.ContactPartner>();
         public DbSet<Model.Event> Events => Set<Model.Event>();
         public DbSet<Model.Package> Packages => Set<Model.Package>();
+
+        public DbSet<Model.Config> Configs => Set<Model.Config>();
+
+        public async Task<Model.Config> GetConfig() => (await Configs.OrderBy(c => c.Id).FirstOrDefaultAsync()) ?? new Model.Config();
+
+        public async Task SetConfig(Config config)
+        {
+            if (config.Id == default) Configs.Add(config);
+            await SaveChangesAsync();
+        }
+        
         public void Seed()
         {
             Randomizer.Seed = new Random(1039);

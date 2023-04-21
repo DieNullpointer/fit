@@ -3,11 +3,13 @@ using FitManager.Application.Dto;
 using FitManager.Application.Infrastructure;
 using FitManager.Application.Model;
 using FitManager.Application.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -51,10 +53,11 @@ namespace FitManager.Webapi.Controllers
         [HttpGet("{guid:Guid}")]
         public async Task<IActionResult> GetCompany(Guid guid)
         {
-            var partners = await _db.ContactPartners.Where(a => a.Company.Guid== guid).ToListAsync();
+            var partners = await _db.ContactPartners.Where(a => a.Company.Guid == guid).ToListAsync();
             return partners is null ? BadRequest() : Ok(partners);
         }
 
+        // api/company/delete
         [HttpDelete("delete/{guid:Guid}")]
         public async Task<IActionResult> DeleteCompany(Guid guid)
         {
@@ -64,13 +67,7 @@ namespace FitManager.Webapi.Controllers
                     return Ok();
                 return BadRequest();
             }
-            catch(ServiceException e) { return BadRequest(e.Message); }
-
-            /*var company = await _db.Companies.FirstAsync(a => a.Guid == guid);
-            if(company is null)
-                return BadRequest();
-            _db.Companies.Remove(company);
-            return Ok(company);*/
+            catch (ServiceException e) { return BadRequest(e.Message); }
         }
 
         //  api/company/register
@@ -82,6 +79,22 @@ namespace FitManager.Webapi.Controllers
                 return Ok(await _service.AddCompany(register));
             }
             catch (ServiceException e) { return BadRequest(e.Message); }
+        }
+
+        [HttpPost("addfile")]
+        public async Task<IActionResult> AddFile([FromForm] IFormFile formFile)
+        {
+            if (formFile.ContentType != "application/pdf")
+                return BadRequest();
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "Files");
+            if(!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+            path = Path.Combine(path, formFile.FileName);
+            using(var stream = new FileStream(path, FileMode.Create))
+            {
+                await formFile.CopyToAsync(stream);
+            }
+            return Ok(new { formFile.Name, formFile.Length });
         }
     }
 }

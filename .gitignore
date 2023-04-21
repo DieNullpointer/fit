@@ -21,6 +21,9 @@ fit.client/package-lock.json
 **.pnp.js
 **package-lock.json
 
+# Ordner für File Upload
+**/Files
+
 # testing
 **/coverage
 

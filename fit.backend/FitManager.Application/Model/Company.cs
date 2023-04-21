@@ -41,6 +41,6 @@ namespace FitManager.Application.Model
 
         public Event Event { get; set; }
 
-        public List<ContactPartner> ContactPartners = new();
+        public List<ContactPartner> ContactPartners { get; } = new();
     }
 }
