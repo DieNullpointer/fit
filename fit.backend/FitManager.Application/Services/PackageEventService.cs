@@ -28,6 +28,7 @@ namespace FitManager.Application.Services
             _db = db;
         }
 
+        //  EVENT METHODS
         public async Task<Guid> AddEvent(EventCmd events)
         {
             if (events.Date < DateTime.UtcNow)
@@ -44,8 +45,15 @@ namespace FitManager.Application.Services
 
         public async Task<bool> DeleteEvent(Guid guid)
         {
-            var events = await _db.Events.FirstAsync(a => a.Guid == guid);
+            var events = await _db.Events.Include(a => a.Packages).Include(a => a.Companies).FirstAsync(a => a.Guid == guid);
             if (events is null) throw new ServiceException("Event existiert nicht");
+            events.Packages.Clear();
+            _db.Companies.RemoveRange(events.Companies.ToList());
+            try
+            {
+                await _db.SaveChangesAsync();
+            }
+            catch (DbUpdateException e) { throw new ServiceException(e.InnerException?.Message ?? e.Message, e); }
             _db.Events.Remove(events);
             try
             {
@@ -53,21 +61,6 @@ namespace FitManager.Application.Services
             }
             catch (DbUpdateException e) { throw new ServiceException(e.InnerException?.Message ?? e.Message, e); }
             return true;
-        }
-
-        public async Task<Guid> AddPackage(PackageCmd cmd)
-        {
-            var package = _mapper.Map<Package>(cmd, opt => opt.AfterMap((dto, entity) =>
-            {
-                entity.Price = decimal.Parse(cmd.price);
-            }));
-            await _db.Packages.AddAsync(package);
-            try
-            {
-                await _db.SaveChangesAsync();
-            }
-            catch (DbUpdateException e) { throw new ServiceException(e.InnerException?.Message ?? e.Message, e); }
-            return package.Guid;
         }
 
         public async Task<bool> AssignPackages(AssignPackageCmd packages)
@@ -95,6 +88,20 @@ namespace FitManager.Application.Services
             return true;
         }
 
-
+        //  PACKAGE METHODS
+        public async Task<Guid> AddPackage(PackageCmd cmd)
+        {
+            var package = _mapper.Map<Package>(cmd, opt => opt.AfterMap((dto, entity) =>
+            {
+                entity.Price = decimal.Parse(cmd.price);
+            }));
+            await _db.Packages.AddAsync(package);
+            try
+            {
+                await _db.SaveChangesAsync();
+            }
+            catch (DbUpdateException e) { throw new ServiceException(e.InnerException?.Message ?? e.Message, e); }
+            return package.Guid;
+        }
     }
 }

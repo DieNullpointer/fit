@@ -58,7 +58,6 @@ namespace FitManager.Webapi.Controllers
         }
 
         // api/company/delete
-        // FUNTKIONIERT NOCH NICHT
         [HttpDelete("delete/{guid:Guid}")]
         public async Task<IActionResult> DeleteCompany(Guid guid)
         {
@@ -69,12 +68,6 @@ namespace FitManager.Webapi.Controllers
                 return BadRequest();
             }
             catch (ServiceException e) { return BadRequest(e.Message); }
-
-            /*var company = await _db.Companies.FirstAsync(a => a.Guid == guid);
-            if(company is null)
-                return BadRequest();
-            _db.Companies.Remove(company);
-            return Ok(company);*/
         }
 
         //  api/company/register

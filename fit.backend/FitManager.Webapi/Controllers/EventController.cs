@@ -75,7 +75,6 @@ namespace FitManager.Webapi.Controllers
         }
 
         //  api/event/delete
-        // FUNKTIONIERT NOCH NICHT
         [HttpDelete("delete/{guid:Guid}")]
         public async Task<IActionResult> DeleteEvent(Guid guid)
         {

@@ -4,6 +4,7 @@ using FitManager.Application.Infrastructure;
 using FitManager.Application.Model;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace FitManager.Application.Services
@@ -21,9 +22,16 @@ namespace FitManager.Application.Services
 
         public async Task<bool> DeleteCompany(Guid guid)
         {
-            var company = await _db.Companies.FirstAsync(a => a.Guid == guid);
+            var company = await _db.Companies.Include(c=>c.ContactPartners).FirstAsync(a => a.Guid == guid);
             if (company is null)
                 throw new ServiceException("Firma gibt es nicht");
+
+            _db.ContactPartners.RemoveRange(company.ContactPartners.ToList());
+            try
+            {
+                await _db.SaveChangesAsync();
+            }
+            catch (DbUpdateException e) { throw new ServiceException(e.InnerException?.Message ?? e.Message, e); }
             _db.Companies.Remove(company);
             try
             {
