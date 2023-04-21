@@ -13,6 +13,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Logo from "./atoms/Logo";
 import Style from "../styleConstants";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function Navbar({ pages, profileSettings }) {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -42,145 +43,30 @@ export default function Navbar({ pages, profileSettings }) {
       sx={{ bgcolor: Style.colors.white, color: Style.colors.dark }}
     >
       <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <Logo className="mr-2" />
-
-          <Box
-            sx={{
-              flexGrow: 1,
-              display: { xs: "flex", md: "none" },
-              color: Style.colors.dark,
-            }}
-          >
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-6 h-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M3.75 5.25h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5"
-                />
-              </svg>
-            </IconButton>
-
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
+        <Toolbar disableGutters sx={{
+          display: "flex",
+          justifyItems: "center",
+          justifyContent: "center",
+          position: "relative"
+        }}>
+          <Logo className="mr-2 absolute top-2 left-2" />
+          <Link to="/">
+            <Typography
+              variant="h5"
+              noWrap
               sx={{
-                display: { xs: "block", md: "none" },
+                mr: 2,
+                display: "flex",
+                flexGrow: 1,
+                fontWeight: 700,
+                letterSpacing: ".3rem",
+                color: Style.colors.dark,
+                textDecoration: "none",
               }}
             >
-              {pages.map?.((page) => (
-                <MenuItem key={page.name} onClick={handleCloseNavMenu}>
-                  <Typography
-                    textAlign="center"
-                    sx={{ color: Style.colors.dark }}
-                  >
-                    {page.name}
-                  </Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href=""
-            sx={{
-              mr: 2,
-              display: { xs: "flex", md: "none" },
-              flexGrow: 1,
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: Style.colors.dark,
-              textDecoration: "none",
-            }}
-          >
-            FIT Anmeldung
-          </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map?.((page) => (
-              <Button
-                key={page.name}
-                onClick={() => navigate(page.href)}
-                sx={{
-                  my: 2,
-                  marginRight: '7px',
-                  color: page.active ? Style.colors.white : Style.colors.dark,
-                  bgcolor: page.active
-                    ? Style.colors.primary
-                    : Style.colors.white,
-                  display: "block",
-                  ":hover": {
-                    backgroundColor: page.active && Style.colors.primaryHover,
-                  },
-                }}
-              >
-                {page.name}
-              </Button>
-            ))}
-          </Box>
-
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Robert Kofler" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {profileSettings.map?.((setting) => (
-                <MenuItem key={setting.name} onClick={handleCloseUserMenu}>
-                  <Typography
-                    textAlign="center"
-                    sx={{ color: Style.colors.dark }}
-                  >
-                    {setting.name}
-                  </Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
+              Firmen Informationstag
+            </Typography>
+          </Link>
         </Toolbar>
       </Container>
     </AppBar>

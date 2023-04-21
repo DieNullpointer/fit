@@ -21,5 +21,14 @@ class APIConstants {
     } catch (error) {}
     return response.data;
   }
+
+  static async getCompany(guid) {
+    let response;
+    try {
+      response = await axios.get(`${this.COMPANY_URL}/${guid}`)
+    } catch (error) {
+      return response.data;
+    }
+  }
 }
 export default APIConstants;
