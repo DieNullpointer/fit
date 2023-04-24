@@ -8,7 +8,7 @@ export default function PageFrame({ children, active, margin, className, noFullS
         <Navbar
           pages={[
             {name: "home", href: "/", active: active === "home"},
-            { name: "sign-up", href: "/signup?p=1", active: active === "sign-up" },
+            { name: "sign-up", href: "/signup", active: active === "sign-up" },
             { name: "about", href: "/about", active: active === "about" },
           ]}
           profileSettings

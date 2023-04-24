@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace FitManager.Webapi.Controllers
 {
@@ -14,12 +15,10 @@ namespace FitManager.Webapi.Controllers
     [ApiController]
     public class EventController : ControllerBase
     {
-        private readonly FitContext _db;
         private readonly PackageEventService _service;
 
         public EventController(FitContext db, PackageEventService service)
         {
-            _db = db;
             _service = service;
         }
 
@@ -27,13 +26,20 @@ namespace FitManager.Webapi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllEvents()
         {
-            var events = await _db.Events.Where(a => a.Date > DateTime.UtcNow.Date).OrderBy(a => a.Date).ToListAsync();
+            var events = await _service.Events.Include(a => a.Packages).Where(a => a.Date > DateTime.UtcNow.Date).OrderBy(a => a.Date).ToListAsync();
             if (events is null)
                 return BadRequest();
+
             var export = events.Select(a => new
             {
                 a.Guid,
                 a.Name,
+                Packages = a.Packages.Select(b => new
+                {
+                    b.Guid,
+                    b.Name,
+                    b.Price
+                }),
                 Date = a.Date.ToString("dd/MM/yyyy")
             });
             return Ok(export);
@@ -41,18 +47,43 @@ namespace FitManager.Webapi.Controllers
 
         //  api/event/now
         [HttpGet("now")]
-        public IActionResult GetCurrentEvent()
+        public async Task<IActionResult> GetCurrentEvent()
         {
-            var events = _db.Events.Include(a => a.Companies).Where(a => DateTime.UtcNow.Date <= a.Date).OrderBy(a => a.Date).First();
-            return events is null ? BadRequest("No event is planned") : Ok(events);
+            var events = await _service.Events.Include(a => a.Companies).Where(a => DateTime.UtcNow.Date <= a.Date).OrderBy(a => a.Date).FirstAsync();
+            return events is null ? BadRequest("Kein Event in Planung") : Ok(events);
         }
 
         //  api/event/{name}
         [HttpGet("{name}")]
-        public IActionResult GetEventByName(string name)
+        public async Task<IActionResult> GetEventByName(string name)
         {
-            var events = _db.Events.Where(e => e.Name.ToLower() == name.ToLower()).First();
-            return events is null ? BadRequest("Event does not exist") : Ok(events);
+            var events = await _service.Events.Where(e => e.Name.ToLower() == name.ToLower()).FirstAsync();
+            return events is null ? BadRequest("Event existiert nicht") : Ok(events);
+        }
+
+        //  api/event/assign
+        [HttpPut("assign")]
+        public async Task<IActionResult> AssignPackages([FromBody] AssignPackageCmd packages)
+        {
+            try
+            {
+                if (await _service.AssignPackages(packages))
+                    return Ok();
+                return BadRequest();
+            }
+            catch(ServiceException e) { return BadRequest(e.Message); }
+        }
+
+        //  api/event/delete
+        [HttpDelete("delete/{guid:Guid}")]
+        public async Task<IActionResult> DeleteEvent(Guid guid)
+        {
+            try
+            {
+                if(await _service.DeleteEvent(guid)) return Ok();
+                return BadRequest();
+            }
+            catch(ServiceException e) { return BadRequest(e.Message);  }
         }
 
         //  api/event/add

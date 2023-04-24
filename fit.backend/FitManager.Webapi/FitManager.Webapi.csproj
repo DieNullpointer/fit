@@ -8,9 +8,14 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.*" />
+		<PackageReference Include="Microsoft.Identity.Web" Version="2.*" />
+		<PackageReference Include="Microsoft.Identity.Web.MicrosoftGraph" Version="2.*" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\FitManager.Application\FitManager.Application.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Files\" />
 	</ItemGroup>
 
 </Project>

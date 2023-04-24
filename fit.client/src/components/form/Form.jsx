@@ -6,39 +6,37 @@ let refArray = [];
 let idArray = [];
 let sections = [];
 
-function Body({ className, children }) {
+function walkAllChildren(root, callback) {
+  function walk(e, parents) {
+    callback(e, parents);
+    const newParents = [...parents, e];
+    React.Children.toArray(e.props?.children).forEach((c) => {
+      walk(c, newParents);
+    });
+  }
+  walk(root, []);
+}
+
+function Body({ className, children, active, id, definedUseEffect }) {
   React.useEffect(() => {
-    for (let i = 0; i < idArray.length; i++) {
-      stateArray[i][1](refArray[i].current);
+    if (active) {
+      for (let i = 0; i < idArray.length; i++) {
+        stateArray[i][1](refArray[i].current);
+      }
+      if (definedUseEffect) definedUseEffect();
     }
   });
-
-  function walkAllChildren(root, callback) {
-    function walk(e, parents) {
-      callback(e, parents);
-      const newParents = [...parents, e];
-      React.Children.toArray(e.props?.children).forEach((c) => {
-        walk(c, newParents);
-      });
-    }
-    walk(root, []);
-  }
-
-  walkAllChildren(<>{children}</>, (e, parents) => {
-    if (e.type?.name === "Section") sections.push(e);
-  });
-
-  if (!sections.length) {
-    console.error(
-      "[FIT-Manager Component] Form.Body must have at least one Form.Section element!"
-    );
-  }
 
   return <form className={className}>{children}</form>;
 }
 
-function Section({ children, className, array }) {
-  return <div className={className}>{children}</div>;
+// check for formchild of active body
+function Section({ children, className, array, id }) {
+  return (
+    <div id={id} className={className}>
+      {children}
+    </div>
+  );
 }
 
 /**
@@ -50,12 +48,11 @@ function Child(type, name, onChangeOverride) {
     count = idArray.indexOf(name);
   }
 
-  const onChange = (e) => {
-    if(!onChangeOverride)
-    refArray[count].current =
-      type === "autocomplete" ? e.target.innerText :  e.target.value;
-      else
-      refArray[count].current = onChangeOverride(e);
+  const onChange = (e, newval) => {
+    if (!onChangeOverride)
+      refArray[count].current =
+        type === "autocomplete" ? newval.text : e.target.value;
+    else refArray[count].current = onChangeOverride(e, newval);
   };
 
   return { as: Get(type, name), onChange };
@@ -101,6 +98,7 @@ function getExport() {
     Object.defineProperty(exportObj, idArray[i], {
       value: refArray[i].current,
       writable: true,
+      enumerable: true,
     });
   }
   return exportObj;
@@ -119,7 +117,7 @@ function Reload() {
   const [reload, setReload] = React.useState(false);
   setReload(false);
   reset();
-  return <></>
+  return <></>;
 }
 
 // eslint-disable-next-line

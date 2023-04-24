@@ -13,12 +13,10 @@ namespace FitManager.Webapi.Controllers
     [ApiController]
     public class PackageController : ControllerBase
     {
-        private readonly FitContext _db;
         private readonly PackageEventService _service;
 
         public PackageController(FitContext db, PackageEventService service)
         {
-            _db = db;
             _service = service;
         }
 
@@ -26,7 +24,7 @@ namespace FitManager.Webapi.Controllers
         [HttpGet]
         public IActionResult AllPackages()
         {
-            var p = _db.Packages.ToList();
+            var p = _service.Packages.ToList();
             if(p is null)
                 return BadRequest();
             var export = p.Select(a => new

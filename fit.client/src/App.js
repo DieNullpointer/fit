@@ -10,7 +10,9 @@ import Style from "./styleConstants";
 import AddPackage from "./pages/AddPackage";
 import Events from "./pages/Events";
 import Packages from "./pages/Packages";
-import Signup from "./pages/Signup";
+import Signup from "./pages/SignupP1";
+import SignupContinue from "./pages/SignupP2";
+import UploadPage from "./pages/UploadPage";
 
 export default function App() {
   return (
@@ -27,7 +29,10 @@ export default function App() {
           <Route path="/event" element={<Events />} />
           <Route path="/impressum" />
           <Route path="/datenschutz" />
+          <Route path="/finalize" element={<UploadPage />} />
           <Route path="/signup" element={<Signup />} />
+          
+          <Route path="/signup/continue" element={<SignupContinue />} />
         </Routes>
       </Router>
 
