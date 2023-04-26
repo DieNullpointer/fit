@@ -1,11 +1,12 @@
 import styled from "@emotion/styled";
 import { IconButton, TextField } from "@mui/material";
 import Style from "../../styleConstants";
+import { useState, useRef, useEffect } from "react";
 
 export default function Input({
   adornment,
   required,
-  value,
+  defaultValue,
   label,
   type,
   purpose,
@@ -17,6 +18,7 @@ export default function Input({
   disabled,
   className,
 }) {
+
   const ColorTextField = styled(TextField)(({ theme }) => ({
     display: block ? "block" : "inline-block",
     "& label.Mui-focused": {
@@ -44,7 +46,7 @@ export default function Input({
       label={label}
       required={required}
       type={type || "text"}
-      defaultValue={value}
+      defaultValue={defaultValue}
       InputProps={{
         startAdornment:
           adornment == null ? null : <IconButton>{adornment}</IconButton>,

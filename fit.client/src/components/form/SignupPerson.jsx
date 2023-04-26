@@ -7,10 +7,10 @@ export function SignupPerson({
   mainPartnerDisabled,
   disabled,
   onChange,
+  key,
 }) {
   //not using form component due to reworks
   let data = { _intern: number };
-  
 
   const sharedProps = (registry) => {
     return {
@@ -28,7 +28,7 @@ export function SignupPerson({
   };
 
   return (
-    <form key={"paper-key-person-" + number}>
+    <form key={key}>
       <Paper elevation={3}>
         <div className="px-3" id={"person-" + number}>
           <div className="grid md:grid-cols-3 grid-flow-column">
