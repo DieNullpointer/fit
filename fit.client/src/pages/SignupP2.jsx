@@ -9,21 +9,6 @@ import { useNavigate } from "react-router-dom";
 import { motion as m } from "framer-motion";
 import { SignupPerson as Person } from "../components/form/SignupPerson";
 
-/**
- *
- * Die Stimmen werden lauter.
- * Lass die Stimmen nicht gewinnen.
- * Die Stimmen werden lauter.
- * Lass die Stimmen nicht gewinnen.
- * Die Stimmen werden lauter.
- * Lass die Stimmen nicht gewinnen.
- * Die Stimmen werden lauter.
- * Lass die Stimmen nicht gewinnen.
- * Die Stimmen werden lauter.
- * Lass die Stimmen nicht gewinnen.
- * De Stimmen werden lauter.
- * Lass die Stimmen gewinnen.
- */
 export default function Signup() {
   const navigate = useNavigate();
   const url = window.location.pathname.split("/").pop();
@@ -82,6 +67,7 @@ export default function Signup() {
                           updateData(number, rdata);
                           console.log(data);
                         }}
+                        key={idx}
                       />
                     ))}
                     <div className="w-full flex items-center justify-center">
