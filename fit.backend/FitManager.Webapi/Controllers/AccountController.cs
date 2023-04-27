@@ -46,7 +46,7 @@ namespace BeamerProtector.Webapp.Controllers
             config.MailerAccountname = null;
             config.MailerRefreshToken = null;
             await _db.SetConfig(config);
-            return Redirect("/Config/Index");
+            return Redirect("/");
         }
 
         /// <summary>
