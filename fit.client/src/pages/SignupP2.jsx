@@ -23,16 +23,16 @@ export default function Signup() {
   const updateData = (number, rdata) => {
     var found = false;
     data.forEach((person) => {
-      if(person._intern === number) {
+      if (person._intern === number) {
         person = rdata;
         found = true;
       }
-    })
+    });
 
-    if(!found) data.push(rdata);
-  }
+    if (!found) data.push(rdata);
+  };
 
-  const [persons, setPersons] = useState([0]);
+  const [persons, setPersons] = useState([0, 1, 2]);
   const [error, setError] = useState({});
 
   return (
@@ -70,7 +70,8 @@ export default function Signup() {
                         key={idx}
                       />
                     ))}
-                    <div className="w-full flex items-center justify-center">
+                    {/**
+                       * <div className="w-full flex items-center justify-center">
                       <Button
                         text={"+"}
                         onClick={() => {
@@ -79,6 +80,7 @@ export default function Signup() {
                         }}
                       />
                     </div>
+                       */}
                   </div>
                 </div>
               </div>
@@ -115,7 +117,7 @@ export default function Signup() {
               variant="subtitle1"
               className="absolute right-[1.35rem] bottom-2.5"
             >
-              2/2
+              (Dev Note: temporarily only three options) 2/2
             </Typography>
           </div>
         </Paper>
