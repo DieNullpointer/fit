@@ -42,7 +42,7 @@ function Section({ children, className, array, id }) {
 /**
  * @param {"input" | "button" | "checkbox" | "autocomplete"} type Type of FormChild
  */
-function Child(type, name, onChangeOverride) {
+function Child(type, name, onChangeOverride, valueOverride = false) {
   let count = 0;
   if (idArray.includes(name)) {
     count = idArray.indexOf(name);
@@ -55,7 +55,14 @@ function Child(type, name, onChangeOverride) {
     else refArray[count].current = onChangeOverride(e, newval);
   };
 
-  return { as: Get(type, name), onChange };
+  console.log(getExport());
+  if (!valueOverride)
+    return {
+      as: Get(type, name),
+      onChange,
+      defaultValue: getExport()[name] || (type === "input" ? "" : null),
+    };
+  else return { as: Get(type, name), onChange };
 }
 
 function Submit(route) {

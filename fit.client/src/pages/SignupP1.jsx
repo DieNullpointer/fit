@@ -132,12 +132,14 @@ export default function Signup() {
                           disabled={payDisabled}
                           block
                           full
-                          {...Form.Child("input", "billAddress")}
+                          defaultValue={payDisabled ? Form.getExport()?.address : ""}
+                          {...Form.Child("input", "billAddress", null, true)}
                         />
                         <div className="-mt-6">
                           <Checkbox
                             label="Gleich wie Firmenadresse"
                             onChange={(e) => setPayDisabled(e.target.checked)}
+                            defaultChecked={payDisabled}
                           />
                         </div>
                       </Form.Section>
