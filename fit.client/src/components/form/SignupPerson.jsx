@@ -10,7 +10,7 @@ export function SignupPerson({
   key,
 }) {
   //not using form component due to reworks
-  let data = { _intern: number };
+  let data = { _intern: number, mainPartner: false };
 
   const sharedProps = (registry) => {
     return {
@@ -68,14 +68,14 @@ export function SignupPerson({
                 required
                 purpose={"text"}
                 full
-                {...sharedProps("telnr")}
+                {...sharedProps("telNr")}
               />
               <Input
                 id="in-mobilnr"
                 label="Mobilnummer"
                 purpose={"text"}
                 full
-                {...sharedProps("mobilnr")}
+                {...sharedProps("mobilNr")}
               />
               <Input
                 id="in-email"
@@ -99,8 +99,12 @@ export function SignupPerson({
                 <Checkbox
                   label="Hauptansprechpartner"
                   onChange={(e) => {
-                    //mainPersonRef.current = number;
-                    //console.log("Set to main partner " + number);
+                    Object.defineProperty(data, "mainPartner", {
+                      value: e.target.checked,
+                      enumerable: true,
+                      writable: true,
+                    });
+                    console.log("Checked mainPartner to " + e.target.checked);
                   }}
                   disabled={mainPartnerDisabled}
                 />

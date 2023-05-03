@@ -6,27 +6,26 @@ import PageFrame from "../components/PageFrame";
 import Input from "../components/atoms/Input";
 import AutoComplete from "../components/atoms/AutoComplete";
 import Checkbox from "../components/atoms/Checkbox";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Button from "../components/atoms/Button";
 import Form from "../components/form/Form";
 import APIConstants from "../apiConstants";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { motion as m } from "framer-motion";
 
 export default function Signup() {
   const [payDisabled, setPayDisabled] = useState(false);
   const [events, setEvents] = useState([]);
   const [packages, setPackages] = useState([]);
-
   const [error, setError] = useState({});
 
-  const [page, setPage] = useState(1);
+  const url = useParams();
 
   const navigate = useNavigate();
 
   useEffect(() => {
     init();
-  }, [page]);
+  }, [url]);
 
   async function init() {
     let newEvents = [];
