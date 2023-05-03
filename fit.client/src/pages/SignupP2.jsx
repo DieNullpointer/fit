@@ -4,10 +4,10 @@ import Paper from "../components/atoms/Paper";
 import PageFrame from "../components/PageFrame";
 import { useState, useEffect, useRef } from "react";
 import Button from "../components/atoms/Button";
-import Form from "../components/form/Form";
 import { useNavigate } from "react-router-dom";
 import { motion as m } from "framer-motion";
 import { SignupPerson as Person } from "../components/form/SignupPerson";
+import APIConstants from "../apiConstants";
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -85,8 +85,9 @@ export default function Signup() {
               </div>
             </div>
             <div className="flex flex-row justify-between mb-3">
-              <div className="flex flex-col">
-                <Button
+                {
+                  /**
+                   * <Button
                   id="back"
                   text="Zurück"
                   onClick={() => {
@@ -94,17 +95,30 @@ export default function Signup() {
                     navigate("/signup");
                   }}
                 />
+                   */
+                }
                 {error.msg && (
                   <Typography color="crimson" variant="subtitle1">
                     {error.msg}
                   </Typography>
                 )}
-              </div>
               <Button
                 id="submit"
-                text="Abschicken"
+                text="Weiter"
                 onClick={() => {
-                  console.log(data);
+                  data.forEach((p) => {
+                    delete p._intern;
+                  });
+                  sessionStorage.setItem("signup2", JSON.stringify(data));
+                  let exportObj = JSON.parse(sessionStorage.getItem("signup1"));
+                  Object.defineProperty(exportObj, "partners", {
+                    value: data,
+                    writable: true,
+                    enumerable: true,
+                  })
+                  console.log(exportObj);
+                  let response = APIConstants.registerCompany(exportObj);
+                  
                 }}
               />
             </div>
