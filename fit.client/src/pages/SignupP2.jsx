@@ -65,7 +65,6 @@ export default function Signup() {
                         onChange={(number, rdata, e) => {
                           //recieved data = rdata from person component
                           updateData(number, rdata);
-                          console.log(data);
                         }}
                         key={idx}
                       />
@@ -105,11 +104,7 @@ export default function Signup() {
                 id="submit"
                 text="Abschicken"
                 onClick={() => {
-                  sessionStorage.setItem(
-                    "signup2",
-                    JSON.stringify(Form.getExport())
-                  );
-                  console.log(Form.reset());
+                  console.log(data);
                 }}
               />
             </div>

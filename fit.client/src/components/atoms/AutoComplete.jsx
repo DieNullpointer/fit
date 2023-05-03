@@ -49,7 +49,7 @@ export default function AutoComplete({
         autoHighlight
         fullWidth
         onChange={onChange}
-        value={defaultValue}
+        defaultValue={defaultValue}
         renderInput={(params) => (
           <TextField
             {...params}

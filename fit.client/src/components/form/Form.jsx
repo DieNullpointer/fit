@@ -55,7 +55,6 @@ function Child(type, name, onChangeOverride, valueOverride = false) {
     else refArray[count].current = onChangeOverride(e, newval);
   };
 
-  console.log(getExport());
   if (!valueOverride)
     return {
       as: Get(type, name),
@@ -111,6 +110,17 @@ function getExport() {
   return exportObj;
 }
 
+function addManual(name, gvalue) {
+  let fidx = 0;
+  idArray.find((value, idx) => {
+    if (value === name) {
+      fidx = idx;
+      return true;
+    }
+  });
+  refArray[fidx].current = gvalue;
+}
+
 function reset() {
   let exportObj = getExport();
   stateArray = [];
@@ -128,4 +138,13 @@ function Reload() {
 }
 
 // eslint-disable-next-line
-export default { Body, Section, Child, Submit, getExport, reset, Reload };
+export default {
+  Body,
+  Section,
+  Child,
+  Submit,
+  getExport,
+  reset,
+  Reload,
+  addManual,
+};
