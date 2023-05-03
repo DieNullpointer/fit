@@ -17,6 +17,7 @@ export default function Input({
   full,
   disabled,
   className,
+  value
 }) {
 
   const ColorTextField = styled(TextField)(({ theme }) => ({
@@ -46,6 +47,7 @@ export default function Input({
       label={label}
       required={required}
       type={type || "text"}
+      value={value}
       defaultValue={defaultValue}
       InputProps={{
         startAdornment:
