@@ -127,7 +127,7 @@ export default function Signup() {
               />
               {error.msg && (
                 <div className="m-2">
-                  <Typography color="crimson" variant="subtitle1" sx={{ lineHeight: "20px"}}>
+                  <Typography color="crimson" variant="subtitle1" sx={{ lineHeight: "20px" }}>
                   {error.msg}
                 </Typography>
                 </div>
