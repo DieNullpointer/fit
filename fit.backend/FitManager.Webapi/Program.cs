@@ -11,6 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text.Json.Serialization;
 using System.Linq;
 using FitManager.Application.Services;
+using FitManager.Webapi.Services;
 
 internal class Program
 {
@@ -44,6 +45,12 @@ internal class Program
         builder.Services.AddAutoMapper(typeof(FitManager.Application.Dto.MappingProfile));
         builder.Services.AddTransient<PackageEventService>();
         builder.Services.AddTransient<CompanyService>();
+        builder.Services.AddTransient(opt => new AzureAdClient(
+            tenantId: builder.Configuration["AzureAd:TenantId"],
+            clientId: builder.Configuration["AzureAd:ClientId"],
+            redirectUrl: builder.Configuration["AzureAd:RedirectUrl"],
+            clientSecret: builder.Configuration["AzureAd:ClientSecret"],
+            scope: builder.Configuration["AzureAd:Scope"]));
         builder.Services.AddDbContext<FitContext>(opt =>
         {
             opt.UseSqlServer(

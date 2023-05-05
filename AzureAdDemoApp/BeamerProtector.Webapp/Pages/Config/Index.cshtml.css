@@ -1,0 +1,24 @@
+﻿.configCards {
+    display: grid;
+    gap: 0.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(30em, 1fr));
+}
+
+.configCard {
+    border: 3px solid gray;
+    border-radius: 5px;
+}
+
+.cardTitle {
+    font-weight: bolder;
+    background-color: aliceblue;
+    padding: 0.5rem;
+}
+
+.cardContent {
+    padding: 0.5rem;
+}
+
+.cardAlert {
+    background-color: lightyellow;
+}

@@ -4,7 +4,9 @@ using FitManager.Application.Model;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -113,5 +115,50 @@ namespace FitManager.Application.Infrastructure
             if (Database.EnsureCreated()) { Initialize(); }
             if (isDevelopment) Seed();
         }
+
+        /// <summary>
+        /// Set the account to send alert emails and encrypt the refresh token with the key provided.
+        /// </summary>
+        public async Task SetMailerAccount(string mailAccountname, string refreshToken, byte[] key)
+        {
+            using var aes = Aes.Create();
+            aes.Key = key;
+
+            var value = Encoding.UTF8.GetBytes(refreshToken);
+            using var memoryStream = new MemoryStream();
+            memoryStream.Write(aes.IV);
+            using var encryptor = aes.CreateEncryptor();
+            using (var cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write))
+                cryptoStream.Write(value);
+            var encryptedToken = Convert.ToBase64String(memoryStream.ToArray());
+
+            var config = await GetConfig();
+            config.MailerRefreshToken = encryptedToken;
+            config.MailerAccountname = mailAccountname;
+            await SetConfig(config);
+        }
+
+        /// <summary>
+        /// Read the account to send alert emails and decrypt the refresh token with the key provided.
+        /// </summary>
+        public async Task<(string? accountname, string? refreshToken)> GetMailerAccount(byte[] key)
+        {
+            var config = await GetConfig();
+            if (string.IsNullOrEmpty(config.MailerAccountname) || string.IsNullOrEmpty(config.MailerRefreshToken))
+                return (null, null);
+
+            using var aes = Aes.Create();
+            var memoryStream = new MemoryStream(Convert.FromBase64String(config.MailerRefreshToken));
+            var iv = new byte[aes.BlockSize / 8];
+            memoryStream.Read(iv);
+
+            using var decryptor = aes.CreateDecryptor(key, iv);
+            using var cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read);
+            using var dataStream = new MemoryStream();
+            cryptoStream.CopyTo(dataStream);
+            var decryptedToken = Encoding.UTF8.GetString(dataStream.ToArray());
+            return (config.MailerAccountname, decryptedToken);
+        }
+
     }
 }

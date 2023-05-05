@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeamerProtector.Webapp", "BeamerProtector.Webapp\BeamerProtector.Webapp.csproj", "{24C944C6-1C07-43D5-A3A4-C3EF4CA7E7C4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeamerProtector.Application", "BeamerProtector.Application\BeamerProtector.Application.csproj", "{B9891C88-DA5C-4A06-8C09-7A2DBF46921F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeamerProtector.Simulation", "BeamerProtector.Simulation\BeamerProtector.Simulation.csproj", "{CFA51CD2-7B83-4300-B417-1D58D78B7E33}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{24C944C6-1C07-43D5-A3A4-C3EF4CA7E7C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24C944C6-1C07-43D5-A3A4-C3EF4CA7E7C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24C944C6-1C07-43D5-A3A4-C3EF4CA7E7C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24C944C6-1C07-43D5-A3A4-C3EF4CA7E7C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9891C88-DA5C-4A06-8C09-7A2DBF46921F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9891C88-DA5C-4A06-8C09-7A2DBF46921F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9891C88-DA5C-4A06-8C09-7A2DBF46921F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9891C88-DA5C-4A06-8C09-7A2DBF46921F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFA51CD2-7B83-4300-B417-1D58D78B7E33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFA51CD2-7B83-4300-B417-1D58D78B7E33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFA51CD2-7B83-4300-B417-1D58D78B7E33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFA51CD2-7B83-4300-B417-1D58D78B7E33}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F30C40FF-94A6-44B7-A681-BB62C3563705}
+	EndGlobalSection
+EndGlobal

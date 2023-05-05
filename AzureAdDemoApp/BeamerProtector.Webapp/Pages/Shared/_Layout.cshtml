@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="~/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="~/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="~/favicon-16x16.png">
+    <link rel="manifest" href="~/site.webmanifest">
+    <link rel="mask-icon" href="~/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+
+    <title>Beamer Protector</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css" integrity="sha512-SbiR/eusphKoMVVXysTKG/7VseWii+Y3FdHrt0EpKgpToZeemhqHeZeLWLhJutz/2ut2Vw1uQEj2MbRF+TVBUA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="~/css/site.css" rel="stylesheet">
+    <link href="~/BeamerProtector.Webapp.styles.css" rel="stylesheet">
+    <script src="~/js/site.js"></script>
+    @RenderSection("head", required: false)
+</head>
+<body>
+    <div class="app">
+        <nav>
+            <div><a asp-page="/Index" class="btn btn-outline-primary">Dashboard</a></div>
+            <div><a asp-page="/Devices/Index" class="btn btn-outline-primary">Geräte verwalten</a></div>
+            <div><a asp-page="/Alarms/Groups" class="btn btn-outline-primary">Alarmgruppen verwalten</a></div>
+            <div><a asp-page="/Alarms/Devices" class="btn btn-outline-primary">Alarmierungen verwalten</a></div>
+            <div><a asp-page="/Alarms/Log" class="btn btn-outline-primary">Alarmlog</a></div>
+            <div><a asp-page="/Config/Index" class="btn btn-outline-primary">Konfiguration</a></div>
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <div><a class="btn btn-outline-primary" asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignOut">Sign out</a></div>
+            }
+        </nav>
+        <main>
+            @RenderBody()
+        </main>
+    </div>
+</body>
+</html>
