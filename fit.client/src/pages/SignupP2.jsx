@@ -85,8 +85,7 @@ export default function Signup() {
               </div>
             </div>
             <div className="flex flex-row justify-between mb-3">
-                {
-                  /**
+              {/**
                    * <Button
                   id="back"
                   text="Zurück"
@@ -95,17 +94,12 @@ export default function Signup() {
                     navigate("/signup");
                   }}
                 />
-                   */
-                }
-                {error.msg && (
-                  <Typography color="crimson" variant="subtitle1">
-                    {error.msg}
-                  </Typography>
-                )}
+                   */}
+              
               <Button
                 id="submit"
                 text="Weiter"
-                onClick={() => {
+                onClick={async () => {
                   data.forEach((p) => {
                     delete p._intern;
                   });
@@ -115,12 +109,29 @@ export default function Signup() {
                     value: data,
                     writable: true,
                     enumerable: true,
-                  })
+                  });
                   console.log(exportObj);
-                  let response = APIConstants.registerCompany(exportObj);
-                  
+                  let response = await APIConstants.registerCompany(exportObj);
+
+                  if (response != true) {
+                    let errors = [];
+                    console.log("errors:");
+                    Object.entries(response).forEach(([key, value]) => {
+                      console.log(value[0]);
+                      errors.push(value[0])
+                    });
+
+                    setError({ msg: errors.join("; ") });
+                  }
                 }}
               />
+              {error.msg && (
+                <div className="m-2">
+                  <Typography color="crimson" variant="subtitle1" sx={{ lineHeight: "20px"}}>
+                  {error.msg}
+                </Typography>
+                </div>
+              )}
             </div>
             <Typography
               variant="subtitle1"

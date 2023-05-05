@@ -36,8 +36,7 @@ class APIConstants {
     try {
       response = await axios.post(`${this.COMPANY_URL}/register`, payload);
     } catch (error) {
-      console.log(error);
-      return response.errors;
+      return error.response.data.errors;
     }
     return true;
    }
