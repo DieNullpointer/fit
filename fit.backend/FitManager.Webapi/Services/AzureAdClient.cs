@@ -15,30 +15,26 @@ namespace FitManager.Webapi.Services
     {
         private readonly string _tenantId;
         private readonly string _clientId;
-        private readonly string _redirectUrl;
         private readonly string _clientSecret;
-        private readonly string _scope;
 
-        public AzureAdClient(string tenantId, string clientId, string redirectUrl, string clientSecret, string scope)
+        public AzureAdClient(string tenantId, string clientId, string clientSecret)
         {
             _tenantId = tenantId;
             _clientId = clientId;
-            _redirectUrl = redirectUrl;
             _clientSecret = clientSecret;
-            _scope = scope;
         }
 
-        public string LoginUrl => $"https://login.microsoftonline.com/{_tenantId}/oauth2/v2.0/authorize?client_id={_clientId}&response_type=code&redirect_uri={HttpUtility.UrlEncode(_redirectUrl)}&prompt=consent&response_mode=query&scope=user.read offline_access mail.send";
+        public string GetLoginUrl(string redirectUrl, string scope) => $"https://login.microsoftonline.com/{_tenantId}/oauth2/v2.0/authorize?client_id={_clientId}&response_type=code&redirect_uri={HttpUtility.UrlEncode(redirectUrl)}&prompt=select_account&response_mode=query&scope={scope}";
 
-        public async Task<(string authToken, string? refreshToken)> GetToken(string code)
+        public async Task<(string authToken, string? refreshToken)> GetToken(string code, string redirectUrl, string scope)
         {
-            var formdata = $"client_id={_clientId}&scope={_scope}&code={code}&redirect_uri={_redirectUrl}&grant_type=authorization_code&client_secret={_clientSecret}";
+            var formdata = $"client_id={_clientId}&scope={scope}&code={code}&redirect_uri={redirectUrl}&grant_type=authorization_code&client_secret={_clientSecret}";
             return await RequestTokens(formdata);
         }
 
-        public async Task<(string authToken, string? refreshToken)> GetNewToken(string refreshToken)
+        public async Task<(string authToken, string? refreshToken)> GetNewToken(string refreshToken, string scope)
         {
-            var formdata = $"client_id={_clientId}&scope={_scope}&refresh_token={refreshToken}&grant_type=refresh_token&client_secret={_clientSecret}";
+            var formdata = $"client_id={_clientId}&scope={scope}&refresh_token={refreshToken}&grant_type=refresh_token&client_secret={_clientSecret}";
             return await RequestTokens(formdata);
         }
 
