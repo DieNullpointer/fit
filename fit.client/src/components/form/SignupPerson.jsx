@@ -21,7 +21,7 @@ export function SignupPerson({
           enumerable: true,
           writable: true,
         });
-        console.log(`changed input of ${registry} to ${e.target.value}`);
+        //console.log(`changed input of ${registry} to ${e.target.value}`);
         onChange?.(number, data, e);
       },
     };
