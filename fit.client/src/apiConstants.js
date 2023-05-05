@@ -30,5 +30,15 @@ class APIConstants {
       return response.data;
     }
   }
+  
+  static async registerCompany(payload) {
+    let response;
+    try {
+      response = await axios.post(`${this.COMPANY_URL}/register`, payload);
+    } catch (error) {
+      return error.response.data.errors;
+    }
+    return true;
+   }
 }
 export default APIConstants;

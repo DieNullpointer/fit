@@ -9,6 +9,7 @@ export default function AutoComplete({
   required,
   full,
   onChange,
+  defaultValue
 }) {
   let items = [];
   if (!options[0]?.guid)
@@ -48,7 +49,7 @@ export default function AutoComplete({
         autoHighlight
         fullWidth
         onChange={onChange}
-        
+        defaultValue={defaultValue}
         renderInput={(params) => (
           <TextField
             {...params}
