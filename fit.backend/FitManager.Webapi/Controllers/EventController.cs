@@ -62,7 +62,7 @@ namespace FitManager.Webapi.Controllers
         }
 
         //  api/event/assign
-        [HttpPut("assign")]
+        /*[HttpPut("assign")]
         public async Task<IActionResult> AssignPackages([FromBody] AssignPackageCmd packages)
         {
             try
@@ -72,7 +72,7 @@ namespace FitManager.Webapi.Controllers
                 return BadRequest();
             }
             catch(ServiceException e) { return BadRequest(e.Message); }
-        }
+        }*/
 
         //  api/event/delete
         [HttpDelete("delete/{guid:Guid}")]
