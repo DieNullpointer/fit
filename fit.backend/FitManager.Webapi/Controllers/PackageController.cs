@@ -72,17 +72,19 @@ namespace FitManager.Webapi.Controllers
 
         [HttpPost("delete")];
         public async Task<IActionResult> DeletePackage ([FromBody] DeletePackageDto delete){
-            var packages =_db.Packages.FirstOrDefault(p => p.Guid == delete.id);
-
+            var packages = await _db.Package.Include(p=>p.package).FirstAsync(a => a.Guid == guid);
+            
             if (packages == null)
+                throw new ServiceException("Package doesnt exist");
+
+            _db.Package.RemoveRange(packages.Package.ToList());
+
+            try
             {
-                return BadRequest("Package does not exist");
+                await _db.SaveChangesAsync();
             }
-
-            _db.Packages.Remove(packages);
-            await _db.SaveChangesAsync();
-
-            return Ok(packages);
+            catch (DbUpdateException e) { throw new ServiceException(e.InnerException?.Message ?? e.Message, e); }
+            return true;
         }
     }
 }
