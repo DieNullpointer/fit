@@ -118,7 +118,7 @@ export default function Signup() {
                     console.log("errors:");
                     Object.entries(response).forEach(([key, value]) => {
                       console.log(value[0]);
-                      errors.push(value[0])
+                      errors.push(value[0]);
                     });
 
                     setError({ msg: errors.join("; ") });
