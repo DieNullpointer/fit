@@ -14,7 +14,10 @@ namespace FitManager.Application.Infrastructure
 {
     public class FitContext : DbContext
     {
-        public FitContext(DbContextOptions<FitContext> opt): base(opt) { }
+        public FitContext(DbContextOptions<FitContext> opt) : base(opt)
+        {
+        }
+
         public DbSet<Model.Company> Companies => Set<Model.Company>();
         public DbSet<Model.ContactPartner> ContactPartners => Set<Model.ContactPartner>();
         public DbSet<Model.Event> Events => Set<Model.Event>();
@@ -29,7 +32,7 @@ namespace FitManager.Application.Infrastructure
             if (config.Id == default) Configs.Add(config);
             await SaveChangesAsync();
         }
-        
+
         public void Seed()
         {
             Randomizer.Seed = new Random(1039);
@@ -45,7 +48,7 @@ namespace FitManager.Application.Infrastructure
 
             var events = new Faker<Model.Event>("de").CustomInstantiator(f =>
             {
-                return new Model.Event(name: f.Name.JobTitle(), date: new DateTime(year: f.Date.Future(refDate: DateTime.UtcNow, yearsToGoForward: 5).Year, month: f.Date.Future(refDate: DateTime.UtcNow, yearsToGoForward: 5).Month, day: f.Date.Future(refDate: DateTime.UtcNow, yearsToGoForward: 5).Day));
+                return new Model.Event(name: f.Name.JobTitle(), date: new DateTime(year: f.Date.Future(refDate: DateTime.UtcNow).Year, month: f.Date.Future(refDate: DateTime.UtcNow).Month, day: f.Date.Future(refDate: DateTime.UtcNow).Day));
             }).Generate(5).ToList();
             events.Add(new Model.Event(new DateTime(year: 2024, month: 3, day: 23), "FIT24"));
             events.Add(new Model.Event(new DateTime(year: 2023, month: 3, day: 23), "FIT23"));
@@ -70,6 +73,7 @@ namespace FitManager.Application.Infrastructure
             ContactPartners.AddRange(partners);
             SaveChanges();
         }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Additional config
@@ -96,13 +100,13 @@ namespace FitManager.Application.Infrastructure
                     if (prop.ClrType == typeof(DateTime?)) prop.SetPrecision(3);
                 }
             }
-
         }
 
         private void Initialize()
         {
             // Your code
         }
+
         /// <summary>
         /// Creates the database. Called once at application startup.
         /// </summary>
@@ -159,6 +163,5 @@ namespace FitManager.Application.Infrastructure
             var decryptedToken = Encoding.UTF8.GetString(dataStream.ToArray());
             return (config.MailerAccountname, decryptedToken);
         }
-
     }
 }

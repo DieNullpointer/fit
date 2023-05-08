@@ -6,6 +6,7 @@ fit.client/package-lock.json
 appsettings.Development.json
 **azure_secrets.txt
 **/wwwroot
+fit.backend/FitManager.Webapi/admin
 
 fit.client/package-lock.json
 **azure_secrets.txt
