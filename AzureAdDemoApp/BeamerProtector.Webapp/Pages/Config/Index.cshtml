@@ -1,0 +1,43 @@
+﻿@page
+@model BeamerProtector.Webapp.Pages.Config.IndexModel
+
+<div class="configView">
+    <h1>Konfiguration</h1>
+    <div class="configCards">
+        <div class="configCard">
+            <div class="cardTitle">Email Account</div>
+            <div class="@string.Join(" ", new string[]{"cardContent", (!Model.HasMailaccount ? "cardAlert" : "")})">
+                @if (Model.HasMailaccount == true)
+                {
+                    <text>
+                        Der Account <strong>@Model.Config.MailerAccountname</strong> ist zum Senden von Emails konfiguriert.
+                        Um diesen Account micht mehr zum Senden der Mails zu verwenden, <a href="/account/signoutMailaccount">klicke auf diesen Link</a>.
+                        Um das Senden von Mails zu testen, <a href="/account/signinMailaccount">klicke auf diesen Link um eine Mail an @Model.Config.MailerAccountname zu senden</a>.
+                    </text>
+                }
+                else
+                {
+                    <text>
+                        Zum Senden von Alarmmeldungen wird ein E-Mail Account benötigt.
+                        Im Moment ist kein Account zum Senden registriert.
+                        Um einen Azure AD Account für den Versand zu konfigurieren, <a href="/account/signinMailaccount">klicke auf diesen Link</a>.
+                    </text>
+                }
+            </div>
+        </div>
+        <div class="configCard">
+            <div class="cardTitle">Andere Option</div>
+            <div class="cardContent">Hier können andere Einstellungen festgelegt werden.</div>
+        </div>
+        <div class="configCard">
+            <div class="cardTitle">Andere Option</div>
+            <div class="cardContent">Hier können andere Einstellungen festgelegt werden.</div>
+        </div>
+        <div class="configCard">
+            <div class="cardTitle">Andere Option</div>
+            <div class="cardContent">Hier können andere Einstellungen festgelegt werden.</div>
+        </div>
+    </div>
+
+</div>
+

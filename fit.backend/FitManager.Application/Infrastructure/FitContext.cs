@@ -4,7 +4,9 @@ using FitManager.Application.Model;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,7 +14,10 @@ namespace FitManager.Application.Infrastructure
 {
     public class FitContext : DbContext
     {
-        public FitContext(DbContextOptions<FitContext> opt): base(opt) { }
+        public FitContext(DbContextOptions<FitContext> opt) : base(opt)
+        {
+        }
+
         public DbSet<Model.Company> Companies => Set<Model.Company>();
         public DbSet<Model.ContactPartner> ContactPartners => Set<Model.ContactPartner>();
         public DbSet<Model.Event> Events => Set<Model.Event>();
@@ -27,7 +32,7 @@ namespace FitManager.Application.Infrastructure
             if (config.Id == default) Configs.Add(config);
             await SaveChangesAsync();
         }
-        
+
         public void Seed()
         {
             Randomizer.Seed = new Random(1039);
@@ -43,7 +48,7 @@ namespace FitManager.Application.Infrastructure
 
             var events = new Faker<Model.Event>("de").CustomInstantiator(f =>
             {
-                return new Model.Event(name: f.Name.JobTitle(), date: new DateTime(year: f.Date.Future(refDate: DateTime.UtcNow, yearsToGoForward: 5).Year, month: f.Date.Future(refDate: DateTime.UtcNow, yearsToGoForward: 5).Month, day: f.Date.Future(refDate: DateTime.UtcNow, yearsToGoForward: 5).Day));
+                return new Model.Event(name: f.Name.JobTitle(), date: new DateTime(year: f.Date.Future(refDate: DateTime.UtcNow).Year, month: f.Date.Future(refDate: DateTime.UtcNow).Month, day: f.Date.Future(refDate: DateTime.UtcNow).Day));
             }).Generate(5).ToList();
             events.Add(new Model.Event(new DateTime(year: 2024, month: 3, day: 23), "FIT24"));
             events.Add(new Model.Event(new DateTime(year: 2023, month: 3, day: 23), "FIT23"));
@@ -68,6 +73,7 @@ namespace FitManager.Application.Infrastructure
             ContactPartners.AddRange(partners);
             SaveChanges();
         }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Additional config
@@ -94,13 +100,13 @@ namespace FitManager.Application.Infrastructure
                     if (prop.ClrType == typeof(DateTime?)) prop.SetPrecision(3);
                 }
             }
-
         }
 
         private void Initialize()
         {
             // Your code
         }
+
         /// <summary>
         /// Creates the database. Called once at application startup.
         /// </summary>
@@ -112,6 +118,50 @@ namespace FitManager.Application.Infrastructure
             // existing tables in the database. This avoids initializing multiple times.
             if (Database.EnsureCreated()) { Initialize(); }
             if (isDevelopment) Seed();
+        }
+
+        /// <summary>
+        /// Set the account to send alert emails and encrypt the refresh token with the key provided.
+        /// </summary>
+        public async Task SetMailerAccount(string mailAccountname, string refreshToken, byte[] key)
+        {
+            using var aes = Aes.Create();
+            aes.Key = key;
+
+            var value = Encoding.UTF8.GetBytes(refreshToken);
+            using var memoryStream = new MemoryStream();
+            memoryStream.Write(aes.IV);
+            using var encryptor = aes.CreateEncryptor();
+            using (var cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write))
+                cryptoStream.Write(value);
+            var encryptedToken = Convert.ToBase64String(memoryStream.ToArray());
+
+            var config = await GetConfig();
+            config.MailerRefreshToken = encryptedToken;
+            config.MailerAccountname = mailAccountname;
+            await SetConfig(config);
+        }
+
+        /// <summary>
+        /// Read the account to send alert emails and decrypt the refresh token with the key provided.
+        /// </summary>
+        public async Task<(string? accountname, string? refreshToken)> GetMailerAccount(byte[] key)
+        {
+            var config = await GetConfig();
+            if (string.IsNullOrEmpty(config.MailerAccountname) || string.IsNullOrEmpty(config.MailerRefreshToken))
+                return (null, null);
+
+            using var aes = Aes.Create();
+            var memoryStream = new MemoryStream(Convert.FromBase64String(config.MailerRefreshToken));
+            var iv = new byte[aes.BlockSize / 8];
+            memoryStream.Read(iv);
+
+            using var decryptor = aes.CreateDecryptor(key, iv);
+            using var cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read);
+            using var dataStream = new MemoryStream();
+            cryptoStream.CopyTo(dataStream);
+            var decryptedToken = Encoding.UTF8.GetString(dataStream.ToArray());
+            return (config.MailerAccountname, decryptedToken);
         }
     }
 }

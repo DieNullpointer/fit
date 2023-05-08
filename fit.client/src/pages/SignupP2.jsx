@@ -4,26 +4,11 @@ import Paper from "../components/atoms/Paper";
 import PageFrame from "../components/PageFrame";
 import { useState, useEffect, useRef } from "react";
 import Button from "../components/atoms/Button";
-import Form from "../components/form/Form";
 import { useNavigate } from "react-router-dom";
 import { motion as m } from "framer-motion";
 import { SignupPerson as Person } from "../components/form/SignupPerson";
+import APIConstants from "../apiConstants";
 
-/**
- *
- * Die Stimmen werden lauter.
- * Lass die Stimmen nicht gewinnen.
- * Die Stimmen werden lauter.
- * Lass die Stimmen nicht gewinnen.
- * Die Stimmen werden lauter.
- * Lass die Stimmen nicht gewinnen.
- * Die Stimmen werden lauter.
- * Lass die Stimmen nicht gewinnen.
- * Die Stimmen werden lauter.
- * Lass die Stimmen nicht gewinnen.
- * De Stimmen werden lauter.
- * Lass die Stimmen gewinnen.
- */
 export default function Signup() {
   const navigate = useNavigate();
   const url = window.location.pathname.split("/").pop();
@@ -38,16 +23,16 @@ export default function Signup() {
   const updateData = (number, rdata) => {
     var found = false;
     data.forEach((person) => {
-      if(person._intern === number) {
+      if (person._intern === number) {
         person = rdata;
         found = true;
       }
-    })
+    });
 
-    if(!found) data.push(rdata);
-  }
+    if (!found) data.push(rdata);
+  };
 
-  const [persons, setPersons] = useState([0]);
+  const [persons, setPersons] = useState([0, 1, 2]);
   const [error, setError] = useState({});
 
   return (
@@ -80,11 +65,12 @@ export default function Signup() {
                         onChange={(number, rdata, e) => {
                           //recieved data = rdata from person component
                           updateData(number, rdata);
-                          console.log(data);
                         }}
+                        key={idx}
                       />
                     ))}
-                    <div className="w-full flex items-center justify-center">
+                    {/**
+                       * <div className="w-full flex items-center justify-center">
                       <Button
                         text={"+"}
                         onClick={() => {
@@ -93,13 +79,14 @@ export default function Signup() {
                         }}
                       />
                     </div>
+                       */}
                   </div>
                 </div>
               </div>
             </div>
             <div className="flex flex-row justify-between mb-3">
-              <div className="flex flex-col">
-                <Button
+              {/**
+                   * <Button
                   id="back"
                   text="Zurück"
                   onClick={() => {
@@ -107,29 +94,50 @@ export default function Signup() {
                     navigate("/signup");
                   }}
                 />
-                {error.msg && (
-                  <Typography color="crimson" variant="subtitle1">
-                    {error.msg}
-                  </Typography>
-                )}
-              </div>
+                   */}
+              
               <Button
                 id="submit"
-                text="Abschicken"
-                onClick={() => {
-                  sessionStorage.setItem(
-                    "signup2",
-                    JSON.stringify(Form.getExport())
-                  );
-                  console.log(Form.reset());
+                text="Weiter"
+                onClick={async () => {
+                  data.forEach((p) => {
+                    delete p._intern;
+                  });
+                  sessionStorage.setItem("signup2", JSON.stringify(data));
+                  let exportObj = JSON.parse(sessionStorage.getItem("signup1"));
+                  Object.defineProperty(exportObj, "partners", {
+                    value: data,
+                    writable: true,
+                    enumerable: true,
+                  });
+                  console.log(exportObj);
+                  let response = await APIConstants.registerCompany(exportObj);
+
+                  if (response != true) {
+                    let errors = [];
+                    console.log("errors:");
+                    Object.entries(response).forEach(([key, value]) => {
+                      console.log(value[0]);
+                      errors.push(value[0]);
+                    });
+
+                    setError({ msg: errors.join("; ") });
+                  }
                 }}
               />
+              {error.msg && (
+                <div className="m-2">
+                  <Typography color="crimson" variant="subtitle1" sx={{ lineHeight: "20px" }}>
+                  {error.msg}
+                </Typography>
+                </div>
+              )}
             </div>
             <Typography
               variant="subtitle1"
               className="absolute right-[1.35rem] bottom-2.5"
             >
-              2/2
+              (Dev Note: temporarily only three options) 2/2
             </Typography>
           </div>
         </Paper>

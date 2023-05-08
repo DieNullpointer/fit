@@ -48,8 +48,8 @@ namespace FitManager.Application.Services
                 entity.Event = await _db.Events.FirstAsync(a => a.Guid == register.eventGuid);
                 entity.Package = await _db.Packages.FirstAsync(a => a.Guid == register.packageGuid);
             }));
-            if (company.Event.Packages.Contains(company.Package))
-                throw new ServiceException("Package stimmt mit Event nicht überein");
+            //if (!company.Event.Packages.Contains(company.Package))
+                //throw new ServiceException("Package stimmt mit Event nicht überein");
             //var package = await _db.Packages.FirstAsync(a => a.Name == register.package);
             //var events = await _db.Events.FirstAsync(a => a.Name == register.eventName);
             //var company = new Company(register.name, register.address, register.country, register.plz, register.place, register.billAddress, package, events);

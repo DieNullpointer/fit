@@ -8,11 +8,13 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FitManager.Webapi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [AllowAnonymous]
     public class EventController : ControllerBase
     {
         private readonly PackageEventService _service;
@@ -62,7 +64,7 @@ namespace FitManager.Webapi.Controllers
         }
 
         //  api/event/assign
-        [HttpPut("assign")]
+        /*[HttpPut("assign")]
         public async Task<IActionResult> AssignPackages([FromBody] AssignPackageCmd packages)
         {
             try
@@ -72,7 +74,7 @@ namespace FitManager.Webapi.Controllers
                 return BadRequest();
             }
             catch(ServiceException e) { return BadRequest(e.Message); }
-        }
+        }*/
 
         //  api/event/delete
         [HttpDelete("delete/{guid:Guid}")]
@@ -80,10 +82,10 @@ namespace FitManager.Webapi.Controllers
         {
             try
             {
-                if(await _service.DeleteEvent(guid)) return Ok();
+                if (await _service.DeleteEvent(guid)) return Ok();
                 return BadRequest();
             }
-            catch(ServiceException e) { return BadRequest(e.Message);  }
+            catch (ServiceException e) { return BadRequest(e.Message); }
         }
 
         //  api/event/add
@@ -94,7 +96,7 @@ namespace FitManager.Webapi.Controllers
             {
                 return Ok(await _service.AddEvent(events));
             }
-            catch(ServiceException e) { return BadRequest(e.Message); }
+            catch (ServiceException e) { return BadRequest(e.Message); }
         }
     }
 }
