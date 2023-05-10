@@ -2,6 +2,7 @@
 using FitManager.Application.Dto;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 using System.Linq;
 using FitManager.Application.Services;
