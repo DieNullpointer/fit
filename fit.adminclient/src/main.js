@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 import axios from "axios";
-
+import PrimeVue from 'primevue/config';
 import App from './App.vue'
 import router from './router'
 import store from './store.js'
@@ -15,10 +15,11 @@ axios.get("../account/accountinfo")
   .then(response => {
     const userdata = response.data;
     store.commit("authenticate", userdata);
-    const app = createApp(App)
-    app.use(router)
-    app.use(store)
-    app.mount('#app')
+    const app = createApp(App);
+    app.use(PrimeVue);
+    app.use(router);
+    app.use(store);
+    app.mount('#app');
   })
   .catch(() => {
     alert("Not authenticated. Please login in ASP.NET Backend on https://localhost:5001/admin and reload.");
