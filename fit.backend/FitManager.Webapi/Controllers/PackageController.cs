@@ -17,10 +17,12 @@ namespace FitManager.Webapi.Controllers
     public class PackageController : ControllerBase
     {
         private readonly PackageEventService _service;
+        private readonly FitContext _db;
 
         public PackageController(FitContext db, PackageEventService service)
         {
             _service = service;
+            _db = db;
         }
 
         // api/package
