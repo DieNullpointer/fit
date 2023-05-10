@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using FitManager.Application.Services;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+using System;
+using Microsoft.EntityFrameworkCore;
 
 namespace FitManager.Webapi.Controllers
 {
@@ -51,7 +54,9 @@ namespace FitManager.Webapi.Controllers
 
         public record ChangePackageDto(Guid id, string newName, string newPrice);
 
-        [HttpPost("change")]
+    
+        //api/package/change
+        [HttpPut("change")]
         public async Task<IActionResult> ChangePackage([FromBody] ChangePackageDto change){
             var packages = _db.Packages.FirstOrDefault(p => p.Guid == change.id);
 
@@ -61,30 +66,26 @@ namespace FitManager.Webapi.Controllers
             }
 
             packages.Name = change.newName ?? packages.Name;
-            packages.Price = change.price ?? packages.Price;
+            packages.Price = decimal.Parse(change.newPrice);
 
             await _db.SaveChangesAsync();
 
             return Ok(packages);
         }
 
-        public record DeletePackageDto(Guid id);
-
-        [HttpPost("delete")];
-        public async Task<IActionResult> DeletePackage ([FromBody] DeletePackageDto delete){
-            var packages = await _db.Package.Include(p=>p.package).FirstAsync(a => a.Guid == guid);
+        [HttpPost("delete/{id:Guid}")]
+        public async Task<IActionResult> DeletePackage (Guid id) { 
+            var packages = await _db.Packages.FirstAsync(a => a.Guid == id);
             
             if (packages == null)
                 throw new ServiceException("Package doesnt exist");
-
-            _db.Package.RemoveRange(packages.Package.ToList());
 
             try
             {
                 await _db.SaveChangesAsync();
             }
-            catch (DbUpdateException e) { throw new ServiceException(e.InnerException?.Message ?? e.Message, e); }
-            return true;
+            catch (Exception e) { throw new ServiceException(e.InnerException?.Message ?? e.Message, e); }
+            return Ok();
         }
     }
 }
