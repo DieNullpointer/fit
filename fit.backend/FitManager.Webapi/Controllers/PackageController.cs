@@ -53,6 +53,7 @@ namespace FitManager.Webapi.Controllers
             catch(ServiceException e) { return BadRequest(e.Message); }
         }
 
+
         //api/package/change
         [HttpPut("change")]
         public async Task<IActionResult> ChangePackage([FromBody] PackageDto change){
