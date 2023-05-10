@@ -54,7 +54,6 @@ namespace FitManager.Webapi.Controllers
 
         public record ChangePackageDto(Guid id, string newName, string newPrice);
 
-    
         //api/package/change
         [HttpPut("change")]
         public async Task<IActionResult> ChangePackage([FromBody] ChangePackageDto change){
@@ -73,19 +72,26 @@ namespace FitManager.Webapi.Controllers
             return Ok(packages);
         }
 
-        [HttpPost("delete/{id:Guid}")]
-        public async Task<IActionResult> DeletePackage (Guid id) { 
-            var packages = await _db.Packages.FirstAsync(a => a.Guid == id);
+       [HttpDelete("delete/{id:Guid}")]
+        public async Task<IActionResult> DeletePackage(Guid id)
+        { 
+            var package = await _db.Packages.FirstOrDefaultAsync(a => a.Guid == id);
             
-            if (packages == null)
+            if (package == null)
                 throw new ServiceException("Package doesnt exist");
+
+            _db.Packages.Remove(package);
 
             try
             {
                 await _db.SaveChangesAsync();
             }
-            catch (Exception e) { throw new ServiceException(e.InnerException?.Message ?? e.Message, e); }
+            catch (Exception e)
+            {
+                throw new ServiceException(e.InnerException?.Message ?? e.Message, e);
+            }
+
             return Ok();
-        }
+        }   
     }
 }
