@@ -6,11 +6,13 @@ using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using FitManager.Application.Services;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FitManager.Webapi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [AllowAnonymous]
     public class PackageController : ControllerBase
     {
         private readonly PackageEventService _service;
