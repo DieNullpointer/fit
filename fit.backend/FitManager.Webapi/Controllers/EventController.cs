@@ -36,13 +36,13 @@ namespace FitManager.Webapi.Controllers
             {
                 a.Guid,
                 a.Name,
+                Date = a.Date.ToString("dd/MM/yyyy"),
                 Packages = a.Packages.Select(b => new
                 {
                     b.Guid,
                     b.Name,
                     b.Price
-                }),
-                Date = a.Date.ToString("dd/MM/yyyy")
+                })
             });
             return Ok(export);
         }
@@ -64,7 +64,7 @@ namespace FitManager.Webapi.Controllers
         }
 
         //  api/event/assign
-        /*[HttpPut("assign")]
+        [HttpPut("assign")]
         public async Task<IActionResult> AssignPackages([FromBody] AssignPackageCmd packages)
         {
             try
@@ -74,7 +74,7 @@ namespace FitManager.Webapi.Controllers
                 return BadRequest();
             }
             catch(ServiceException e) { return BadRequest(e.Message); }
-        }*/
+        }
 
         //  api/event/delete
         [HttpDelete("delete/{guid:Guid}")]
