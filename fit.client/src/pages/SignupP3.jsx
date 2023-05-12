@@ -34,6 +34,9 @@ export default function Signup() {
           <Typography variant="subtitle1" gutterBottom>
             Sie werden in Kürze zum Firmenportal weitergeleitet... {seconds}
           </Typography>
+          <div className="flex justify-center items-center">
+          <img src="../alternative_spg_logo.png" alt="SPG Logo" width="320" />
+          </div>
           <Typography marginTop={"40px"} gutterBottom>
             Redirect funktioniert nicht? Versuchen Sie diesen <Link className="text-blue-300" to={`/companypage/${sessionStorage.getItem("companyGuid")}`}>Link</Link>.
           </Typography>
