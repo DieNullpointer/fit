@@ -35,6 +35,7 @@ class APIConstants {
     let response;
     try {
       response = await axios.post(`${this.COMPANY_URL}/register`, payload);
+      sessionStorage.setItem("companyGuid", response.data);
     } catch (error) {
       return error.response.data.errors;
     }
