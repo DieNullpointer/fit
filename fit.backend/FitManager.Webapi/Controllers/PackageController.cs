@@ -72,8 +72,8 @@ namespace FitManager.Webapi.Controllers
             return Ok(packages);
         }
 
-       [HttpDelete("delete/{id:Guid}")]
-        public async Task<IActionResult> DeletePackage(Guid id)
+      //  [HttpDelete("delete/{id:Guid}")]
+/*         public async Task<IActionResult> DeletePackage(Guid id)
         { 
             var package = await _db.Packages.FirstOrDefaultAsync(a => a.Guid == id);
             
@@ -91,7 +91,7 @@ namespace FitManager.Webapi.Controllers
                 throw new ServiceException(e.InnerException?.Message ?? e.Message, e);
             }
 
-            return Ok();
-        }   
+            return Ok(); 
+        } */   
     }
 }
