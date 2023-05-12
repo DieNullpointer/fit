@@ -79,7 +79,7 @@ namespace FitManager.Webapi.Controllers
         }
 
         //  api/event/delete
-        [HttpDelete("delete/{guid:Guid}")]
+        /* [HttpDelete("delete/{guid:Guid}")]
         public async Task<IActionResult> DeleteEvent(Guid guid)
         {
             try
@@ -88,7 +88,7 @@ namespace FitManager.Webapi.Controllers
                 return BadRequest();
             }
             catch (ServiceException e) { return BadRequest(e.Message); }
-        }
+        } */
 
         //  api/event/add
         [HttpPost("add")]
