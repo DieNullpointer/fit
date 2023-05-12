@@ -52,46 +52,5 @@ namespace FitManager.Webapi.Controllers
             }
             catch(ServiceException e) { return BadRequest(e.Message); }
         }
-
-        public record ChangePackageDto(Guid id, string newName, string newPrice);
-
-        //api/package/change
-        [HttpPut("change")]
-        public async Task<IActionResult> ChangePackage([FromBody] ChangePackageDto change){
-            var packages = _db.Packages.FirstOrDefault(p => p.Guid == change.id);
-
-            if (packages == null)
-            {
-                return BadRequest("Package does not exist");
-            }
-
-            packages.Name = change.newName ?? packages.Name;
-            packages.Price = decimal.Parse(change.newPrice);
-
-            await _db.SaveChangesAsync();
-
-            return Ok(packages);
-        }
-
-        /* [HttpDelete("delete/{id:Guid}")]
-        public async Task<IActionResult> DeletePackage (Guid id) { 
-            var packages = await _db.Packages.FirstAsync(a => a.Guid == id);
-            
-            if (package == null)
-                throw new ServiceException("Package doesnt exist");
-
-            _db.Packages.Remove(package);
-
-            try
-            {
-                await _db.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                throw new ServiceException(e.InnerException?.Message ?? e.Message, e);
-            }
-
-            return Ok();
-        } */
     }
 }
