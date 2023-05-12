@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Authorization;
 using System.Linq;
 using FitManager.Application.Services;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 
 namespace FitManager.Webapi.Controllers
 {
