@@ -2,22 +2,28 @@
 using FitManager.Application.Dto;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.AspNetCore.Authorization;
 using System.Linq;
 using FitManager.Application.Services;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+using System;
+using Microsoft.EntityFrameworkCore;
 
 namespace FitManager.Webapi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [AllowAnonymous]
     public class PackageController : ControllerBase
     {
         private readonly PackageEventService _service;
+        private readonly FitContext _db;
 
         public PackageController(FitContext db, PackageEventService service)
         {
             _service = service;
+            _db = db;
         }
 
         // api/package
