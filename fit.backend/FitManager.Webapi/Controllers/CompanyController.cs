@@ -55,7 +55,7 @@ namespace FitManager.Webapi.Controllers
         [HttpGet("{guid:Guid}")]
         public async Task<IActionResult> GetCompany(Guid guid)
         {
-            var company = await _db.Companies.FirstAsync(c => c.Guid == guid);
+            var company = await _db.Companies.Include(a => a.Event).Include(a => a.Package).Include(c => c.ContactPartners).FirstAsync(c => c.Guid == guid);
             if (company is null) return BadRequest();
             return Ok(company);
         }
