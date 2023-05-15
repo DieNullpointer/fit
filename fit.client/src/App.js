@@ -29,7 +29,7 @@ export default function App() {
           <Route path="/event" element={<Events />} />
           <Route path="/impressum" />
           <Route path="/datenschutz" />
-          <Route path="/companypage/:companyGuid" element={<UploadPage />} />
+          <Route path="/companypage/:company" element={<UploadPage />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/signup/continue" element={<SignupContinue />} />
           <Route path="/signup/finish" element={<SignupFinish />} />

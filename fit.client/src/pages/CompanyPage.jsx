@@ -13,9 +13,13 @@ export default function UploadPage() {
   }, [company]);
 
   async function init() {
+    if(!sessionStorage.getItem("companyGuid"))
+      sessionStorage.setItem("companyGuid", company);
+
     if (company) {
-      APIConstants.getCompany(company);
-    } else {
+      var fetchCompany = await APIConstants.getCompany(company);
+      console.log(fetchCompany);
+      sessionStorage.setItem("company", JSON.stringify(fetchCompany));
     }
   }
 
@@ -27,10 +31,10 @@ export default function UploadPage() {
         transition={{ duration: 0.85 }}
       >
         <Typography variant="h4" color="white">
-          Fast geschafft!
+          Firmenportal
         </Typography>
         <Typography variant="subtitle1" gutterBottom color="white">
-          Laden Sie als letztes noch nötige Dateien hoch.
+          Ihre persönliche Seite für Organisatorisches
         </Typography>
       </m.div>
     </PageFrame>
