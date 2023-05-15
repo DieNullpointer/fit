@@ -55,8 +55,9 @@ namespace FitManager.Webapi.Controllers
         [HttpGet("{guid:Guid}")]
         public async Task<IActionResult> GetCompany(Guid guid)
         {
-            var partners = await _db.ContactPartners.Where(a => a.Company.Guid == guid).ToListAsync();
-            return partners is null ? BadRequest() : Ok(partners);
+            var company = await _db.Companies.FirstAsync(c => c.Guid == guid);
+            if (company is null) return BadRequest();
+            return Ok(company);
         }
 
         // api/company/delete
@@ -89,10 +90,10 @@ namespace FitManager.Webapi.Controllers
             if (formFile.ContentType != "application/pdf")
                 return BadRequest();
             string path = Path.Combine(Directory.GetCurrentDirectory(), "Files");
-            if(!Directory.Exists(path))
+            if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
             path = Path.Combine(path, formFile.FileName);
-            using(var stream = new FileStream(path, FileMode.Create))
+            using (var stream = new FileStream(path, FileMode.Create))
             {
                 await formFile.CopyToAsync(stream);
             }
