@@ -36,7 +36,7 @@ namespace FitManager.Webapi.Controllers
         [HttpGet]
         public IActionResult GetAllCompanies()
         {
-            var companies = _db.Companies.Include(a => a.Package).Include(a => a.Event).OrderBy(c => c.Name).ToList();
+            var companies = _db.Companies.Include(a => a.Package).Include(a => a.Event).Include(a => a.ContactPartners).OrderBy(c => c.Name).ToList();
             var export = companies.Select(p => new
             {
                 p.Guid,
@@ -46,7 +46,19 @@ namespace FitManager.Webapi.Controllers
                 p.Plz,
                 p.Place,
                 p.BillAddress,
-                EventName = p.Event.Name
+                EventName = p.Event.Name,
+                PackageName = p.Package.Name,
+                partners = p.ContactPartners.Select(d => new
+                {
+                    d.Title,
+                    d.Firstname,
+                    d.Lastname,
+                    d.Email,
+                    d.TelNr,
+                    d.MobilNr,
+                    d.Function,
+                    d.MainPartner
+                })
             });
             return Ok(export);
         }

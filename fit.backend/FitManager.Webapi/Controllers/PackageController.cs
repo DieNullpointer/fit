@@ -52,5 +52,36 @@ namespace FitManager.Webapi.Controllers
             }
             catch(ServiceException e) { return BadRequest(e.Message); }
         }
+
+        //api/package/change
+        [HttpPut("change")]
+        public async Task<IActionResult> ChangePackage([FromBody] PackageDto change){
+            try
+            {
+                return Ok(await _service.ChangePackage(change));
+            }
+            catch(ServiceException e) { return BadRequest(e.Message); }
+        }
+
+        /* [HttpDelete("delete/{id:Guid}")]
+        public async Task<IActionResult> DeletePackage (Guid id) { 
+            var packages = await _db.Packages.FirstAsync(a => a.Guid == id);
+            
+            if (package == null)
+                throw new ServiceException("Package doesnt exist");
+
+            _db.Packages.Remove(package);
+
+            try
+            {
+                await _db.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                throw new ServiceException(e.InnerException?.Message ?? e.Message, e);
+            }
+
+            return Ok();
+        } */
     }
 }
