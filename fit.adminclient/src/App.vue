@@ -8,6 +8,9 @@ import axios from 'axios';
         <nav>
             <div><router-link to="/">Home</router-link></div>
             <div><router-link to="/about">About</router-link></div>
+            <div><router-link to="/events">Events</router-link></div>
+            <div><router-link to="/packages">Packages</router-link></div>
+            <div><router-link to="/companies">Companies</router-link></div>
             <div>Logged in as {{ username }}</div>
         </nav>
         <main>

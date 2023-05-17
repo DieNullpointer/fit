@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "axios": "^1.4.0",
-    "primevue": "^3.28.0",
+    "primevue": "^3.29.0",
     "vue": "^3.2.47",
     "vue-router": "^4.1.6",
     "vuex": "^4.1.0"
