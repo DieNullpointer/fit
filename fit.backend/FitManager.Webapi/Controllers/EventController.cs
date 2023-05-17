@@ -18,10 +18,12 @@ namespace FitManager.Webapi.Controllers
     public class EventController : ControllerBase
     {
         private readonly PackageEventService _service;
+        private readonly FitContext _db;
 
         public EventController(FitContext db, PackageEventService service)
         {
             _service = service;
+            _db = db;
         }
 
         //  api/event
@@ -77,7 +79,7 @@ namespace FitManager.Webapi.Controllers
         }
 
         //  api/event/delete
-        [HttpDelete("delete/{guid:Guid}")]
+        /* [HttpDelete("delete/{guid:Guid}")]
         public async Task<IActionResult> DeleteEvent(Guid guid)
         {
             try
@@ -86,7 +88,7 @@ namespace FitManager.Webapi.Controllers
                 return BadRequest();
             }
             catch (ServiceException e) { return BadRequest(e.Message); }
-        }
+        } */
 
         //  api/event/add
         [HttpPost("add")]
@@ -98,5 +100,25 @@ namespace FitManager.Webapi.Controllers
             }
             catch (ServiceException e) { return BadRequest(e.Message); }
         }
+
+        public record ChangeEventDto(Guid id, string newName, DateTime date);
+
+        [HttpPost("change")]
+        public async Task<IActionResult> ChangeEvent([FromBody] ChangeEventDto change)
+            {
+                var events = _db.Events.FirstOrDefault(e => e.Guid == change.id);
+
+                if (events == null)
+                {
+                    return BadRequest("Event does not exist");
+                }
+
+                events.Name = change.newName ?? events.Name; // use newName if it's not null, otherwise keep the current value of events.name
+                events.Date = change.date;
+
+                await _db.SaveChangesAsync();
+
+                return Ok(events);
+            }
     }
 }
