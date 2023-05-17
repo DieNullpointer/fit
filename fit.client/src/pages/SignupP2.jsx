@@ -66,7 +66,6 @@ export default function Signup() {
                           //recieved data = rdata from person component
                           updateData(number, rdata);
                         }}
-                        
                       />
                     ))}
                     {/**
