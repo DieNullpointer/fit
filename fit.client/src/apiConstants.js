@@ -27,14 +27,16 @@ class APIConstants {
     try {
       response = await axios.get(`${this.COMPANY_URL}/${guid}`)
     } catch (error) {
-      return response.data;
+      return error;
     }
+    return response.data;
   }
   
   static async registerCompany(payload) {
     let response;
     try {
       response = await axios.post(`${this.COMPANY_URL}/register`, payload);
+      sessionStorage.setItem("companyGuid", response.data);
     } catch (error) {
       return error.response.data.errors;
     }

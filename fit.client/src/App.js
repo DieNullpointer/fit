@@ -12,7 +12,8 @@ import Events from "./pages/Events";
 import Packages from "./pages/Packages";
 import Signup from "./pages/SignupP1";
 import SignupContinue from "./pages/SignupP2";
-import UploadPage from "./pages/UploadPage";
+import SignupFinish from "./pages/SignupP3";
+import UploadPage from "./pages/CompanyPage";
 
 export default function App() {
   return (
@@ -21,7 +22,6 @@ export default function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="*" exact={true} element={<NotFound />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/event/add" element={<AddEvent />} />
           <Route path="/package/add" element={<AddPackage />} />
@@ -29,10 +29,11 @@ export default function App() {
           <Route path="/event" element={<Events />} />
           <Route path="/impressum" />
           <Route path="/datenschutz" />
-          <Route path="/finalize" element={<UploadPage />} />
+          <Route path="/companypage/:company" element={<UploadPage />} />
           <Route path="/signup" element={<Signup />} />
-          
           <Route path="/signup/continue" element={<SignupContinue />} />
+          <Route path="/signup/finish" element={<SignupFinish />} />
+          <Route path="*" exact={true} element={<NotFound />} />
         </Routes>
       </Router>
 

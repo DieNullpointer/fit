@@ -36,7 +36,7 @@ export default function Signup() {
   const [error, setError] = useState({});
 
   return (
-    <PageFrame active={"sign-up"} margin className="bg-primary" noFullScreen>
+    <PageFrame active={"sign-up"} margin className="bg-primary">
       <Box sx={{ color: "white", textAlign: "center" }}>
         <Typography variant="h4">Anmeldung für den FIT</Typography>
         <Typography variant="subtitle1" gutterBottom>
@@ -66,7 +66,6 @@ export default function Signup() {
                           //recieved data = rdata from person component
                           updateData(number, rdata);
                         }}
-                        key={idx}
                       />
                     ))}
                     {/**
@@ -95,7 +94,7 @@ export default function Signup() {
                   }}
                 />
                    */}
-              
+
               <Button
                 id="submit"
                 text="Weiter"
@@ -113,7 +112,7 @@ export default function Signup() {
                   console.log(exportObj);
                   let response = await APIConstants.registerCompany(exportObj);
 
-                  if (response != true) {
+                  if (response !== true) {
                     let errors = [];
                     console.log("errors:");
                     Object.entries(response).forEach(([key, value]) => {
@@ -122,14 +121,21 @@ export default function Signup() {
                     });
 
                     setError({ msg: errors.join("; ") });
+                  } else {
+                    console.log(response);
+                    navigate("/signup/finish");
                   }
                 }}
               />
               {error.msg && (
                 <div className="m-2">
-                  <Typography color="crimson" variant="subtitle1" sx={{ lineHeight: "20px" }}>
-                  {error.msg}
-                </Typography>
+                  <Typography
+                    color="crimson"
+                    variant="subtitle1"
+                    sx={{ lineHeight: "20px" }}
+                  >
+                    {error.msg}
+                  </Typography>
                 </div>
               )}
             </div>

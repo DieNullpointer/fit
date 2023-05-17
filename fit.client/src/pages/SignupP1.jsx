@@ -50,7 +50,7 @@ export default function Signup() {
   }
 
   return (
-    <PageFrame active={"sign-up"} margin className="bg-primary" noFullScreen>
+    <PageFrame active={"sign-up"} margin className="bg-primary">
       <Box sx={{ color: "white", textAlign: "center" }}>
         <Typography variant="h4">Anmeldung für den FIT</Typography>
         <Typography variant="subtitle1" gutterBottom>
@@ -160,7 +160,7 @@ export default function Signup() {
                         full
                         label="FIT"
                         required
-                        {...Form.Child("autocomplete", "event", (e, newval) => {
+                        {...Form.Child("autocomplete", "eventGuid", (e, newval) => {
                           const text = newval.text;
                           let correctGuid = 1;
                           events.forEach((ev) => {
@@ -179,7 +179,7 @@ export default function Signup() {
                           required
                           {...Form.Child(
                             "autocomplete",
-                            "package",
+                            "packageGuid",
                             (e, newval) => {
                               const text = newval.text;
                               let correctGuid = 1;

@@ -28,7 +28,7 @@ export function SignupPerson({
   };
 
   return (
-    <form key={key}>
+    <form>
       <Paper elevation={3}>
         <div className="px-3" id={"person-" + number}>
           <div className="grid md:grid-cols-3 grid-flow-column">
