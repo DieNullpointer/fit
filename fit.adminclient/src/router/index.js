@@ -14,7 +14,22 @@ const router = createRouter({
       path: '/about',
       name: 'about',
       component: () => import('../views/AboutView.vue'),
-    }    
+    },
+    {
+      path: '/events',
+      name: 'events',
+      component: () => import('../views/EventsView.vue'),
+    },
+    {
+      path: '/packages',
+      name: 'packages',
+      component: () => import('../views/PackagesView.vue'),
+    },
+    {
+      path: '/companies',
+      name: 'companies',
+      component: () => import('../views/CompaniesView.vue'),
+    }     
   ]
 });
 

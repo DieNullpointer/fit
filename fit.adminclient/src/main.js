@@ -6,6 +6,8 @@ import router from './router'
 import store from './store.js'
 import process from 'node:process'
 import './assets/main.css'
+import "primevue/resources/themes/lara-light-indigo/theme.css";     
+import "primevue/resources/primevue.min.css";
 
 axios.defaults.baseURL = process.env.NODE_ENV == 'production' ? "/api" : "https://localhost:5001/api";
 // Use ASP cookie for devserver requests.
