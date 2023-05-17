@@ -3,6 +3,7 @@ using FitManager.Application.Dto;
 using FitManager.Application.Infrastructure;
 using FitManager.Application.Model;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
@@ -63,6 +64,30 @@ namespace FitManager.Application.Services
             return true;
         }
 
+        public async Task<Guid> ChangeEvent(EventDto change)
+        {
+            if (change.Date < DateTime.UtcNow)
+                throw new ServiceException("Datum liegt in der Vergangenheit");
+            var events = await _db.Events.FirstOrDefaultAsync(e => e.Guid == change.Guid);
+
+            if (events is null)
+            {
+                throw new ServiceException($"Evnet {change.Guid} existiert nicht");
+            }
+
+            events.Name = change.Name ?? events.Name; // use change.Name if it's not null, otherwise keep the current value of events.name
+            events.Date = change.Date;
+
+            await _db.SaveChangesAsync();
+
+            try
+            {
+                await _db.SaveChangesAsync();
+            }
+            catch (DbUpdateException e) { throw new ServiceException(e.InnerException?.Message ?? e.Message, e); }
+            return events.Guid;
+        }
+
         public async Task<bool> AssignPackages(AssignPackageCmd packages)
         {
             if (packages.Packages.Count == 0) throw new ServiceException("Keine Pakete gesendet");
@@ -102,6 +127,31 @@ namespace FitManager.Application.Services
             }
             catch (DbUpdateException e) { throw new ServiceException(e.InnerException?.Message ?? e.Message, e); }
             return package.Guid;
+        }
+
+        public async Task<Guid> ChangePackage(PackageDto change)
+        {
+            var packages = await _db.Packages.FirstOrDefaultAsync(p => p.Guid == change.Guid);
+
+            if (packages is null)
+            {
+                throw new ServiceException($"Package {change.Guid} existiert nicht");
+            }
+
+            packages.Name = change.Name ?? packages.Name;
+            try
+            {
+                packages.Price = decimal.Parse(change.Price);
+            }
+            catch(FormatException) { throw new ServiceException("Preis muss eine Zahlsein"); }
+
+            try
+            {
+                await _db.SaveChangesAsync();
+            }
+            catch (DbUpdateException e) { throw new ServiceException(e.InnerException?.Message ?? e.Message, e); }
+
+            return packages.Guid;
         }
     }
 }

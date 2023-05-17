@@ -101,24 +101,14 @@ namespace FitManager.Webapi.Controllers
             catch (ServiceException e) { return BadRequest(e.Message); }
         }
 
-        public record ChangeEventDto(Guid id, string newName, DateTime date);
-
-        [HttpPost("change")]
-        public async Task<IActionResult> ChangeEvent([FromBody] ChangeEventDto change)
+        [HttpPut("change")]
+        public async Task<IActionResult> ChangeEvent([FromBody] EventDto change)
+        {
+            try
             {
-                var events = _db.Events.FirstOrDefault(e => e.Guid == change.id);
-
-                if (events == null)
-                {
-                    return BadRequest("Event does not exist");
-                }
-
-                events.Name = change.newName ?? events.Name; // use newName if it's not null, otherwise keep the current value of events.name
-                events.Date = change.date;
-
-                await _db.SaveChangesAsync();
-
-                return Ok(events);
+                return Ok(await _service.ChangeEvent(change));
             }
+            catch (ServiceException e) { return BadRequest(e.Message); }
+        }
     }
 }

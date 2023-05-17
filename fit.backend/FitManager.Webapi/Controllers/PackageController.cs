@@ -53,24 +53,14 @@ namespace FitManager.Webapi.Controllers
             catch(ServiceException e) { return BadRequest(e.Message); }
         }
 
-        public record ChangePackageDto(Guid id, string newName, string newPrice);
-
         //api/package/change
         [HttpPut("change")]
-        public async Task<IActionResult> ChangePackage([FromBody] ChangePackageDto change){
-            var packages = _db.Packages.FirstOrDefault(p => p.Guid == change.id);
-
-            if (packages == null)
+        public async Task<IActionResult> ChangePackage([FromBody] PackageDto change){
+            try
             {
-                return BadRequest("Package does not exist");
+                return Ok(await _service.ChangePackage(change));
             }
-
-            packages.Name = change.newName ?? packages.Name;
-            packages.Price = decimal.Parse(change.newPrice);
-
-            await _db.SaveChangesAsync();
-
-            return Ok(packages);
+            catch(ServiceException e) { return BadRequest(e.Message); }
         }
 
         /* [HttpDelete("delete/{id:Guid}")]
