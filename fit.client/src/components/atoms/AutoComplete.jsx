@@ -9,7 +9,8 @@ export default function AutoComplete({
   required,
   full,
   onChange,
-  defaultValue
+  defaultValue,
+  value
 }) {
   let items = [];
   if (!options[0]?.guid)
@@ -50,6 +51,10 @@ export default function AutoComplete({
         fullWidth
         onChange={onChange}
         defaultValue={defaultValue}
+        value={value}
+        isOptionEqualToValue={(option, value) => {
+          return option.text === value.text;
+        }}
         renderInput={(params) => (
           <TextField
             {...params}

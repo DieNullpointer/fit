@@ -56,10 +56,17 @@ function Child(type, name, onChangeOverride, valueOverride = false) {
   };
 
   if (!valueOverride)
+    if(type === "input")
     return {
       as: Get(type, name),
       onChange,
-      defaultValue: getExport()[name] || (type === "input" ? "" : null),
+      defaultValue: getExport()[name] || "",
+    };
+    else if(type === "autocomplete")
+    return {
+      as: Get(type, name),
+      onChange,
+      value: getExport()[name] ||null,
     };
   else return { as: Get(type, name), onChange };
 }

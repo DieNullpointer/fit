@@ -18,11 +18,10 @@ export default function UploadPage() {
       sessionStorage.setItem("companyGuid", company);
 
     if (company) {
-      var fetchCompany = await APIConstants.getCompany(company);
-      console.log(fetchCompany);
-      setComp(fetchCompany);
-      console.log(comp);
-      sessionStorage.setItem("company", JSON.stringify(fetchCompany));
+      let fetchedResults = await APIConstants.getCompany(company);
+      console.log(fetchedResults);
+       setComp(fetchedResults);
+      sessionStorage.setItem("company", JSON.stringify(fetchedResults));
     }
 
   }
@@ -40,14 +39,16 @@ export default function UploadPage() {
         <Typography variant="subtitle1" gutterBottom color="white">
           Ihre persönliche Seite für Organisatorisches
         </Typography>
-        {comp.contactPartners && (
-          <Typography variant="subtitle1" gutterBottom color="white">
-            {comp.contactPartners
+        <Typography variant="subtitle1" color="white" marginTop="15px"> 
+          <b>Firma:</b> {comp?.name}
+        </Typography>
+        {comp?.contactPartners && (
+          <Typography variant="subtitle1" gutterBottom color="white" marginTop="15px">
+             <b>Ansprechpartner:</b><br />{comp?.contactPartners
               .map(
-                (idx, p) =>
-                  `${p.title} ${p.firstname} ${p.lastname} (${p.email} ${p.telNr})`
-              )
-              .join(" ")}
+                p =>
+                  <>{p.title} <b>{p.firstname} {p.lastname}</b> (<i>{p.email}</i>; <i>{p.telNr}</i>)</>
+              )}
           </Typography>
         )}
       </m.div>
