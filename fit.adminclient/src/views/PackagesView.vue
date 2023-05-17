@@ -53,8 +53,7 @@ import Dialog from 'primevue/dialog';
             <small class="p-error" v-if="submitted && !package.price">Price is required.</small>
         </div>
         <template #footer>
-            <Button label="Cancel" icon="pi pi-times" text @click="this.newPackageDialog = false, this.submitted = false, this.package.name = '',
-                this.package.price = ''" />
+            <Button label="Cancel" icon="pi pi-times" text @click="hideDialog()" />
             <Button label="Save" icon="pi pi-check" text @click="addPackage()" />
         </template>
     </Dialog>
@@ -92,10 +91,7 @@ export default {
             this.submitted = true;
             try {
                 await axios.post('package/add', this.package)
-                this.newPackageDialog = false;
-                this.submitted = false;
-                this.package.name = '';
-                this.package.price = '';
+                this.hideDialog();
                 await this.getAllPackages();
             } catch (e) {
                 if (e.response.status === 400) {
@@ -106,7 +102,12 @@ export default {
         async editPackage() {
 
         },
-
+        hideDialog() {
+            this.newPackageDialog = false;
+            this.submitted = false; 
+            this.package.name = '';
+            this.package.price = '';
+        },
         findIndexById(id) {
             let index = -1;
             for (let i = 0; i < this.products.length; i++) {
