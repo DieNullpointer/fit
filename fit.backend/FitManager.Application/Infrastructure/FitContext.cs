@@ -9,6 +9,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace FitManager.Application.Infrastructure
 {
@@ -67,11 +68,22 @@ namespace FitManager.Application.Infrastructure
             Companies.AddRange(companies);
             SaveChanges();
 
+            var c = companies.ToList();
+
             var partners = new Faker<Model.ContactPartner>("de").CustomInstantiator(f =>
             {
-                return new Model.ContactPartner(title: f.Random.Word(), firstname: f.Person.FirstName, lastname: f.Person.LastName, email: f.Person.Email, telNr: f.Person.Phone, company: f.PickRandom(companies), mainPartner: true, function: f.Name.JobTitle());
+                var company = f.PickRandom(c);
+                c.Remove(company);
+                return new Model.ContactPartner(title: f.Random.Word(), firstname: f.Person.FirstName, lastname: f.Person.LastName, email: f.Person.Email, telNr: f.Person.Phone, company: company, mainPartner: true, function: f.Name.JobTitle());
             }).Generate(10).ToList();
             ContactPartners.AddRange(partners);
+            SaveChanges();
+
+            var partners2 = new Faker<Model.ContactPartner>("de").CustomInstantiator(f =>
+            {
+                return new Model.ContactPartner(title: f.Random.Word(), firstname: f.Person.FirstName, lastname: f.Person.LastName, email: f.Person.Email, telNr: f.Person.Phone, company: f.PickRandom(companies), mainPartner: false, function: f.Name.JobTitle());
+            }).Generate(10).ToList();
+            ContactPartners.AddRange(partners2);
             SaveChanges();
         }
 
