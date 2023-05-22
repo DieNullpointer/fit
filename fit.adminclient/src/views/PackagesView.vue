@@ -1,12 +1,8 @@
 <script setup>
-import { ref } from "vue";
 import axios from "axios";
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-import ColumnGroup from 'primevue/columngroup';
 import InputText from 'primevue/inputtext';
-import InputNumber from 'primevue/inputnumber';
-import Row from 'primevue/row';
 import { FilterMatchMode } from 'primevue/api';
 
 import Button from 'primevue/button';
@@ -38,8 +34,7 @@ import Dialog from 'primevue/dialog';
     </div>
 
 
-    <Dialog v-model:visible="dialog" :style="{ width: '450px' }" header="Package Details" :modal="true"
-        class="p-fluid">
+    <Dialog v-model:visible="dialog" :style="{ width: '450px' }" header="Package Details" :modal="true" class="p-fluid">
         <div class="field">
             <label for="name">Name</label>
             <InputText id="name" v-model.trim="package.name" required="true" autofocus
@@ -51,8 +46,8 @@ import Dialog from 'primevue/dialog';
             <div class="field">
                 <label for="price">Price</label>
                 <InputText id="name" v-model.trim="package.price" required="true" autofocus
-                :class="{ 'p-invalid': submitted && !package.price }" />
-            <small class="p-error" v-if="submitted && !package.price">Price is required.</small>
+                    :class="{ 'p-invalid': submitted && !package.price }" />
+                <small class="p-error" v-if="submitted && !package.price">Price is required.</small>
             </div>
         </div>
         <template #footer>
@@ -92,7 +87,7 @@ export default {
             }
         },
         async addPackage() {
-            this.submitted = true;
+            console.log(this.package)
             try {
                 await axios.post('package/add', this.package)
                 console.log(this.package)
@@ -113,6 +108,7 @@ export default {
             }
         },
         newPackage() {
+            this.package.guid = '';
             this.package.name = '';
             this.package.price = '';
             this.submitted = false;
@@ -121,27 +117,19 @@ export default {
         editPackage(item) {
             this.package.guid = item.guid;
             this.package.name = item.name;
-            this.package.price = item.price +'';
-            this.packageDialog = true;
+            this.package.price = item.price + '';
+            this.dialog = true;
         },
-        hideDialog () {
+        hideDialog() {
             this.dialog = false;
             this.submitted = false;
             this.package.guid = '';
             this.package.name = '';
             this.package.price = '';
-            this.submitted = false;
-            this.packageDialog = true;
-        },
-        hideDialog() {
-            this.newPackageDialog = false;
-            this.submitted = false; 
-            this.package.name = '';
-            this.package.price = '';
         },
         savePackage() {
             this.submitted = true;
-			if (this.package.name.trim() && this.package.price.trim()) {
+            if (this.package.name.trim() && this.package.price.trim()) {
                 if (this.package.guid) {
                     this.changePackage();
                 }
