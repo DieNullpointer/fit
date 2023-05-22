@@ -111,5 +111,15 @@ namespace FitManager.Webapi.Controllers
             }
             return Ok(new { formFile.Name, formFile.Length });
         }
+
+        [HttpPut("change")]
+        public async Task<IActionResult> EditCompany([FromBody] CompanyDto company)
+        {
+            try
+            {
+                return Ok(_service.EditCompany(company));
+            }
+            catch(ServiceException e) { return BadRequest(e.Message); }
+        }
     }
 }

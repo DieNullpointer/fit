@@ -3,6 +3,8 @@ using FitManager.Application.Dto;
 using FitManager.Application.Infrastructure;
 using FitManager.Application.Model;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Microsoft.Win32;
 using MimeKit.Encodings;
 using System;
 using System.Linq;
@@ -71,6 +73,34 @@ namespace FitManager.Application.Services
                 return company.Guid;
             }
             catch (DbUpdateException e) { throw new ServiceException(e.InnerException?.Message ?? e.Message, e); }
+        }
+
+        public async Task<Guid> EditCompany(CompanyDto companydto)
+        {
+            var packages = await _db.Packages.FirstAsync(a => a.Guid == companydto.packageGuid);
+            var events = await _db.Events.Include(a => a.Packages).FirstAsync(a => a.Guid == companydto.eventGuid);
+            var company = await _db.Companies.FirstAsync(a => a.Guid == companydto.guid);
+
+            if (company is null)
+            {
+                throw new ServiceException($"Event {companydto.guid} existiert nicht");
+            }
+            if (!events.Packages.Contains(packages))
+                throw new ServiceException("Package stimmt mit Event nicht überein");
+            //if (companydto.partners.Where(a => a.mainPartner).Count() > 1) { throw new ServiceException("Nur ein Hauptansprechpartner erlaubt"); }
+            company = Change(companydto, events, packages);
+            try
+            {
+                await _db.SaveChangesAsync();
+                return company.Guid;
+            }
+            catch (DbUpdateException e) { throw new ServiceException(e.InnerException?.Message ?? e.Message, e); }
+        }
+
+        private Company Change(CompanyDto companydto, Event events, Package package)
+        {
+            var company = new Company(name: companydto.name, address: companydto.address, country: companydto.country, plz: companydto.plz, place: companydto.place, billAddress: companydto.billAddress, @event: events, package: package);
+            return company;
         }
     }
 }

@@ -11,6 +11,7 @@ namespace FitManager.Application.Dto
             CreateMap<CompanyCmd, Company>(); //CompanyCmd --> Company
             CreateMap<EventCmd, Event>(); //EventCmd --> Event
             CreateMap<PackageCmd, Package>(); //PackageCmd --> Package
+            CreateMap<CompanyDto, Company>(); //CompanyDto --> Company
         }
     }
 }
