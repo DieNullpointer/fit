@@ -16,7 +16,7 @@ import Dialog from 'primevue/dialog';
 
 <template>
     <div class="packagesView">
-        <DataTable ref="dt" :value="packages" v-model:selection="selectedPackage" dataKey="id" :filters="filters">
+        <DataTable ref="dt" :value="packages" dataKey="guid" :filters="filters">
             <template #header>
                 <div class="flex flex-wrap gap-2  justify-content-between">
                     <h4 class="m-0">Manage Packages</h4>
@@ -24,8 +24,7 @@ import Dialog from 'primevue/dialog';
                         <i class="pi pi-search" />
                         <InputText v-model="filters['global'].value" placeholder="Search..." />
                     </span>
-
-                    <Button type="button" @click="this.newPackageDialog = true" label="New Package" />
+                    <Button type="button" @click="newPackage()" label="New Package" />
                 </div>
             </template>
             <Column field="name" header="Name" sortable style="min-width:12rem"></Column>
@@ -38,23 +37,27 @@ import Dialog from 'primevue/dialog';
         </DataTable>
     </div>
 
-    <Dialog v-model:visible="newPackageDialog" :style="{ width: '450px' }" header="New Package" :modal="true"
+
+    <Dialog v-model:visible="packageDialog" :style="{ width: '450px' }" header="Package Details" :modal="true"
         class="p-fluid">
         <div class="field">
             <label for="name">Name</label>
-            <InputText id="name" v-model="package.name" required="true" autofocus
+            <InputText id="name" v-model.trim="package.name" required="true" autofocus
                 :class="{ 'p-invalid': submitted && !package.name }" />
             <small class="p-error" v-if="submitted && !package.name">Name is required.</small>
         </div>
-        <div class="field">
-            <label for="price">Price</label>
-            <InputText id="price" v-model="package.price" mode="currency" required="true" autofocus
+
+        <div class="p-fluid">
+            <div class="field">
+                <label for="price">Price</label>
+                <InputText id="name" v-model.trim="package.price" required="true" autofocus
                 :class="{ 'p-invalid': submitted && !package.price }" />
             <small class="p-error" v-if="submitted && !package.price">Price is required.</small>
+            </div>
         </div>
         <template #footer>
             <Button label="Cancel" icon="pi pi-times" text @click="hideDialog()" />
-            <Button label="Save" icon="pi pi-check" text @click="addPackage()" />
+            <Button label="Save" icon="pi pi-check" text @click="savePackage()" />
         </template>
     </Dialog>
 </template>
@@ -65,12 +68,13 @@ export default {
         return {
             packages: [],
             package: {
+                guid: '',
                 name: '',
                 price: ''
             },
             filters: {},
-            newPackageDialog: false,
-            submitted: false
+            packageDialog: false,
+            submitted: false,
         };
     },
     created() {
@@ -91,22 +95,53 @@ export default {
             this.submitted = true;
             try {
                 await axios.post('package/add', this.package)
+                console.log(this.package)
                 this.hideDialog();
                 await this.getAllPackages();
             } catch (e) {
-                if (e.response.status === 400) {
-                    console.log(e.response.data.errors);
-                }
+                console.log("Fehler bie Add Package");
             }
         },
-        async editPackage() {
-
+        async changePackage() {
+            console.log(this.package)
+            try {
+                await axios.put('package/change', this.package)
+                this.hideDialog();
+                await this.getAllPackages();
+            } catch (e) {
+                console.log(e.response)
+            }
         },
-        hideDialog() {
-            this.newPackageDialog = false;
-            this.submitted = false; 
+        newPackage() {
             this.package.name = '';
             this.package.price = '';
+            this.submitted = false;
+            this.packageDialog = true;
+        },
+        editPackage(item) {
+            this.package.guid = item.guid;
+            this.package.name = item.name;
+            this.package.price = item.price +'';
+            this.packageDialog = true;
+        },
+        hideDialog () {
+            this.packageDialog = false;
+            this.submitted = false;
+            this.package.guid = '';
+            this.package.name = '';
+            this.package.price = '';
+        },
+        savePackage() {
+            this.submitted = true;
+			if (this.package.name.trim() && this.package.price.trim()) {
+                if (this.package.guid) {
+                    this.changePackage();
+                }
+                else {
+                    this.addPackage()
+                }
+                this.hideDialog()
+            }
         },
         findIndexById(id) {
             let index = -1;
@@ -116,7 +151,6 @@ export default {
                     break;
                 }
             }
-
             return index;
         },
         createId() {
