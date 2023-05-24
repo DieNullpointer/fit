@@ -191,7 +191,7 @@ export default {
             this.company.place = item.place;
             this.company.billAddress = item.billAddress;
             this.company.eventGuid = item.event.guid;
-            this.company.packageGuid = item.packageName.guid;
+            this.company.packageGuid = item.package.guid;
             this.company.partners = item.partners;
             console.log(this.company.event)
             this.changeDialog = true;
