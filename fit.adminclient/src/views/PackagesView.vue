@@ -38,7 +38,7 @@ import Dialog from 'primevue/dialog';
     </div>
 
 
-    <Dialog v-model:visible="packageDialog" :style="{ width: '450px' }" header="Package Details" :modal="true"
+    <Dialog v-model:visible="dialog" :style="{ width: '450px' }" header="Package Details" :modal="true"
         class="p-fluid">
         <div class="field">
             <label for="name">Name</label>
@@ -73,7 +73,7 @@ export default {
                 price: ''
             },
             filters: {},
-            packageDialog: false,
+            dialog: false,
             submitted: false,
         };
     },
@@ -116,7 +116,7 @@ export default {
             this.package.name = '';
             this.package.price = '';
             this.submitted = false;
-            this.packageDialog = true;
+            this.dialog = true;
         },
         editPackage(item) {
             this.package.guid = item.guid;
@@ -125,7 +125,7 @@ export default {
             this.packageDialog = true;
         },
         hideDialog () {
-            this.packageDialog = false;
+            this.dialog = false;
             this.submitted = false;
             this.package.guid = '';
             this.package.name = '';
@@ -145,8 +145,8 @@ export default {
         },
         findIndexById(id) {
             let index = -1;
-            for (let i = 0; i < this.products.length; i++) {
-                if (this.products[i].id === id) {
+            for (let i = 0; i < this.packages.length; i++) {
+                if (this.packages[i].id === id) {
                     index = i;
                     break;
                 }
