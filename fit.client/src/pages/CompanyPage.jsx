@@ -3,6 +3,7 @@ import APIConstants from "../apiConstants";
 import PageFrame from "../components/PageFrame";
 import { useParams } from "react-router-dom";
 import { Typography } from "@mui/material";
+import Paper from "../components/atoms/Paper";
 import { motion as m } from "framer-motion";
 
 export default function UploadPage() {
@@ -20,10 +21,9 @@ export default function UploadPage() {
     if (company) {
       let fetchedResults = await APIConstants.getCompany(company);
       console.log(fetchedResults);
-       setComp(fetchedResults);
+      setComp(fetchedResults);
       sessionStorage.setItem("company", JSON.stringify(fetchedResults));
     }
-
   }
 
   return (
@@ -39,18 +39,55 @@ export default function UploadPage() {
         <Typography variant="subtitle1" gutterBottom color="white">
           Ihre persönliche Seite für Organisatorisches
         </Typography>
-        <Typography variant="subtitle1" color="white" marginTop="15px"> 
-          <b>Firma:</b> {comp?.name}
-        </Typography>
-        {comp?.contactPartners && (
-          <Typography variant="subtitle1" gutterBottom color="white" marginTop="15px">
-             <b>Ansprechpartner:</b><br />{comp?.contactPartners
-              .map(
-                p =>
-                  <>{p.title} <b>{p.firstname} {p.lastname}</b> (<i>{p.email}</i>; <i>{p.telNr}</i>)</>
-              )}
+        <div className="pl-3">
+          <Typography variant="subtitle1" color="white" marginTop="15px">
+            <b>Firma:</b> {comp?.name}
           </Typography>
-        )}
+          {comp?.contactPartners && (
+            <Typography
+              variant="subtitle1"
+              gutterBottom
+              color="white"
+              marginTop="15px"
+            >
+              <b>Ansprechpartner:</b>
+              <br />
+              {comp?.contactPartners.map((p) => (
+                <div key={p.lastname}>
+                  {p.title}{" "}
+                  <b>
+                    {p.firstname} {p.lastname}
+                  </b>{" "}
+                  (<i>{p.email}</i>; <i>{p.telNr}</i>)<br />
+                </div>
+              ))}
+            </Typography>
+          )}
+        </div>
+
+        <Paper elevation={3} className="mt-12 mb-24 relative">
+          <div className="py-4 px-8">
+            <Typography variant="h5" gutterBottom>
+              Uploads
+            </Typography>
+            <div className="pl-3">
+              <Typography variant="subtitle1" gutterBottom>
+                <b>Firmenlogo Upload</b>
+              </Typography>
+              {comp?.package.name.includes("Inserat") && (
+                <Typography variant="subtitle1" gutterBottom>
+                  <b>Inserat Upload</b>
+                </Typography>
+              )}
+              <Typography variant="subtitle1">
+                <b>Dokumentupload (z.B. Infomaterial)</b>
+              </Typography>
+              <Typography variant="subtitle1">
+                <b>Selbstdarstellung</b>
+              </Typography>
+            </div>
+          </div>
+        </Paper>
       </m.div>
     </PageFrame>
   );
