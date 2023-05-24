@@ -108,35 +108,24 @@ export default {
             }
         },
         newPackage() {
+            this.package.guid = '';
             this.package.name = '';
             this.package.price = '';
             this.submitted = false;
-            this.packageDialog = true;
+            this.dialog = true;
         },
         editPackage(item) {
             this.package.guid = item.guid;
             this.package.name = item.name;
-            this.package.price = item.price +'';
-            this.packageDialog = true;
+            this.package.price = item.price + '';
+            this.dialog = true;
         },
-        hideDialog () {
-            this.packageDialog = false;
+        hideDialog() {
+            this.dialog = false;
             this.submitted = false;
             this.package.guid = '';
             this.package.name = '';
             this.package.price = '';
-        },
-        savePackage() {
-            this.submitted = true;
-			if (this.package.name.trim() && this.package.price.trim()) {
-                if (this.package.guid) {
-                    this.changePackage();
-                }
-                else {
-                    this.addPackage()
-                }
-                this.hideDialog()
-            }
         },
         savePackage() {
             this.submitted = true;

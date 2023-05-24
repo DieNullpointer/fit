@@ -134,7 +134,7 @@ export default {
                 place: '',
                 billAddress: '',
                 event: '',
-                package: [],
+                package: '',
                 partners: []
             },
             filters: {},

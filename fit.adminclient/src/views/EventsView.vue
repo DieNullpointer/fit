@@ -56,7 +56,7 @@ import Dialog from 'primevue/dialog';
     <div class="p-fluid">
       <div class="field">
         <label for="date">Date</label>
-        <Calendar id="name" v-model.trim="event.date" required="true" autofocus dateFormat='dd.mm.yy' :min-date="minDate"
+        <Calendar id="name" v-model.trim="event.date" required="true" autofocus dateFormat="dd.mm.yy" :min-date="minDate"
           :class="{ 'p-invalid': submitted && !event.date }" />
         <small class="p-error" v-if="submitted && !event.date">Price is required.</small>
       </div>
