@@ -96,12 +96,12 @@ namespace FitManager.Webapi.Controllers
             catch (ServiceException e) { return BadRequest(e.Message); }
         }
 
-        [HttpPost("addfile")]
-        public async Task<IActionResult> AddFile([FromForm] IFormFile formFile)
+        [HttpPost("addfile/{guid:Guid}")]
+        public async Task<IActionResult> AddFile([FromForm] IFormFile formFile, Guid guid)
         {
             if (formFile.ContentType != "application/pdf")
                 return BadRequest();
-            string path = Path.Combine(Directory.GetCurrentDirectory(), "Files");
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "Files", $"{guid}");
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
             path = Path.Combine(path, formFile.FileName);
@@ -110,6 +110,16 @@ namespace FitManager.Webapi.Controllers
                 await formFile.CopyToAsync(stream);
             }
             return Ok(new { formFile.Name, formFile.Length });
+        }
+
+        [HttpPut("change")]
+        public async Task<IActionResult> EditCompany([FromBody] CompanyDto company)
+        {
+            try
+            {
+                return Ok(await _service.EditCompany(company));
+            }
+            catch(ServiceException e) { return BadRequest(e.Message); }
         }
     }
 }

@@ -3,8 +3,11 @@ using FitManager.Application.Dto;
 using FitManager.Application.Infrastructure;
 using FitManager.Application.Model;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Microsoft.Win32;
 using MimeKit.Encodings;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Threading.Tasks;
@@ -65,6 +68,34 @@ namespace FitManager.Application.Services
                 await _db.ContactPartners.AddAsync(new ContactPartner(i.title, i.firstname, i.lastname, i.email, i.telNr, i.function, company, i.mobilNr, i.mainPartner));
             }
             await _db.Companies.AddAsync(company);
+            try
+            {
+                await _db.SaveChangesAsync();
+                return company.Guid;
+            }
+            catch (DbUpdateException e) { throw new ServiceException(e.InnerException?.Message ?? e.Message, e); }
+        }
+
+        public async Task<Guid> EditCompany(CompanyDto companydto)
+        {
+            var packages = await _db.Packages.FirstAsync(a => a.Guid == companydto.packageGuid);
+            var events = await _db.Events.Include(a => a.Packages).FirstAsync(a => a.Guid == companydto.eventGuid);
+            var company = await _db.Companies.FirstAsync(a => a.Guid == companydto.guid);
+            if (company is null)
+            {
+                throw new ServiceException($"Firma {companydto.guid} existiert nicht");
+            }
+            if (!events.Packages.Contains(packages))
+                throw new ServiceException("Package stimmt mit Event nicht überein");
+            //if (companydto.partners.Where(a => a.mainPartner).Count() > 1) { throw new ServiceException("Nur ein Hauptansprechpartner erlaubt"); }
+            company.Package = packages;
+            company.Event = events;
+            company.Name = companydto.name;
+            company.Address = companydto.address;
+            company.Country = companydto.country;
+            company.Plz = companydto.plz;
+            company.Place = companydto.place;
+            company.BillAddress = companydto.billAddress;
             try
             {
                 await _db.SaveChangesAsync();

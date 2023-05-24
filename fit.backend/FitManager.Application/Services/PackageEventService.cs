@@ -72,7 +72,7 @@ namespace FitManager.Application.Services
 
             if (events is null)
             {
-                throw new ServiceException($"Evnet {change.Guid} existiert nicht");
+                throw new ServiceException($"Event {change.Guid} existiert nicht");
             }
 
             events.Name = change.Name ?? events.Name; // use change.Name if it's not null, otherwise keep the current value of events.name

@@ -9,8 +9,9 @@ using System.Threading.Tasks;
 
 namespace FitManager.Application.Dto
 {
-    public record CompanyCmd
+    public record CompanyDto
     (
+        Guid guid,
         [StringLength(255, MinimumLength = 3, ErrorMessage = "Die Länge des Firmennamens ist ungültig")]
         string name,
         [StringLength(255, MinimumLength = 3, ErrorMessage = "Die Länge der Adresse ist ungültig")]
@@ -23,16 +24,19 @@ namespace FitManager.Application.Dto
         string place,
         [StringLength(255, MinimumLength = 3, ErrorMessage = "Die Länge der Rechnungsadresse ist ungültig")]
         string billAddress,
-        List<PartnerCmd> partners,
         Guid packageGuid,
         Guid eventGuid
-    ): IValidatableObject
+    ) : IValidatableObject
     {
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             // We have registered FitContext in Program.cs in ASP.NET core. So we can
             // get this service to access the database for further validation.
             var db = validationContext.GetRequiredService<FitContext>();
+            if (!db.Companies.Any(a => a.Guid == guid))
+            {
+                yield return new ValidationResult("Firma existiert nicht", new[] { nameof(guid) });
+            }
             if (!db.Packages.Any(a => a.Guid == packageGuid))
             {
                 yield return new ValidationResult("Package existiert nicht", new[] { nameof(packageGuid) });
