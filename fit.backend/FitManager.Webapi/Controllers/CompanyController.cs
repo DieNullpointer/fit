@@ -46,8 +46,8 @@ namespace FitManager.Webapi.Controllers
                 p.Plz,
                 p.Place,
                 p.BillAddress,
-                EventName = p.Event.Name,
-                PackageName = p.Package.Name,
+                Event = new { p.Event.Guid, p.Event.Name},
+                PackageName = new {p.Package.Guid, p.Package.Name},
                 partners = p.ContactPartners.Select(d => new
                 {
                     d.Guid,
