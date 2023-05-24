@@ -33,6 +33,10 @@ namespace FitManager.Application.Dto
             // We have registered FitContext in Program.cs in ASP.NET core. So we can
             // get this service to access the database for further validation.
             var db = validationContext.GetRequiredService<FitContext>();
+            if (!db.Companies.Any(a => a.Guid == guid))
+            {
+                yield return new ValidationResult("Firma existiert nicht", new[] { nameof(guid) });
+            }
             if (!db.Packages.Any(a => a.Guid == packageGuid))
             {
                 yield return new ValidationResult("Package existiert nicht", new[] { nameof(packageGuid) });

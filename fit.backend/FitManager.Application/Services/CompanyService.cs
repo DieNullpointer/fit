@@ -80,27 +80,27 @@ namespace FitManager.Application.Services
             var packages = await _db.Packages.FirstAsync(a => a.Guid == companydto.packageGuid);
             var events = await _db.Events.Include(a => a.Packages).FirstAsync(a => a.Guid == companydto.eventGuid);
             var company = await _db.Companies.FirstAsync(a => a.Guid == companydto.guid);
-
             if (company is null)
             {
-                throw new ServiceException($"Event {companydto.guid} existiert nicht");
+                throw new ServiceException($"Firma {companydto.guid} existiert nicht");
             }
             if (!events.Packages.Contains(packages))
                 throw new ServiceException("Package stimmt mit Event nicht überein");
             //if (companydto.partners.Where(a => a.mainPartner).Count() > 1) { throw new ServiceException("Nur ein Hauptansprechpartner erlaubt"); }
-            company = Change(companydto, events, packages);
+            company.Package = packages;
+            company.Event = events;
+            company.Name = companydto.name;
+            company.Address = companydto.address;
+            company.Country = companydto.country;
+            company.Plz = companydto.plz;
+            company.Place = companydto.place;
+            company.BillAddress = companydto.billAddress;
             try
             {
                 await _db.SaveChangesAsync();
                 return company.Guid;
             }
             catch (DbUpdateException e) { throw new ServiceException(e.InnerException?.Message ?? e.Message, e); }
-        }
-
-        private Company Change(CompanyDto companydto, Event events, Package package)
-        {
-            var company = new Company(name: companydto.name, address: companydto.address, country: companydto.country, plz: companydto.plz, place: companydto.place, billAddress: companydto.billAddress, @event: events, package: package);
-            return company;
         }
     }
 }

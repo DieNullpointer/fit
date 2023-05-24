@@ -117,7 +117,7 @@ namespace FitManager.Webapi.Controllers
         {
             try
             {
-                return Ok(_service.EditCompany(company));
+                return Ok(await _service.EditCompany(company));
             }
             catch(ServiceException e) { return BadRequest(e.Message); }
         }
