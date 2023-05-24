@@ -96,12 +96,12 @@ namespace FitManager.Webapi.Controllers
             catch (ServiceException e) { return BadRequest(e.Message); }
         }
 
-        [HttpPost("addfile")]
-        public async Task<IActionResult> AddFile([FromForm] IFormFile formFile)
+        [HttpPost("addfile/{guid:Guid}")]
+        public async Task<IActionResult> AddFile([FromForm] IFormFile formFile, Guid guid)
         {
             if (formFile.ContentType != "application/pdf")
                 return BadRequest();
-            string path = Path.Combine(Directory.GetCurrentDirectory(), "Files");
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "Files", $"{guid}");
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
             path = Path.Combine(path, formFile.FileName);

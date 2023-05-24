@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
 using MimeKit.Encodings;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Threading.Tasks;

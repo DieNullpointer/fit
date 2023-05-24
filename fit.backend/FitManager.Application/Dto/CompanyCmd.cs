@@ -23,7 +23,7 @@ namespace FitManager.Application.Dto
         string place,
         [StringLength(255, MinimumLength = 3, ErrorMessage = "Die Länge der Rechnungsadresse ist ungültig")]
         string billAddress,
-        List<PartnerDto> partners,
+        List<PartnerCmd> partners,
         Guid packageGuid,
         Guid eventGuid
     ): IValidatableObject
