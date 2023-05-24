@@ -50,6 +50,7 @@ namespace FitManager.Webapi.Controllers
                 PackageName = p.Package.Name,
                 partners = p.ContactPartners.Select(d => new
                 {
+                    d.Guid,
                     d.Title,
                     d.Firstname,
                     d.Lastname,
