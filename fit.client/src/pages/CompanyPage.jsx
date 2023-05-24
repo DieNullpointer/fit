@@ -5,6 +5,8 @@ import { useParams } from "react-router-dom";
 import { Typography } from "@mui/material";
 import Paper from "../components/atoms/Paper";
 import { motion as m } from "framer-motion";
+import RichTextEditor from "../components/RichTextEditor";
+import Button from "../components/atoms/Button";
 
 export default function UploadPage() {
   const { company } = useParams();
@@ -71,21 +73,28 @@ export default function UploadPage() {
               Uploads
             </Typography>
             <div className="pl-3">
-              <Typography variant="subtitle1" gutterBottom>
+              <Typography variant="subtitle1">
                 <b>Firmenlogo Upload</b>
               </Typography>
               {comp?.package.name.includes("Inserat") && (
-                <Typography variant="subtitle1" gutterBottom>
+                <Typography variant="subtitle1" sx={{marginTop: "23px"}}>
                   <b>Inserat Upload</b>
                 </Typography>
               )}
-              <Typography variant="subtitle1">
+              <Typography variant="subtitle1" sx={{marginTop: "23px"}}>
                 <b>Dokumentupload (z.B. Infomaterial)</b>
               </Typography>
-              <Typography variant="subtitle1">
+              <Typography variant="subtitle1" sx={{marginTop: "23px"}}>
                 <b>Selbstdarstellung</b>
               </Typography>
+              <div id="text-editor">
+                <RichTextEditor placeholder="Stellen Sie Ihre Firma vor" />
+              </div>
+              <div className="flex justify-end">
+              <Button text={"Speichern"} onClick={() => console.log(sessionStorage.getItem("editorHtml"))}/>
             </div>
+            </div>
+            
           </div>
         </Paper>
       </m.div>
