@@ -24,41 +24,86 @@ import Dialog from 'primevue/dialog';
                 </div>
             </template>
             <Column field="name" header="Name" sortable style="min-width:12rem"></Column>
-            <Column field="eventName" header="Event" sortable style="min-width:12rem"></Column>
-            <Column field="packageName" header="Package" sortable style="min-width:16rem"></Column>
+            <Column field="event.name" header="Event" sortable style="min-width:12rem"></Column>
+            <Column field="packageName.name" header="Package" sortable style="min-width:16rem"></Column>
             <Column :exportable="false" style="min-width:8rem">
                 <template #body="slotProps">
                     <Button icon="pi pi-pencil" outlined rounded class="mr-2" @click="editCompany(slotProps.data)" />
-                    <Button icon="pi pi-trash" outlined rounded severity="danger" @click="confirmDeleteCompany(slotProps.data)" />
+                    <Button icon="pi pi-trash" outlined rounded severity="danger"
+                        @click="confirmDeleteCompany(slotProps.data)" />
                 </template>
             </Column>
         </DataTable>
     </div>
 
 
-    <Dialog v-model:visible="changeDialog" :style="{ width: '450px' }" header="Package Details" :modal="true" class="p-fluid">
+    <Dialog v-model:visible="changeDialog" :style="{ width: '450px' }" header="Package Details" :modal="true"
+        class="p-fluid">
         <div class="field">
             <label for="name">Name</label>
             <InputText id="name" v-model.trim="company.name" required="true" autofocus
                 :class="{ 'p-invalid': submitted && !company.name }" />
             <small class="p-error" v-if="submitted && !company.name">Name is required.</small>
         </div>
+
+        <div class="field">
+            <label for="address">Addresse</label>
+            <InputText id="address" v-model.trim="company.address" required="true" autofocus
+                :class="{ 'p-invalid': submitted && !company.address }" />
+            <small class="p-error" v-if="submitted && !company.address">Address is required.</small>
+        </div>
+
+        <div class="field">
+            <label for="country">Land</label>
+            <InputText id="country" v-model.trim="company.country" required="true" autofocus
+                :class="{ 'p-invalid': submitted && !company.country }" />
+            <small class="p-error" v-if="submitted && !company.country">Country is required.</small>
+        </div>
+
+        <div class="field">
+            <label for="plz">Plz</label>
+            <InputText id="plz" v-model.trim="company.plz" required="true" autofocus
+                :class="{ 'p-invalid': submitted && !company.plz }" />
+            <small class="p-error" v-if="submitted && !company.plz">Plz is required.</small>
+        </div>
+
+        <div class="field">
+            <label for="place">Place</label>
+            <InputText id="place" v-model.trim="company.place" required="true" autofocus
+                :class="{ 'p-invalid': submitted && !company.place }" />
+            <small class="p-error" v-if="submitted && !company.place">Place is required.</small>
+        </div>
+
+        <div class="field">
+            <label for="billAddress">billAddress</label>
+            <InputText id="billAddress" v-model.trim="company.billAddress" required="true" autofocus
+                :class="{ 'p-invalid': submitted && !company.billAddress }" />
+            <small class="p-error" v-if="submitted && !company.billAddress">billAddress is required.</small>
+        </div>
+
+        <div class="field">
+            <label for="billAddress">billAddress</label>
+            <InputText id="billAddress" v-model.trim="company.billAddress" required="true" autofocus
+                :class="{ 'p-invalid': submitted && !company.billAddress }" />
+            <small class="p-error" v-if="submitted && !company.billAddress">billAddress is required.</small>
+        </div>
+
         <template #footer>
             <Button label="Cancel" icon="pi pi-times" text @click="hideDialog()" />
-            <Button label="Save" icon="pi pi-check" text @click="savePackage()" />
+            <Button label="Save" icon="pi pi-check" text @click="changeCompany()" />
         </template>
     </Dialog>
 
-    <Dialog v-model:visible="deleteDialog" :style="{width: '450px'}" header="Confirm" :modal="true">
-            <div class="confirmation-content">
-                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
-                <span v-if="company">Are you sure you want to delete <b>{{company.name}}</b>?</span>
-            </div>
-            <template #footer>
-                <Button label="No" icon="pi pi-times" text @click="hideDialog()"/>
-                <Button label="Yes" icon="pi pi-check" text @click="deleteCompany()" />
-            </template>
-        </Dialog>
+    <Dialog v-model:visible="deleteDialog" :style="{ width: '450px' }" header="Confirm" :modal="true">
+        <div class="confirmation-content">
+            <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
+            <span v-if="company">Are you sure you want to delete <b>{{ company.name }}</b>?</span>
+        </div>
+        <template #footer>
+            <Button label="No" icon="pi pi-times" text @click="hideDialog()" />
+            <Button label="Yes" icon="pi pi-check" text @click="deleteCompany()" />
+        </template>
+    </Dialog>
 </template>
 
 <script>
@@ -74,7 +119,7 @@ export default {
                 plz: '',
                 place: '',
                 billAddress: '',
-                eventName: '',
+                event: '',
                 packageName: '',
                 patners: []
             },
@@ -99,19 +144,22 @@ export default {
             }
         },
         async changeCompany() {
-            console.log(this.company)
-            try {
-                await axios.put('company/change', this.company)
-                this.hideDialog();
-                await this.getAllCompanies();
-            } catch (e) {
-                console.log(e.response)
+            this.submitted = true;
+            if (this.company.name.trim()) {
+                try {
+                    await axios.put('company/change', this.company)
+                    this.hideDialog();
+                    await this.getAllCompanies();
+                } catch (e) {
+                    console.log(e.response)
+                }
             }
+
         },
         async deleteCompany() {
-            console.log(this.company)
+
             try {
-                await axios.delete(`company/delete${this.company.guid}`)
+                await axios.delete(`company/delete/${this.company.guid}`)
                 this.hideDialog();
                 await this.getAllCompanies();
             } catch (e) {
@@ -121,10 +169,20 @@ export default {
         editCompany(item) {
             this.company.guid = item.guid;
             this.company.name = item.name;
+            this.company.address = item.address;
+            this.company.country = item.country;
+            this.company.plz = item.plz;
+            this.company.place = item.place;
+            this.company.billAddress = item.billAddress;
+            this.company.eventGuid = item.event.guid;
+            this.company.packageGuid = item.packageName.guid;
+            this.company.patners = item.patners;
+            console.log(this.company.event)
             this.changeDialog = true;
         },
         confirmDeleteCompany(item) {
             this.company.guid = item.guid;
+            console.log(this.company.guid)
             this.deleteDialog = true;
         },
         hideDialog() {
@@ -133,13 +191,6 @@ export default {
             this.deleteDialog = false
             this.company.guid = '';
             this.company.name = '';
-        },
-        saveCompany() {
-            this.submitted = true;
-            if (this.company.name.trim()) {
-                this.changePackage();
-                this.hideDialog()
-            }
         },
         findIndexById(id) {
             let index = -1;
