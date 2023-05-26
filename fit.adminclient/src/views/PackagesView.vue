@@ -133,9 +133,10 @@ export default {
             this.submitted = false;
             this.packageDialog = true;
         },
-        hideDialog() {
-            this.newPackageDialog = false;
-            this.submitted = false; 
+        hideDialog () {
+            this.dialog = false;
+            this.submitted = false;
+            this.package.guid = '';
             this.package.name = '';
             this.package.price = '';
         },
