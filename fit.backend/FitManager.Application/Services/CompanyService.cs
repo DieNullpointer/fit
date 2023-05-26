@@ -78,18 +78,11 @@ namespace FitManager.Application.Services
 
         public async Task<Guid> EditCompany(CompanyDto companydto)
         {
-            var packages = await _db.Packages.FirstAsync(a => a.Guid == companydto.packageGuid);
-            var events = await _db.Events.Include(a => a.Packages).FirstAsync(a => a.Guid == companydto.eventGuid);
             var company = await _db.Companies.FirstAsync(a => a.Guid == companydto.guid);
             if (company is null)
             {
                 throw new ServiceException($"Firma {companydto.guid} existiert nicht");
             }
-            if (!events.Packages.Contains(packages))
-                throw new ServiceException("Package stimmt mit Event nicht überein");
-            //if (companydto.partners.Where(a => a.mainPartner).Count() > 1) { throw new ServiceException("Nur ein Hauptansprechpartner erlaubt"); }
-            company.Package = packages;
-            company.Event = events;
             company.Name = companydto.name;
             company.Address = companydto.address;
             company.Country = companydto.country;
