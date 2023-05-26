@@ -57,7 +57,7 @@ import Dialog from 'primevue/dialog';
         </div>
         <template #footer>
             <Button label="Cancel" icon="pi pi-times" text @click="hideDialog()" />
-            <Button label="Save" icon="pi pi-check" text @click="savePackage()" />
+            <Button label="Save" icon="pi pi-check" text @click="changePackage()" />
         </template>
     </Dialog>
 </template>
@@ -122,7 +122,7 @@ export default {
             this.package.guid = item.guid;
             this.package.name = item.name;
             this.package.price = item.price +'';
-            this.packageDialog = true;
+            this.dialog = true;
         },
         hideDialog () {
             this.dialog = false;
@@ -131,7 +131,7 @@ export default {
             this.package.name = '';
             this.package.price = '';
             this.submitted = false;
-            this.packageDialog = true;
+            this.dialog = true;
         },
         hideDialog () {
             this.dialog = false;
