@@ -52,7 +52,7 @@ import Dialog from 'primevue/dialog';
         </div>
         <template #footer>
             <Button label="Cancel" icon="pi pi-times" text @click="hideDialog()" />
-            <Button label="Save" icon="pi pi-check" text @click="changePackage()" />
+            <Button label="Save" icon="pi pi-check" text @click="savePackage()" />
         </template>
     </Dialog>
 </template>
