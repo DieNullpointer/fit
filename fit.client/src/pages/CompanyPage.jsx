@@ -66,6 +66,9 @@ export default function UploadPage() {
               ))}
             </Typography>
           )}
+          <Typography marginTop="15px" color="white" variant="subtitle1">
+            <b>&bull; Status:</b> {comp?.status ? comp.status : "unbekannt"}
+          </Typography>
         </div>
 
         <Paper elevation={3} className="mt-12 mb-24 relative">
@@ -77,26 +80,53 @@ export default function UploadPage() {
               <Typography variant="subtitle1">
                 <b>Firmenlogo Upload</b>
               </Typography>
-              <SmallUpload label="Logo Auswählen" helpText="Erlaubte Endungen: JPG; PNG; WEBP" id="logoupload" />
+              <SmallUpload
+                label="Logo Auswählen"
+                helpText="Erlaubte Endungen: JPG; PNG; WEBP"
+                id="logoupload"
+              />
               {comp?.package.name.includes("Inserat") && (
-                <Typography variant="subtitle1" sx={{marginTop: "23px"}}>
-                  <b>Inserat Upload</b>
-                </Typography>
+                <div>
+                  <Typography variant="subtitle1" sx={{ marginTop: "23px" }}>
+                    <b>Inserat Upload</b>
+                  </Typography>
+                  <SmallUpload
+                    label="Inserat Hochladen"
+                    helpText="Erlaubte Endungen: PDF; PNG; JPG"
+                    id="inseratupload"
+                  />
+                </div>
               )}
-              <Typography variant="subtitle1" sx={{marginTop: "23px"}}>
+              <Typography variant="subtitle1" sx={{ marginTop: "23px" }}>
                 <b>Dokumentupload (z.B. Infomaterial)</b>
               </Typography>
-              <Typography variant="subtitle1" sx={{marginTop: "23px"}}>
+              <SmallUpload
+                label="Freier Fileupload"
+                helpText="Erlaubte Endungen: PDF"
+                id="documentupload"
+                multiple
+              />
+              <Typography variant="subtitle1" sx={{ marginTop: "23px" }}>
                 <b>Selbstdarstellung</b>
               </Typography>
               <div id="text-editor">
                 <RichTextEditor placeholder="Stellen Sie Ihre Firma vor" />
               </div>
               <div className="flex justify-end">
-              <Button style={{maxWidth: '200px', maxHeight: '30px', minWidth: '30px', minHeight: '30px'}} text={"Text Speichern"} onClick={() => console.log(sessionStorage.getItem("editorHtml"))}/>
+                <Button
+                  style={{
+                    maxWidth: "200px",
+                    maxHeight: "30px",
+                    minWidth: "30px",
+                    minHeight: "30px",
+                  }}
+                  text={"Text Speichern"}
+                  onClick={() =>
+                    console.log(sessionStorage.getItem("editorHtml"))
+                  }
+                />
+              </div>
             </div>
-            </div>
-            
           </div>
         </Paper>
       </m.div>
