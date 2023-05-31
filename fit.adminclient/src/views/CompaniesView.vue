@@ -13,7 +13,7 @@ import Dialog from 'primevue/dialog';
 
 <template>
     <div class="companiesView">
-        <DataTable ref="dt" :value="companies" dataKey="guid" :filters="filters">
+        <DataTable ref="dt" v-model:expandedRows="expandedRows" :value="companies" dataKey="guid" :filters="filters">
             <template #header>
                 <div class="flex flex-wrap gap-2  justify-content-between">
                     <h4 class="m-0">Manage Packages</h4>
@@ -23,9 +23,15 @@ import Dialog from 'primevue/dialog';
                     </span>
                 </div>
             </template>
+            <Column expander style="width: 5rem" />
             <Column field="name" header="Name" sortable style="min-width:12rem"></Column>
             <Column field="event.name" header="Event" sortable style="min-width:12rem"></Column>
             <Column field="packageName.name" header="Package" sortable style="min-width:16rem"></Column>
+            <Column field="address" header="address" sortable></Column>
+            <Column field="country" header="country" sortable></Column>
+            <Column field="plz" header="plz" sortable></Column>
+            <Column field="place" header="place" sortable></Column>
+            <Column field="billAddress" header="billAddress" sortable></Column>
             <Column :exportable="false" style="min-width:8rem">
                 <template #body="slotProps">
                     <Button icon="pi pi-pencil" outlined rounded class="mr-2" @click="editCompany(slotProps.data)" />
@@ -33,6 +39,20 @@ import Dialog from 'primevue/dialog';
                         @click="confirmDeleteCompany(slotProps.data)" />
                 </template>
             </Column>
+            <template #expansion="slotProps">
+                <div class="p-3">
+                    <DataTable :value="slotProps.data.partners">
+                        <Column field="title" header="title" sortable></Column>
+                        <Column field="firstname" header="firstname" sortable></Column>
+                        <Column field="lastname" header="lastname" sortable></Column>
+                        <Column field="email" header="email" sortable></Column>
+                        <Column field="telNr" header="telNr" sortable></Column>
+                        <Column field="mobilNr" header="mobilNr" sortable></Column>
+                        <Column field="function" header="function" sortable></Column>
+                        <Column field="mainPartner" header="mainPartner" sortable></Column>
+                    </DataTable>
+                </div>
+            </template>
         </DataTable>
     </div>
 
@@ -81,13 +101,6 @@ import Dialog from 'primevue/dialog';
             <small class="p-error" v-if="submitted && !company.billAddress">billAddress is required.</small>
         </div>
 
-        <div class="field">
-            <label for="billAddress">billAddress</label>
-            <InputText id="billAddress" v-model.trim="company.billAddress" required="true" autofocus
-                :class="{ 'p-invalid': submitted && !company.billAddress }" />
-            <small class="p-error" v-if="submitted && !company.billAddress">billAddress is required.</small>
-        </div>
-
         <template #footer>
             <Button label="Cancel" icon="pi pi-times" text @click="hideDialog()" />
             <Button label="Save" icon="pi pi-check" text @click="changeCompany()" />
@@ -108,6 +121,7 @@ import Dialog from 'primevue/dialog';
 
 <script>
 export default {
+    
     data() {
         return {
             companies: [],
@@ -121,13 +135,15 @@ export default {
                 billAddress: '',
                 event: '',
                 packageName: '',
-                patners: []
+                partners: []
             },
             filters: {},
             changeDialog: false,
             submitted: false,
-            deleteDialog: false
-        };
+            deleteDialog: false,
+
+            expandedRows: ref([])
+        }
     },
     created() {
         this.initFilters();
@@ -176,7 +192,7 @@ export default {
             this.company.billAddress = item.billAddress;
             this.company.eventGuid = item.event.guid;
             this.company.packageGuid = item.packageName.guid;
-            this.company.patners = item.patners;
+            this.company.partners = item.partners;
             console.log(this.company.event)
             this.changeDialog = true;
         },
@@ -215,6 +231,6 @@ export default {
                 'global': { value: null, matchMode: FilterMatchMode.CONTAINS },
             }
         },
-    }
+    } 
 };
 </script>
