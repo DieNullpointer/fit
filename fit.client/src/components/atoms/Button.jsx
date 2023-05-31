@@ -12,6 +12,8 @@ export default function Button({
   sharp,
   className,
   loading,
+  style,
+  submit
 }) {
   const ColorButton = styled(MButton)(({ theme }) => ({
     color: theme.palette.getContrastText(Style.colors.primary),
@@ -24,7 +26,7 @@ export default function Button({
 
   return (
     <div className={className || ""}>
-      <ColorButton id={id} onClick={onClick} variant="contained">
+      <ColorButton style={style} id={id} onClick={onClick} variant="contained" type={submit ? "submit" : "button"}>
         {!loading ? (
           text
         ) : (
