@@ -71,6 +71,22 @@ export default function UploadPage() {
           </Typography>
         </div>
 
+        <Paper elevation={3} className="mt-12 mb-10 relative">
+          <div className="py-4 px-8">
+            <Typography variant="h5" gutterBottom>
+              Pakete
+            </Typography>
+            <div className="pl-3">
+              <Typography variant="subtitle1">
+                <b>Paket as dem Vorjahr</b>: ?
+              </Typography>
+              <Typography variant="subtitle1" marginTop="10px">
+                <b>Diesjähriges Paket</b>: {comp?.package ? comp.package.name : "nicht ausgewählt"}
+              </Typography>
+            </div>
+          </div>
+        </Paper>
+
         <Paper elevation={3} className="mt-12 mb-24 relative">
           <div className="py-4 px-8">
             <Typography variant="h5" gutterBottom>
