@@ -7,6 +7,7 @@ import Paper from "../components/atoms/Paper";
 import { motion as m } from "framer-motion";
 import RichTextEditor from "../components/RichTextEditor";
 import Button from "../components/atoms/Button";
+import SmallUpload from "../components/atoms/SmallUpload";
 
 export default function UploadPage() {
   const { company } = useParams();
@@ -76,6 +77,7 @@ export default function UploadPage() {
               <Typography variant="subtitle1">
                 <b>Firmenlogo Upload</b>
               </Typography>
+              <SmallUpload label="Logo Auswählen" helpText="Erlaubte Endungen: JPG; PNG; WEBP" id="logoupload" />
               {comp?.package.name.includes("Inserat") && (
                 <Typography variant="subtitle1" sx={{marginTop: "23px"}}>
                   <b>Inserat Upload</b>
@@ -91,7 +93,7 @@ export default function UploadPage() {
                 <RichTextEditor placeholder="Stellen Sie Ihre Firma vor" />
               </div>
               <div className="flex justify-end">
-              <Button text={"Speichern"} onClick={() => console.log(sessionStorage.getItem("editorHtml"))}/>
+              <Button style={{maxWidth: '200px', maxHeight: '30px', minWidth: '30px', minHeight: '30px'}} text={"Text Speichern"} onClick={() => console.log(sessionStorage.getItem("editorHtml"))}/>
             </div>
             </div>
             
