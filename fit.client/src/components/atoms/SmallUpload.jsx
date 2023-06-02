@@ -2,7 +2,7 @@ import Button from "./Button";
 
 export default function SmallUpload({ label, helpText, id, action, multiple }) {
   return (
-    <form action={action} className="flex justify-between items-center">
+    <form action={action} className="flex justify-between items-center" method="POST">
       <div className="w-3/4">
       <label
         className="mb-1 block text-base font-medium text-gray-900"
