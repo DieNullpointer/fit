@@ -40,7 +40,7 @@ namespace FitManager.Application.Model
         public string BillAddress { get; set; }
         public string? Description { get; set; }
         public bool HasPaid { get; set; }
-        public Package? LastPackage { get; set; } = null;
+        public string? LastPackage { get; set; } = null;
         public Package Package { get; set; }
         public Event Event { get; set; }
 

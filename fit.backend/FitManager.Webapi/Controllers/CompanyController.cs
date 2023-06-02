@@ -159,7 +159,7 @@ namespace FitManager.Webapi.Controllers
             if (events.Date < DateTime.Now)
                 return BadRequest("Keine Vergangenen Events zur Anmeldung möglich");
             var package = await _db.Packages.FirstAsync(a => a.Guid == sign.guid);
-            company.LastPackage = company.Package;
+            company.LastPackage = company.Package.Name;
             company.Event = events;
             company.Package = package;
             return Ok(company.Guid);
