@@ -118,6 +118,7 @@ namespace FitManager.Webapi.Controllers
         }
 
         [HttpPost("addlogo/{guid:Guid}")]
+        [Consumes("multipart/form-data")]
         public async Task<IActionResult> AddLogo([FromForm] IFormFile formFile, Guid guid)
         {
             string path = Path.Combine(Directory.GetCurrentDirectory(), "Files", $"{guid}");
