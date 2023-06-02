@@ -8,13 +8,11 @@ import { motion as m } from "framer-motion";
 import RichTextEditor from "../components/RichTextEditor";
 import Button from "../components/atoms/Button";
 import SmallUpload from "../components/atoms/SmallUpload";
-import axios from 'axios';
+import axios from "axios";
 
 export default function UploadPage() {
   const { company } = useParams();
   const [comp, setComp] = useState();
-
-  console.log(`${axios.defaults.baseURL}${APIConstants.COMPANY_URL}/addlogo/${comp?.guid}`);
 
   useEffect(() => {
     init();
@@ -70,7 +68,12 @@ export default function UploadPage() {
             </Typography>
           )}
           <Typography marginTop="15px" color="white" variant="subtitle1">
-            <b>&bull; Status:</b> {comp?.status ? comp.status : "unbekannt"}
+            <span style={{ color: comp?.hasPaid ? "lime" : "yellow" }}>
+              <b>
+                &bull; <span style={{ color: "white" }}>Status:</span>
+              </b>{" "}
+              {comp?.hasPaid ? "bezahlt" : "nicht bezahlt"}
+            </span>
           </Typography>
         </div>
 
@@ -84,7 +87,8 @@ export default function UploadPage() {
                 <b>Paket as dem Vorjahr</b>: ?
               </Typography>
               <Typography variant="subtitle1" marginTop="10px">
-                <b>Diesjähriges Paket</b>: {comp?.package ? comp.package.name : "nicht ausgewählt"}
+                <b>Diesjähriges Paket</b>:{" "}
+                {comp?.package ? comp.package.name : "nicht ausgewählt"}
               </Typography>
             </div>
           </div>
@@ -105,7 +109,7 @@ export default function UploadPage() {
                 id="logoupload"
                 action={`${axios.defaults.baseURL}${APIConstants.COMPANY_URL}/addlogo/${comp?.guid}`}
               />
-              {comp?.package.name.includes("Inserat") && (
+              {comp?.package?.name.includes("Inserat") && (
                 <div>
                   <Typography variant="subtitle1" sx={{ marginTop: "23px" }}>
                     <b>Inserat Upload</b>
@@ -114,6 +118,7 @@ export default function UploadPage() {
                     label="Inserat Hochladen"
                     helpText="Erlaubte Endungen: PDF"
                     id="inseratupload"
+                    action={`${axios.defaults.baseURL}${APIConstants.COMPANY_URL}/addinserat/${comp?.guid}`}
                   />
                 </div>
               )}
@@ -130,7 +135,7 @@ export default function UploadPage() {
                 <b>Selbstdarstellung</b>
               </Typography>
               <div id="text-editor">
-                <RichTextEditor placeholder="Stellen Sie Ihre Firma vor" />
+                <RichTextEditor placeholder="Stellen Sie Ihre Firma vor" startValue={comp?.description || ""} />
               </div>
               <div className="flex justify-end">
                 <Button
@@ -142,7 +147,10 @@ export default function UploadPage() {
                   }}
                   text={"Text Speichern"}
                   onClick={() =>
-                    console.log(sessionStorage.getItem("editorHtml"))
+                    axios.post(`${APIConstants.COMPANY_URL}/adddescription`, {
+                      guid: comp?.guid,
+                      description: sessionStorage.getItem("editorHtml"),
+                    })
                   }
                 />
               </div>
