@@ -3,13 +3,8 @@ using FitManager.Application.Dto;
 using FitManager.Application.Infrastructure;
 using FitManager.Application.Model;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Microsoft.Win32;
-using MimeKit.Encodings;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Emit;
 using System.Threading.Tasks;
 
 namespace FitManager.Application.Services
@@ -89,6 +84,21 @@ namespace FitManager.Application.Services
             company.Plz = companydto.plz;
             company.Place = companydto.place;
             company.BillAddress = companydto.billAddress;
+            company.HasPaid = companydto.hasPaid;
+            try
+            {
+                await _db.SaveChangesAsync();
+                return company.Guid;
+            }
+            catch (DbUpdateException e) { throw new ServiceException(e.InnerException?.Message ?? e.Message, e); }
+        }
+
+        public async Task<Guid> AddDescription(string description, Guid guid)
+        {
+            var company = await _db.Companies.FirstAsync(a => a.Guid == guid);
+            if (company is null)
+                throw new ServiceException($"Firma {guid} existiert nicht");
+            company.Description = description;
             try
             {
                 await _db.SaveChangesAsync();

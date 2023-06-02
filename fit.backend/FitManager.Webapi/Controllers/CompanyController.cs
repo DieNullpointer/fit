@@ -46,8 +46,10 @@ namespace FitManager.Webapi.Controllers
                 p.Plz,
                 p.Place,
                 p.BillAddress,
+                p.Description,
+                p.HasPaid,
                 Event = new { p.Event.Guid, p.Event.Name},
-                PackageName = new {p.Package.Guid, p.Package.Name},
+                Package = new {p.Package.Guid, p.Package.Name},
                 partners = p.ContactPartners.Select(d => new
                 {
                     d.Guid,
@@ -97,20 +99,46 @@ namespace FitManager.Webapi.Controllers
             catch (ServiceException e) { return BadRequest(e.Message); }
         }
 
-        [HttpPost("addfile/{guid:Guid}")]
-        public async Task<IActionResult> AddFile([FromForm] IFormFile formFile, Guid guid)
+        [HttpPost("addinserat/{guid:Guid}")]
+        public async Task<IActionResult> AddInserat([FromForm] IFormFile formFile, Guid guid)
         {
+            if(!(await _db.Companies.Include(a => a.Package).FirstAsync(a => a.Guid == guid)).Package.Name.ToLower().Contains("inserat"))
+                return BadRequest("Firma hat kein Package das ein Inserat erlaubt");
             if (formFile.ContentType != "application/pdf")
-                return BadRequest();
+                return BadRequest("Es werden nur PDF Dokumente akzeptiert");
             string path = Path.Combine(Directory.GetCurrentDirectory(), "Files", $"{guid}");
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
-            path = Path.Combine(path, formFile.FileName);
+            path = Path.Combine(path, $"Inserat-{guid}.{formFile.FileName.Split(".").Last()}");
             using (var stream = new FileStream(path, FileMode.Create))
             {
                 await formFile.CopyToAsync(stream);
             }
-            return Ok(new { formFile.Name, formFile.Length });
+            return Ok(new { FileName = $"Inserat-{guid}", formFile.Length });
+        }
+
+        [HttpPost("addlogo/{guid:Guid}")]
+        public async Task<IActionResult> AddLogo([FromForm] IFormFile formFile, Guid guid)
+        {
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "Files", $"{guid}");
+            if(!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+            path = Path.Combine(path, $"Logo-{guid}.{formFile.FileName.Split(".").Last()}");
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                await formFile.CopyToAsync(stream);
+            }
+            return Ok(new { FileName = $"Logo-{guid}", formFile.Length });
+        }
+
+        [HttpPost("adddescription")]
+        public async Task<IActionResult> AddDescription([FromBody] AddDescriptionDto descriptionDto)
+        {
+            try
+            {
+                return Ok(await _service.AddDescription(descriptionDto.description, descriptionDto.guid));
+            }
+            catch(ServiceException e) { return BadRequest(e.Message); }
         }
 
         [HttpPut("change")]
@@ -121,6 +149,20 @@ namespace FitManager.Webapi.Controllers
                 return Ok(await _service.EditCompany(company));
             }
             catch(ServiceException e) { return BadRequest(e.Message); }
+        }
+
+        [HttpPost("signin")]
+        public async Task<IActionResult> NewEvent([FromBody] SignInCmd sign)
+        {
+            var company = await _db.Companies.Include(a => a.Package).Include(a => a.Event).FirstAsync(a => a.Guid == sign.guid);
+            var events = await _db.Events.FirstAsync(a => a.Guid == sign.guid);
+            if (events.Date < DateTime.Now)
+                return BadRequest("Keine Vergangenen Events zur Anmeldung möglich");
+            var package = await _db.Packages.FirstAsync(a => a.Guid == sign.guid);
+            company.LastPackage = company.Package.Name;
+            company.Event = events;
+            company.Package = package;
+            return Ok(company.Guid);
         }
     }
 }

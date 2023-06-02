@@ -50,7 +50,9 @@ namespace FitManager.Application.Infrastructure
             var events = new Faker<Model.Event>("de").CustomInstantiator(f =>
             {
                 var date = f.Date.Future(refDate: DateTime.UtcNow, yearsToGoForward: 5);
-                return new Model.Event(name: f.Name.JobTitle(), date: date.Date);
+                var @event = new Model.Event(name: f.Name.JobTitle(), date: date.Date);
+                @event.Packages.Add(f.PickRandom(packages));
+                return @event;
             }).Generate(5).ToList();
             events.Add(new Model.Event(new DateTime(year: 2024, month: 3, day: 23), "FIT24"));
             events.Add(new Model.Event(new DateTime(year: 2023, month: 3, day: 23), "FIT23"));
