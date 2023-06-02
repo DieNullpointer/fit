@@ -139,9 +139,6 @@ namespace FitManager.Webapi.Controllers
                 return Ok(await _service.AddDescription(descriptionDto.description, descriptionDto.guid));
             }
             catch(ServiceException e) { return BadRequest(e.Message); }
-            {
-
-            }
         }
 
         [HttpPut("change")]
@@ -152,6 +149,20 @@ namespace FitManager.Webapi.Controllers
                 return Ok(await _service.EditCompany(company));
             }
             catch(ServiceException e) { return BadRequest(e.Message); }
+        }
+
+        [HttpPost("signin")]
+        public async Task<IActionResult> NewEvent([FromBody] SignInCmd sign)
+        {
+            var company = await _db.Companies.Include(a => a.Package).Include(a => a.Event).FirstAsync(a => a.Guid == sign.guid);
+            var events = await _db.Events.FirstAsync(a => a.Guid == sign.guid);
+            if (events.Date < DateTime.Now)
+                return BadRequest("Keine Vergangenen Events zur Anmeldung möglich");
+            var package = await _db.Packages.FirstAsync(a => a.Guid == sign.guid);
+            company.LastPackage = company.Package;
+            company.Event = events;
+            company.Package = package;
+            return Ok(company.Guid);
         }
     }
 }
