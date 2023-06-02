@@ -87,7 +87,7 @@ export default {
             }
         },
         async addPackage() {
-            this.submitted = true;
+            console.log(this.package)
             try {
                 await axios.post('package/add', this.package)
                 console.log(this.package)

@@ -55,14 +55,14 @@ import Dialog from 'primevue/dialog';
     <div class="p-fluid">
       <div class="field">
         <label for="date">Date</label>
-        <Calendar id="name" v-model.trim="event.date" required="true" autofocus
+        <Calendar id="name" v-model.trim="event.date" required="true" autofocus dateFormat="dd.mm.yy" :min-date="minDate"
           :class="{ 'p-invalid': submitted && !event.date }" />
         <small class="p-error" v-if="submitted && !event.date">Price is required.</small>
       </div>
     </div>
     <template #footer>
       <Button label="Cancel" icon="pi pi-times" text @click="hideDialog()" />
-      <Button label="Save" icon="pi pi-check" text @click="changeEvent()" />
+      <Button label="Save" icon="pi pi-check" text @click="saveEvent()" />
     </template>
   </Dialog>
 </template>
@@ -81,8 +81,8 @@ export default {
       filters: {},
       dialog: false,
       submitted: false,
-
-      expandedRows: ref([])
+      expandedRows: ref([]),
+      minDate: new Date()
     }
   },
   created() {
@@ -100,7 +100,7 @@ export default {
       }
     },
     async addEvent() {
-      this.submitted = true;
+      console.log(this.event)
       try {
         await axios.post('event/add', this.event)
         console.log(this.event)
@@ -111,8 +111,7 @@ export default {
       }
     },
     async changeEvent() {
-      this.submitted = true;
-      if (this.event.name.trim()) {
+      console.log(this.event)
         try {
           await axios.put('event/change', this.event)
           this.hideDialog();
@@ -120,10 +119,9 @@ export default {
         } catch (e) {
           console.log(e.response)
         }
-      }
-
     },
     newEvent() {
+      this.event.guid = '';
       this.event.name = '';
       this.event.date = '';
       this.event.packages = [];
@@ -147,7 +145,8 @@ export default {
     },
     saveEvent() {
       this.submitted = true;
-      if (this.event.name.trim() && this.event.date.trim()) {
+      if (this.event.name.trim()) {
+        this.event.date.toJSON();
         if (this.event.guid) {
           this.changeEvent();
         }
