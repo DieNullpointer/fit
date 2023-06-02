@@ -135,7 +135,7 @@ namespace FitManager.Webapi.Controllers
             {
                 await formFile.CopyToAsync(stream);
             }
-            return Ok(new { FileName = $"Logo-{guid}", formFile.Length });
+            return Redirect($"/companypage/{guid}");
         }
 
         [HttpPost("adddescription")]
