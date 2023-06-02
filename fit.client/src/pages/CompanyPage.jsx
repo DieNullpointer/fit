@@ -8,10 +8,13 @@ import { motion as m } from "framer-motion";
 import RichTextEditor from "../components/RichTextEditor";
 import Button from "../components/atoms/Button";
 import SmallUpload from "../components/atoms/SmallUpload";
+import axios from 'axios';
 
 export default function UploadPage() {
   const { company } = useParams();
   const [comp, setComp] = useState();
+
+  console.log(`${axios.defaults.baseURL}${APIConstants.COMPANY_URL}/addlogo/${comp?.guid}`);
 
   useEffect(() => {
     init();
@@ -100,6 +103,7 @@ export default function UploadPage() {
                 label="Logo Auswählen"
                 helpText="Erlaubte Endungen: JPG; PNG; WEBP"
                 id="logoupload"
+                action={`${axios.defaults.baseURL}${APIConstants.COMPANY_URL}/addlogo/${comp?.guid}`}
               />
               {comp?.package.name.includes("Inserat") && (
                 <div>
@@ -108,7 +112,7 @@ export default function UploadPage() {
                   </Typography>
                   <SmallUpload
                     label="Inserat Hochladen"
-                    helpText="Erlaubte Endungen: PDF; PNG; JPG"
+                    helpText="Erlaubte Endungen: PDF"
                     id="inseratupload"
                   />
                 </div>
