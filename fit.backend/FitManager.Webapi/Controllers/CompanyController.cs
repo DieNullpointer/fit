@@ -1,16 +1,16 @@
 ﻿using AutoMapper;
 using FitManager.Application.Dto;
 using FitManager.Application.Infrastructure;
-using FitManager.Application.Model;
 using FitManager.Application.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.FileProviders;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -163,6 +163,47 @@ namespace FitManager.Webapi.Controllers
             company.Event = events;
             company.Package = package;
             return Ok(company.Guid);
+        }
+
+        [HttpGet("getFiles/{guid:Guid}")]
+        public async Task<IActionResult> GetFiles(Guid guid, [FromQuery] string fileName)
+        {
+            var files = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(), "Files", $"{guid}"));
+            if (files.Length == 0)
+                return BadRequest("Keine Dateien vorhanden");
+            if (fileName == "all")
+            {
+                using (var outStream = new MemoryStream())
+                {
+                    using (var archive = new ZipArchive(outStream, ZipArchiveMode.Create, true))
+                    {
+                        foreach (var f in files)
+                        {
+                            var fileInArchive = archive.CreateEntry(Path.GetFileName(f));
+                            using (var entryStream = fileInArchive.Open())
+                            {
+                                using (var fileCompressionStream = new MemoryStream(System.IO.File.ReadAllBytes(f)))
+                                {
+                                    await fileCompressionStream.CopyToAsync(entryStream);
+                                }
+                            }
+                        }
+                    }
+                    outStream.Position = 0;
+                    return File(outStream.ToArray(), "application/zip", $"Files-{guid}.zip");
+                }
+            }
+            if (files.Where(a => a.ToLower().Contains(fileName)).Count() == 0)
+                return BadRequest("Datei gibt es nicht");
+            var file = files.Where(a => a.ToLower().Contains(fileName)).First();
+            var stream = await System.IO.File.ReadAllBytesAsync(file);
+            if (file.Contains("Logo"))
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Octet, $"Logo-{guid}.{file.Split(".").Last()}");
+            if (file.Contains("Inserat"))
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Octet, $"Inserat-{guid}.{file.Split(".").Last()}");
+            return BadRequest("Sollte nicht passieren.");
+            //var name = file.Split(".");
+            //return File(stream, System.Net.Mime.MediaTypeNames.Application.Octet, $"{name[name.Length-2]}.{name[name.Length - 1]}");
         }
     }
 }
