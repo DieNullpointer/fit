@@ -7,8 +7,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -102,7 +104,7 @@ namespace FitManager.Webapi.Controllers
         [HttpPost("addinserat/{guid:Guid}")]
         public async Task<IActionResult> AddInserat([FromForm] IFormFile formFile, Guid guid)
         {
-            if(!(await _db.Companies.Include(a => a.Package).FirstAsync(a => a.Guid == guid)).Package.Name.ToLower().Contains("inserat"))
+            if (!(await _db.Companies.Include(a => a.Package).FirstAsync(a => a.Guid == guid)).Package.Name.ToLower().Contains("inserat"))
                 return BadRequest("Firma hat kein Package das ein Inserat erlaubt");
             if (formFile.ContentType != "application/pdf")
                 return BadRequest("Es werden nur PDF Dokumente akzeptiert");
@@ -204,6 +206,29 @@ namespace FitManager.Webapi.Controllers
             return BadRequest("Sollte nicht passieren.");
             //var name = file.Split(".");
             //return File(stream, System.Net.Mime.MediaTypeNames.Application.Octet, $"{name[name.Length-2]}.{name[name.Length - 1]}");
+        }
+
+        [HttpPost("addmultiple/{guid:Guid}")]
+        public async Task<IActionResult> UploadMultiple([FromForm] List<IFormFile> files, Guid guid)
+        {
+            string defaultPath = Path.Combine(Directory.GetCurrentDirectory(), "Files", $"{guid}");
+            if (!Directory.Exists(defaultPath))
+                Directory.CreateDirectory(defaultPath);
+            if (files.IsNullOrEmpty())
+                return BadRequest("Keine Dateien vorhanden");
+            foreach (var f in files)
+                if (f.Length > 30000000)
+                    return BadRequest("Eine der Dateien ist größer als 30MB");
+            foreach (var f in files)
+            {
+                var path = Path.Combine(defaultPath, $"{f.FileName.Split(".").First()}-{guid}.{f.FileName.Split(".").Last()}");
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    await f.CopyToAsync(stream);
+                }
+            }
+            return Ok();
+            //return Redirect($"companypage/{guid}");
         }
     }
 }
