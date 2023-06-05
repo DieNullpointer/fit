@@ -2,9 +2,9 @@ import { useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
-export default function RichTextEditor({placeholder}) {
+export default function RichTextEditor({placeholder, startValue}) {
     
-    const [editorHtml, setEditorHtml] = useState("");
+    const [editorHtml, setEditorHtml] = useState(startValue || "");
 
   return (
     <ReactQuill

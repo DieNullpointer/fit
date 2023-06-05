@@ -13,7 +13,8 @@ export default function Button({
   className,
   loading,
   style,
-  submit
+  submit,
+  disabled
 }) {
   const ColorButton = styled(MButton)(({ theme }) => ({
     color: theme.palette.getContrastText(Style.colors.primary),
@@ -26,7 +27,7 @@ export default function Button({
 
   return (
     <div className={className || ""}>
-      <ColorButton style={style} id={id} onClick={onClick} variant="contained" type={submit ? "submit" : "button"}>
+      <ColorButton style={style} id={id} onClick={onClick} variant="contained" type={submit ? "submit" : "button"} disabled={disabled}>
         {!loading ? (
           text
         ) : (

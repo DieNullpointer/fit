@@ -120,6 +120,7 @@ namespace FitManager.Webapi.Controllers
         }
 
         [HttpPost("addlogo/{guid:Guid}")]
+        [Consumes("multipart/form-data")]
         public async Task<IActionResult> AddLogo([FromForm] IFormFile formFile, Guid guid)
         {
             string path = Path.Combine(Directory.GetCurrentDirectory(), "Files", $"{guid}");
@@ -130,7 +131,7 @@ namespace FitManager.Webapi.Controllers
             {
                 await formFile.CopyToAsync(stream);
             }
-            return Ok(new { FileName = $"Logo-{guid}", formFile.Length });
+            return Redirect($"/companypage/{guid}");
         }
 
         [HttpPost("adddescription")]
@@ -227,8 +228,7 @@ namespace FitManager.Webapi.Controllers
                     await f.CopyToAsync(stream);
                 }
             }
-            return Ok();
-            //return Redirect($"companypage/{guid}");
+            return Redirect($"companypage/{guid}");
         }
     }
 }
