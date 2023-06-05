@@ -1,6 +1,6 @@
 import Button from "./Button";
 
-export default function SmallUpload({ label, helpText, id, action, multiple }) {
+export default function SmallUpload({ label, helpText, id, action, multiple, backendName }) {
   return (
     <form action={action} className="flex justify-between items-center" method="POST" encType="multipart/form-data">
       <div className="w-3/4">
@@ -14,7 +14,7 @@ export default function SmallUpload({ label, helpText, id, action, multiple }) {
         className="block w-full text-sm text-white border border-white rounded-lg cursor-pointer bg-primary focus:outline-none"
         id={id}
         type="file"
-        name="formFile"
+        name={backendName || "formFile"}
         multiple={multiple}
       ></input>
       <p className="ml-1 text-sm text-grey-800 opacity-75" id={id + "_helper"}>{helpText}</p>
