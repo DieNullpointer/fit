@@ -236,8 +236,7 @@ namespace FitManager.Webapi.Controllers
                     await f.CopyToAsync(stream);
                 }
             }
-            return Ok();
-            //return Redirect($"companypage/{guid}");
+            return Redirect($"companypage/{guid}");
         }
     }
 }
