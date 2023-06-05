@@ -31,6 +31,7 @@ import Dialog from 'primevue/dialog';
       <Column :exportable="false" style="min-width:8rem">
         <template #body="slotProps">
           <Button icon="pi pi-pencil" outlined rounded class="mr-2" @click="editEvent(slotProps.data)" />
+          <Button type="button" @click="addPackage(slotProps.data.guid)" label="Assign Package" />
         </template>
       </Column>
       <template #expansion="slotProps">
@@ -65,12 +66,30 @@ import Dialog from 'primevue/dialog';
       <Button label="Save" icon="pi pi-check" text @click="saveEvent()" />
     </template>
   </Dialog>
+
+  <Dialog v-model:visible="addPackageDialog" :style="{ width: '450px' }" header="Packages" :modal="true" class="p-fluid">
+    <DataTable ref="dt" :value="packages" v-model:selection="selectedPackages" dataKey="guid" :filters="filters">
+      <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
+      <Column field="name" header="Name" sortable style="min-width:12rem"></Column>
+      <Column field="price" header="Price" sortable style="min-width:16rem"></Column>
+    </DataTable>
+    <template #footer>
+      <Button label="Cancel" icon="pi pi-times" text @click="hideDialog()" />
+      <Button label="Assign" icon="pi pi-check" text @click="assignPackage()" />
+    </template>
+  </Dialog>
 </template>
 
 <script>
 export default {
   data() {
     return {
+      packages: [],
+      selectedPackages: [],
+      toAssign: {
+        eventGuid: '',
+        packages: []
+      },
       events: [],
       event: {
         guid: '',
@@ -80,6 +99,7 @@ export default {
       },
       filters: {},
       dialog: false,
+      addPackageDialog: false,
       submitted: false,
       expandedRows: ref([]),
       minDate: new Date()
@@ -103,7 +123,6 @@ export default {
       console.log(this.event)
       try {
         await axios.post('event/add', this.event)
-        console.log(this.event)
         this.hideDialog();
         await this.getAllEvents();
       } catch (e) {
@@ -112,13 +131,30 @@ export default {
     },
     async changeEvent() {
       console.log(this.event)
-        try {
-          await axios.put('event/change', this.event)
-          this.hideDialog();
-          await this.getAllEvents();
-        } catch (e) {
-          console.log(e.response)
-        }
+      try {
+        await axios.put('event/change', this.event)
+        this.hideDialog();
+        await this.getAllEvents();
+      } catch (e) {
+        console.log(e.response)
+      }
+    },
+    async assignPackage() {
+      this.toAssign.packages = this.selectedPackages.map((item) => item.guid)
+      try {
+        await axios.put('event/assign', this.toAssign)
+        this.hideDialog();
+        await this.getAllEvents();
+      } catch (e) {
+        console.log(e.response)
+      }
+    },
+    async getAllPackages() {
+      try {
+        this.packages = (await axios.get(`/package`)).data;
+      } catch (e) {
+        alert("Fehler beim Laden der Package.");
+      }
     },
     newEvent() {
       this.event.guid = '';
@@ -141,12 +177,16 @@ export default {
       this.event.guid = '';
       this.event.name = '';
       this.event.date = '';
+      this.addPackageDialog = false;
       this.event.packages = [];
+      this.packages = [];
+      this.toAssign.guid = '';
+      this.toAssign.packages = [];
     },
     saveEvent() {
       this.submitted = true;
       if (this.event.name.trim()) {
-        this.event.date.toJSON();
+        this.event.date + '';
         if (this.event.guid) {
           this.changeEvent();
         }
@@ -155,6 +195,11 @@ export default {
         }
         this.hideDialog()
       }
+    },
+    addPackage(guid) {
+      this.toAssign.eventGuid = guid;
+      this.getAllPackages();
+      this.addPackageDialog = true;
     },
     findIndexById(id) {
       let index = -1;
