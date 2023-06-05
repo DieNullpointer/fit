@@ -130,6 +130,8 @@ export default function UploadPage() {
                 helpText="Erlaubte Endungen: PDF"
                 id="documentupload"
                 multiple
+                action={`${axios.defaults.baseURL}${APIConstants.COMPANY_URL}/addmultiple/${comp?.guid}`}
+                backendName="files"
               />
               <Typography variant="subtitle1" sx={{ marginTop: "23px" }}>
                 <b>Selbstdarstellung</b>
