@@ -117,6 +117,68 @@ import Dialog from 'primevue/dialog';
             <Button label="Yes" icon="pi pi-check" text @click="deleteCompany()" />
         </template>
     </Dialog>
+
+
+    <Dialog v-model:visible="changeDialog" :style="{ width: '450px' }" header="Package Details" :modal="true"
+        class="p-fluid">
+        <div class="field">
+            <label for="name">Name</label>
+            <InputText id="name" v-model.trim="company.name" required="true" autofocus
+                :class="{ 'p-invalid': submitted && !company.name }" />
+            <small class="p-error" v-if="submitted && !company.name">Name is required.</small>
+        </div>
+
+        <div class="field">
+            <label for="address">Addresse</label>
+            <InputText id="address" v-model.trim="company.address" required="true" autofocus
+                :class="{ 'p-invalid': submitted && !company.address }" />
+            <small class="p-error" v-if="submitted && !company.address">Address is required.</small>
+        </div>
+
+        <div class="field">
+            <label for="country">Land</label>
+            <InputText id="country" v-model.trim="company.country" required="true" autofocus
+                :class="{ 'p-invalid': submitted && !company.country }" />
+            <small class="p-error" v-if="submitted && !company.country">Country is required.</small>
+        </div>
+
+        <div class="field">
+            <label for="plz">Plz</label>
+            <InputText id="plz" v-model.trim="company.plz" required="true" autofocus
+                :class="{ 'p-invalid': submitted && !company.plz }" />
+            <small class="p-error" v-if="submitted && !company.plz">Plz is required.</small>
+        </div>
+
+        <div class="field">
+            <label for="place">Place</label>
+            <InputText id="place" v-model.trim="company.place" required="true" autofocus
+                :class="{ 'p-invalid': submitted && !company.place }" />
+            <small class="p-error" v-if="submitted && !company.place">Place is required.</small>
+        </div>
+
+        <div class="field">
+            <label for="billAddress">billAddress</label>
+            <InputText id="billAddress" v-model.trim="company.billAddress" required="true" autofocus
+                :class="{ 'p-invalid': submitted && !company.billAddress }" />
+            <small class="p-error" v-if="submitted && !company.billAddress">billAddress is required.</small>
+        </div>
+
+        <template #footer>
+            <Button label="Cancel" icon="pi pi-times" text @click="hideDialog()" />
+            <Button label="Save" icon="pi pi-check" text @click="changeCompany()" />
+        </template>
+    </Dialog>
+
+    <Dialog v-model:visible="deleteDialog" :style="{ width: '450px' }" header="Confirm" :modal="true">
+        <div class="confirmation-content">
+            <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
+            <span v-if="company">Are you sure you want to delete <b>{{ company.name }}</b>?</span>
+        </div>
+        <template #footer>
+            <Button label="No" icon="pi pi-times" text @click="hideDialog()" />
+            <Button label="Yes" icon="pi pi-check" text @click="deleteCompany()" />
+        </template>
+    </Dialog>
 </template>
 
 <script>
