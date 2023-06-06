@@ -32,8 +32,8 @@ namespace FitManager.Application.Services
         //  EVENT METHODS
         public async Task<Guid> AddEvent(EventCmd events)
         {
-            var dates = events.Date.Split(".");
-            var date = new DateTime(day: Int32.Parse(dates[0]), month: Int32.Parse(dates[1]), year: Int32.Parse(dates[2]));
+            var dates = events.Date.Split("T")[0].Split("-");
+            var date = new DateTime(year: Int32.Parse(dates[0]), month: Int32.Parse(dates[1]), day: Int32.Parse(dates[2]));
             if (date < DateTime.UtcNow)
                 throw new ServiceException("Datum liegt in der Vergangenheit");
             var ev = _mapper.Map<Event>(events, opt => opt.AfterMap((dto, entity) =>
@@ -71,8 +71,8 @@ namespace FitManager.Application.Services
 
         public async Task<Guid> ChangeEvent(EventDto change)
         {
-            var dates = change.Date.Split(".");
-            var date = new DateTime(day: Int32.Parse(dates[0]), month: Int32.Parse(dates[1]), year: Int32.Parse(dates[2]));
+            var dates = change.Date.Split("T")[0].Split("-");
+            var date = new DateTime(year: Int32.Parse(dates[0]), month: Int32.Parse(dates[1]), day: Int32.Parse(dates[2]));
             if (date < DateTime.UtcNow)
                 throw new ServiceException("Datum liegt in der Vergangenheit");
             var events = await _db.Events.FirstOrDefaultAsync(e => e.Guid == change.Guid);
