@@ -1,16 +1,8 @@
 <script setup>
 import { ref } from "vue";
-import { ref } from "vue";
 import axios from "axios";
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-import InputText from 'primevue/inputtext';
-import { FilterMatchMode } from 'primevue/api';
-import Calendar from 'primevue/calendar';
-
-import Button from 'primevue/button';
-import Dialog from 'primevue/dialog';
-
 import InputText from 'primevue/inputtext';
 import { FilterMatchMode } from 'primevue/api';
 import Calendar from 'primevue/calendar';
@@ -37,25 +29,7 @@ import Dialog from 'primevue/dialog';
       <Column field="name" header="Name" sortable style="min-width:12rem"></Column>
       <Column field="date" header="Date" sortable style="min-width:12rem"></Column>
       <Column :exportable="false" style="min-width:8rem">
-  <div class="companiesView">
-    <DataTable ref="dt" v-model:expandedRows="expandedRows" :value="events" dataKey="guid" :filters="filters">
-      <template #header>
-        <div class="flex flex-wrap gap-2  justify-content-between">
-          <h4 class="m-0">Manage Events</h4>
-          <span class="p-input-icon-left">
-            <i class="pi pi-search" />
-            <InputText v-model="filters['global'].value" placeholder="Search..." />
-          </span>
-          <Button type="button" @click="newEvent()" label="New Event" />
-        </div>
-      </template>
-      <Column expander style="width: 5rem" />
-      <Column field="name" header="Name" sortable style="min-width:12rem"></Column>
-      <Column field="date" header="Date" sortable style="min-width:12rem"></Column>
-      <Column :exportable="false" style="min-width:8rem">
         <template #body="slotProps">
-          <Button icon="pi pi-pencil" outlined rounded class="mr-2" @click="editEvent(slotProps.data)" />
-          <Button type="button" @click="addPackage(slotProps.data.guid)" label="Assign Package" />
           <Button icon="pi pi-pencil" outlined rounded class="mr-2" @click="editEvent(slotProps.data)" />
           <Button type="button" @click="addPackage(slotProps.data.guid)" label="Assign Package" />
         </template>
@@ -104,16 +78,6 @@ import Dialog from 'primevue/dialog';
       <Button label="Assign" icon="pi pi-check" text @click="assignPackage()" />
     </template>
   </Dialog>
-      </Column>
-      <template #expansion="slotProps">
-        <div class="p-3">
-          <DataTable :value="slotProps.data.packages">
-            <Column field="name" header="name" sortable></Column>
-          </DataTable>
-        </div>
-      </template>
-    </DataTable>
-  </div>
 
 
   <Dialog v-model:visible="dialog" :style="{ width: '450px' }" header="Event Details" :modal="true" class="p-fluid">
@@ -161,12 +125,6 @@ export default {
         eventGuid: '',
         packages: []
       },
-      packages: [],
-      selectedPackages: [],
-      toAssign: {
-        eventGuid: '',
-        packages: []
-      },
       events: [],
       event: {
         guid: '',
@@ -187,19 +145,6 @@ export default {
   },
   async mounted() {
     await this.getAllEvents();
-      event: {
-        guid: '',
-        name: '',
-        date: '',
-        packages: []
-      },
-      filters: {},
-      dialog: false,
-      addPackageDialog: false,
-      submitted: false,
-      expandedRows: ref([]),
-      minDate: new Date()
-    }
   },
   created() {
     this.initFilters();
