@@ -50,8 +50,8 @@ namespace FitManager.Webapi.Controllers
                 p.BillAddress,
                 p.Description,
                 p.HasPaid,
-                Event = new { p.Event.Guid, p.Event.Name},
-                Package = new {p.Package.Guid, p.Package.Name},
+                Event = new { p.Event.Guid, p.Event.Name },
+                Package = new { p.Package.Guid, p.Package.Name },
                 partners = p.ContactPartners.Select(d => new
                 {
                     d.Guid,
@@ -104,7 +104,7 @@ namespace FitManager.Webapi.Controllers
         [HttpPost("addinserat/{guid:Guid}")]
         public async Task<IActionResult> AddInserat([FromForm] IFormFile formFile, Guid guid)
         {
-            if(_db.Companies.Any(a => a.Guid == guid))
+            if (_db.Companies.Any(a => a.Guid == guid))
                 return BadRequest($"Firma {guid} gibt es nicht");
             if (!(await _db.Companies.Include(a => a.Package).FirstAsync(a => a.Guid == guid)).Package.Name.ToLower().Contains("inserat"))
                 return BadRequest("Firma hat kein Package das ein Inserat erlaubt");
@@ -125,10 +125,10 @@ namespace FitManager.Webapi.Controllers
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> AddLogo([FromForm] IFormFile formFile, Guid guid)
         {
-            if(_db.Companies.Any(a => a.Guid == guid))
+            if (_db.Companies.Any(a => a.Guid == guid))
                 return BadRequest($"Firma {guid} gibt es nicht");
             string path = Path.Combine(Directory.GetCurrentDirectory(), "Files", $"{guid}");
-            if(!Directory.Exists(path))
+            if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
             path = Path.Combine(path, $"Logo-{guid}.{formFile.FileName.Split(".").Last()}");
             using (var stream = new FileStream(path, FileMode.Create))
@@ -145,7 +145,7 @@ namespace FitManager.Webapi.Controllers
             {
                 return Ok(await _service.AddDescription(descriptionDto.description, descriptionDto.guid));
             }
-            catch(ServiceException e) { return BadRequest(e.Message); }
+            catch (ServiceException e) { return BadRequest(e.Message); }
         }
 
         [HttpPut("change")]
@@ -155,7 +155,7 @@ namespace FitManager.Webapi.Controllers
             {
                 return Ok(await _service.EditCompany(company));
             }
-            catch(ServiceException e) { return BadRequest(e.Message); }
+            catch (ServiceException e) { return BadRequest(e.Message); }
         }
 
         [HttpPost("signin")]
@@ -175,7 +175,7 @@ namespace FitManager.Webapi.Controllers
         [HttpGet("getFiles/{guid:Guid}")]
         public async Task<IActionResult> GetFiles(Guid guid, [FromQuery] string fileName)
         {
-            if(_db.Companies.Any(a => a.Guid == guid))
+            if (_db.Companies.Any(a => a.Guid == guid))
                 return BadRequest($"Firma {guid} gibt es nicht");
             var files = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(), "Files", $"{guid}"));
             if (files.Length == 0)
@@ -218,7 +218,7 @@ namespace FitManager.Webapi.Controllers
         [HttpPost("addmultiple/{guid:Guid}")]
         public async Task<IActionResult> UploadMultiple([FromForm] List<IFormFile> files, Guid guid)
         {
-            if(_db.Companies.Any(a => a.Guid == guid))
+            if (_db.Companies.Any(a => a.Guid == guid))
                 return BadRequest($"Firma {guid} gibt es nicht");
             string defaultPath = Path.Combine(Directory.GetCurrentDirectory(), "Files", $"{guid}");
             if (!Directory.Exists(defaultPath))
@@ -237,6 +237,36 @@ namespace FitManager.Webapi.Controllers
                 }
             }
             return Redirect($"companypage/{guid}");
+        }
+
+        [HttpGet("allFiles")]
+        public async Task<IActionResult> GetAllFiles()
+        {
+            var files = Directory.GetDirectories(Path.Combine(Directory.GetCurrentDirectory(), "Files"));
+            if (files.Length == 0)
+                return BadRequest("Keine Dateien vorhanden");
+            using (var outStream = new MemoryStream())
+            {
+                using (var archive = new ZipArchive(outStream, ZipArchiveMode.Create, true))
+                {
+                    foreach (var d in files)
+                    {
+                        foreach (var f in Directory.GetFiles(d))
+                        {
+                            var fileInArchive = archive.CreateEntry(Path.GetFileName(f));
+                            using (var entryStream = fileInArchive.Open())
+                            {
+                                using (var fileCompressionStream = new MemoryStream(System.IO.File.ReadAllBytes(f)))
+                                {
+                                    await fileCompressionStream.CopyToAsync(entryStream);
+                                }
+                            }
+                        }
+                    }
+                }
+                outStream.Position = 0;
+                return File(outStream.ToArray(), "application/zip", $"Files.zip");
+            }
         }
     }
 }
