@@ -206,9 +206,9 @@ namespace FitManager.Webapi.Controllers
                 return BadRequest("Datei gibt es nicht");
             var file = files.Where(a => a.ToLower().Contains(fileName)).First();
             var stream = await System.IO.File.ReadAllBytesAsync(file);
-            if (file.Contains("Logo") && fileName.ToLower().Contains("logo"))
+            if (file.Contains("Logo"))
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Octet, $"Logo-{guid}.{file.Split(".").Last()}");
-            if (file.Contains("Inserat") && fileName.ToLower().Contains("inserat"))
+            if (file.Contains("Inserat"))
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Octet, $"Inserat-{guid}.{file.Split(".").Last()}");
             return BadRequest("Sollte nicht passieren.");
             //var name = file.Split(".");
