@@ -104,6 +104,8 @@ namespace FitManager.Webapi.Controllers
         [HttpPost("addinserat/{guid:Guid}")]
         public async Task<IActionResult> AddInserat([FromForm] IFormFile formFile, Guid guid)
         {
+            if(_db.Companies.Any(a => a.Guid == guid))
+                return BadRequest($"Firma {guid} gibt es nicht");
             if (!(await _db.Companies.Include(a => a.Package).FirstAsync(a => a.Guid == guid)).Package.Name.ToLower().Contains("inserat"))
                 return BadRequest("Firma hat kein Package das ein Inserat erlaubt");
             if (formFile.ContentType != "application/pdf")
@@ -122,6 +124,8 @@ namespace FitManager.Webapi.Controllers
         [HttpPost("addlogo/{guid:Guid}")]
         public async Task<IActionResult> AddLogo([FromForm] IFormFile formFile, Guid guid)
         {
+            if(_db.Companies.Any(a => a.Guid == guid))
+                return BadRequest($"Firma {guid} gibt es nicht");
             string path = Path.Combine(Directory.GetCurrentDirectory(), "Files", $"{guid}");
             if(!Directory.Exists(path))
                 Directory.CreateDirectory(path);
@@ -170,6 +174,8 @@ namespace FitManager.Webapi.Controllers
         [HttpGet("getFiles/{guid:Guid}")]
         public async Task<IActionResult> GetFiles(Guid guid, [FromQuery] string fileName)
         {
+            if(_db.Companies.Any(a => a.Guid == guid))
+                return BadRequest($"Firma {guid} gibt es nicht");
             var files = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(), "Files", $"{guid}"));
             if (files.Length == 0)
                 return BadRequest("Keine Dateien vorhanden");
@@ -199,9 +205,9 @@ namespace FitManager.Webapi.Controllers
                 return BadRequest("Datei gibt es nicht");
             var file = files.Where(a => a.ToLower().Contains(fileName)).First();
             var stream = await System.IO.File.ReadAllBytesAsync(file);
-            if (file.Contains("Logo"))
+            if (file.Contains("Logo") && fileName.ToLower().Contains("logo"))
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Octet, $"Logo-{guid}.{file.Split(".").Last()}");
-            if (file.Contains("Inserat"))
+            if (file.Contains("Inserat") && fileName.ToLower().Contains("inserat"))
                 return File(stream, System.Net.Mime.MediaTypeNames.Application.Octet, $"Inserat-{guid}.{file.Split(".").Last()}");
             return BadRequest("Sollte nicht passieren.");
             //var name = file.Split(".");
@@ -211,6 +217,8 @@ namespace FitManager.Webapi.Controllers
         [HttpPost("addmultiple/{guid:Guid}")]
         public async Task<IActionResult> UploadMultiple([FromForm] List<IFormFile> files, Guid guid)
         {
+            if(_db.Companies.Any(a => a.Guid == guid))
+                return BadRequest($"Firma {guid} gibt es nicht");
             string defaultPath = Path.Combine(Directory.GetCurrentDirectory(), "Files", $"{guid}");
             if (!Directory.Exists(defaultPath))
                 Directory.CreateDirectory(defaultPath);
