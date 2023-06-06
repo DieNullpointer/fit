@@ -56,7 +56,7 @@ import Dialog from 'primevue/dialog';
     <div class="p-fluid">
       <div class="field">
         <label for="date">Date</label>
-        <Calendar id="name" v-model.trim="event.date" required="true" autofocus dateFormat="dd.mm.yy" :min-date="minDate"
+        <Calendar id="name" v-model.trim="event.date" view="date" required="true" autofocus dateFormat="dd.mm.yy" :min-date="minDate"
           :class="{ 'p-invalid': submitted && !event.date }" />
         <small class="p-error" v-if="submitted && !event.date">Price is required.</small>
       </div>
@@ -219,7 +219,7 @@ export default {
     editEvent(item) {
       this.event.guid = item.guid;
       this.event.name = item.name;
-      this.event.date = item.date + '';
+      this.event.date = item.date;
       this.event.packages = item.packages;
       this.dialog = true;
     },
@@ -238,6 +238,7 @@ export default {
     saveEvent() {
       this.submitted = true;
       if (this.event.name.trim()) {
+        this.event.date = this.event.date.toLocaleDateString()
         if (this.event.guid) {
           this.changeEvent();
         }
