@@ -22,6 +22,8 @@ namespace FitManager.Webapi.Controllers
             if (contact == null)
                     return NotFound("Kontakt nicht gefunden");   
             
+
+            
             contact.Title = changeContact.Title;
             contact.FirstName = changeContact.FirstName;
             contact.LastName = changeContact.LastName;
@@ -31,6 +33,7 @@ namespace FitManager.Webapi.Controllers
             contact.Function = changeContact.Function;
 
             await _db.SaveChangesAsync();
+
             return Ok("Kontakt erfolgreich geändert");
             }
 
