@@ -14,11 +14,11 @@ namespace FitManager.Webapi.Controllers
             _service = service;
         }
 
-        public ChangeCmd(string id,string title, string firstname, string lastname, string email, string telNr, string? mobilNr, string function)
+        public ChangeCmd(Guid guid,string title, string firstname, string lastname, string email, string telNr, string function, string? mobilNr = null)
         [HttpPost]
         public async Task<IActionResult> ChangeContact([FromBody]ChangeCmd changeContact)
         {
-            var contact = await _db.Contacts.FindAsync(changeContact.Id);
+            var contact = await _db.Contacts.FindAsync(a => a.Guid == changeContact.guid);
             if (contact == null)
                     return NotFound("Kontakt nicht gefunden");   
             
@@ -32,11 +32,14 @@ namespace FitManager.Webapi.Controllers
             contact.MobilNr = changeContact.MobilNr;
             contact.Function = changeContact.Function;
 
-            await _db.SaveChangesAsync();
-
-            return Ok("Kontakt erfolgreich geändert");
+            try
+            {
+                await _db.SaveChangesAsync();
             }
+                catch (DbUpdateException e) { throw new ServiceException(e.InnerException?.Message ?? e.Message, e); }
+                return Ok(contact.Guid);
 
+        }
 
     }
 
