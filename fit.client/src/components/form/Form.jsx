@@ -55,20 +55,20 @@ function Child(type, name, onChangeOverride, valueOverride = false) {
     else refArray[count].current = onChangeOverride(e, newval);
   };
 
-  if (!valueOverride)
-    if(type === "input")
-    return {
-      as: Get(type, name),
-      onChange,
-      defaultValue: getExport()[name] || "",
-    };
-    else if(type === "autocomplete")
-    return {
-      as: Get(type, name),
-      onChange,
-      value: getExport()[name] ||null,
-    };
-  else return { as: Get(type, name), onChange };
+  if (!valueOverride) {
+    if (type === "input")
+      return {
+        as: Get(type, name),
+        onChange,
+        defaultValue: getExport()[name] || "",
+      };
+    else if (type === "autocomplete")
+      return {
+        as: Get(type, name),
+        onChange,
+        value: getExport()[name] || null,
+      };
+  } else return { as: Get(type, name), onChange };
 }
 
 function Submit(route) {
