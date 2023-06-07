@@ -24,8 +24,8 @@ namespace BeamerProtector.Webapp.Controllers
         private readonly AzureAdClient _adClient;
         private readonly FitContext _db;
         private readonly byte[] _key;                // To encrypt the refresh token
-        private string AuthorizeUserUrl => $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/account/authorize";
-        private string AuthorizeMailUrl => $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/account/authorizemail";
+        private string AuthorizeUserUrl => $"https://{HttpContext.Request.Host}/account/authorize";
+        private string AuthorizeMailUrl => $"https://{HttpContext.Request.Host}/account/authorizemail";
 
         public AccountController(AzureAdClient adClient, FitContext db, IConfiguration _config)
         {

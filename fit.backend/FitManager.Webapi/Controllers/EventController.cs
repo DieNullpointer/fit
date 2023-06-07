@@ -30,7 +30,7 @@ namespace FitManager.Webapi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllEvents()
         {
-            var events = await _service.Events.Include(a => a.Packages).Where(a => a.Date > DateTime.UtcNow.Date).OrderBy(a => a.Date).ToListAsync();
+            var events = await _service.Events.Include(a => a.Packages).ToListAsync();
             if (events is null)
                 return BadRequest();
 

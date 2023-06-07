@@ -104,7 +104,7 @@ if [ $CREATE_APP = y ]; then
     # !!! Do not generate a new secret if you only re-reploy a new containerimage. Any password in the database would become invalid. !!!
     SECRET=$(dd if=/dev/random bs=128 count=1 2> /dev/null | base64)
     # ASP.NET Core reads setting ConnectionStrings:Default from environment variable ConnectionStrings__SqlServer
-    az webapp config appsettings set --name $DNS_NAME --resource-group $AZ_GROUP --settings "CONNECTIONSTRINGS__SQLSERVER"="$DB_CONNECTIONSTRING" "JWTSECRET"="$SECRET" > /dev/null
+    az webapp config appsettings set --name $DNS_NAME --resource-group $AZ_GROUP --settings "CONNECTIONSTRINGS__SQLSERVER"="$DB_CONNECTIONSTRING" "JWTSECRET"="$SECRET" "SyncfusionKey"="NRAiBiAaIQQuGjN/V0Z+WE9EaFxKVmJLYVB3WmpQdldgdVRMZVVbQX9PIiBoS35RdUVhWXped3RQRmheUUxy" "TokenKey"="LzeUKMA42xd8NdD+VpOOzfCpVJCVa0d3L7SO61oSwbU=" "AzureAd__Instance"="https://login.microsoftonline.com/" "AzureAd__ClientId"="f07ffe58-23ad-419f-b71a-ed2f058879bd" "AzureAd__TenantId"="c61e66aa-01c3-4775-a319-71a07f3c67a4" "AzureAd__ClientSecret"="3Ta8Q~u.RSuYAL5sijhN5rKDC85BSBFicAqWhciK" "AzureAd__RedirectUrl"="https://localhost:5001/account/authorize" > /dev/null
 
     az webapp stop  --name $DNS_NAME --resource-group $AZ_GROUP  > /dev/null
     az webapp start --name $DNS_NAME --resource-group $AZ_GROUP  > /dev/null

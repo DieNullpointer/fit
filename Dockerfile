@@ -15,7 +15,9 @@ RUN dotnet publish "FitManager.Webapi" -c Release -o /app/publish /p:UseAppHost=
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS final
 EXPOSE 80
 EXPOSE 443
-WORKDIR /app
+WORKDIR /app    
 
 COPY --from=build /app/publish .
+COPY fit.backend/FitManager.Webapi/admin /app/admin
+COPY fit.backend/FitManager.Webapi/wwwroot /app/wwwroot
 ENTRYPOINT ["dotnet", "FitManager.Webapi.dll"]
