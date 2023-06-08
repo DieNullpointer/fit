@@ -238,7 +238,7 @@ export default {
     saveEvent() {
       this.submitted = true;
       if (this.event.name.trim()) {
-        this.event.date = this.event.date.toLocaleDateString()
+        this.event.date = this.event.date.toISOString().substring(0, 10);
         if (this.event.guid) {
           this.changeEvent();
         }
