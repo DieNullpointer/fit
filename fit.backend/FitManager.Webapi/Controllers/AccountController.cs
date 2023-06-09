@@ -3,11 +3,13 @@ using FitManager.Webapi.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Graph;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -91,7 +93,7 @@ namespace BeamerProtector.Webapp.Controllers
         /// Callback for SigninMailaccount. Route has to be corresponding with callback URL in
         /// appsettings.json and in the Azure App Registration.
         /// </summary>
-        [HttpGet("authorizeMailAccount")]
+        [HttpGet("authorizemail")]
         public async Task<IActionResult> AuthorizeMailAccount([FromQuery] string code)
         {
             var (authToken, refreshToken) = await _adClient.GetToken(code, AuthorizeMailUrl, "user.read offline_access mail.send");
@@ -123,6 +125,44 @@ namespace BeamerProtector.Webapp.Controllers
                 Debug.WriteLine("Wrong encryption");
             }
             return Redirect("/admin");
+        }
+
+        [HttpGet("sendMail/{guid:Guid}")]
+        [Authorize]
+        public async Task<IActionResult> SendMail(Guid guid)
+        {
+            var (accountName, refreshToken) = await _db.GetMailerAccount(_key);
+            if (refreshToken is null) { return BadRequest("No refresh token in payload."); }
+            var (authToken, newRefreshToken) = await _adClient.GetNewToken(refreshToken, "user.read offline_access mail.send");
+            var graph = _adClient.GetGraphServiceClientFromToken(authToken);
+            var me = await graph.Me.Request().GetAsync();
+
+            var company = await _db.Companies.Include(a => a.ContactPartners).FirstAsync(a => a.Guid == guid);
+            var partners = company.ContactPartners.ToList();
+            var recipients = new List<Recipient>();
+            foreach(var p in partners)
+            {
+                recipients.Add(new Recipient { EmailAddress = new EmailAddress { Address = p.Email } });
+            }
+
+            var message = new Message
+            {
+                Subject = "Firma registriert",
+                Body = new ItemBody
+                {
+                    ContentType = BodyType.Text,
+                    Content = $"Sie haben sich erfolgreich beim Firmeninformationstag registriert. Hier https://fit-ohiliroc6ha2yrc3.azurewebsites.net/companypage/{guid} kommen Sie zum Firmenportal"
+                },
+                ToRecipients = recipients //new List<Recipient>()
+                //{
+                    //new Recipient { EmailAddress = new EmailAddress { Address = me.Mail } }
+                //}
+            };
+            await graph.Me
+                .SendMail(message, SaveToSentItems: false)
+                .Request()
+                .PostAsync();
+            return Ok();
         }
 
         /// <summary>

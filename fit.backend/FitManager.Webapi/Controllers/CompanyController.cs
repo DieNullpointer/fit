@@ -101,6 +101,12 @@ namespace FitManager.Webapi.Controllers
             catch (ServiceException e) { return BadRequest(e.Message); }
         }
 
+        [HttpGet("filenames/{guid:Guid}")]
+        public IActionResult GetFileNames(Guid guid)
+        {
+            return Ok();
+        }
+
         [HttpPost("addinserat/{guid:Guid}")]
         public async Task<IActionResult> AddInserat([FromForm] IFormFile formFile, Guid guid)
         {
