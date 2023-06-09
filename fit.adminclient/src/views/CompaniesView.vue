@@ -243,7 +243,7 @@ export default {
             }
         },
         async download(company) {
-            window.location.href=`https://localhost:5001/api/company/getFiles/${company}?fileName=all`
+            window.location.href=`${axios.defaults.baseURL}/company/getFiles/${company}?fileName=all`
         },
         editCompany(item) {
             this.company.guid = item.guid;
