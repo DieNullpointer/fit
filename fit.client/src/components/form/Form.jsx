@@ -53,7 +53,6 @@ function Child(type, name, onChangeOverride, valueOverride = false) {
       refArray[count].current =
         type === "autocomplete" ? newval.text : e.target.value;
     else refArray[count].current = onChangeOverride(e, newval);
-    console.log("Ref in onchange: " + refArray[count].current);
   };
 
   if (!valueOverride) {
@@ -88,14 +87,12 @@ function Get(type, name) {
 function getExport() {
   let exportObj = {};
   for (let i = 0; i < idArray.length; i++) {
-    console.log([idArray[i], refArray[i].current, stateArray[i][0]]);
     Object.defineProperty(exportObj, idArray[i], {
       value: refArray[i].current,
       writable: true,
       enumerable: true,
     });
   }
-  console.log(exportObj);
   return exportObj;
 }
 
