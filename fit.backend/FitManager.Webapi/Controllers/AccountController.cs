@@ -134,6 +134,7 @@ namespace BeamerProtector.Webapp.Controllers
             var (accountName, refreshToken) = await _db.GetMailerAccount(_key);
             if (refreshToken is null) { return BadRequest("No refresh token in payload."); }
             var (authToken, newRefreshToken) = await _adClient.GetNewToken(refreshToken, "user.read offline_access mail.send");
+            if (newRefreshToken is null) { return BadRequest("No refresh token in payload."); }
             var graph = _adClient.GetGraphServiceClientFromToken(authToken);
             var me = await graph.Me.Request().GetAsync();
 
@@ -162,6 +163,7 @@ namespace BeamerProtector.Webapp.Controllers
                 .SendMail(message, SaveToSentItems: false)
                 .Request()
                 .PostAsync();
+            await _db.SetMailerAccount(me.Mail, newRefreshToken, _key);
             return Ok();
         }
 
