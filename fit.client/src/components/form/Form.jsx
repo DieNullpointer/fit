@@ -53,43 +53,23 @@ function Child(type, name, onChangeOverride, valueOverride = false) {
       refArray[count].current =
         type === "autocomplete" ? newval.text : e.target.value;
     else refArray[count].current = onChangeOverride(e, newval);
+    console.log("Ref in onchange: " + refArray[count].current);
   };
 
-  if (!valueOverride)
-    if(type === "input")
-    return {
-      as: Get(type, name),
-      onChange,
-      defaultValue: getExport()[name] || "",
-    };
-    else if(type === "autocomplete")
-    return {
-      as: Get(type, name),
-      onChange,
-      value: getExport()[name] ||null,
-    };
-  else return { as: Get(type, name), onChange };
-}
-
-function Submit(route) {
-  // eslint-disable-next-line
-  const [submit, setSubmit] = React.useState(false);
-
-  return {
-    onClick: async () => {
-      var exportObj = getExport();
-      setSubmit(true);
-      console.log(exportObj);
-      await axios
-        .post(route, exportObj)
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-  };
+  if (!valueOverride) {
+    if (type === "input")
+      return {
+        as: Get(type, name),
+        onChange,
+        defaultValue: refArray[count].current || "",
+      };
+    else if (type === "autocomplete")
+      return {
+        as: Get(type, name),
+        onChange,
+        defaultValue: refArray[count].current || null,
+      };
+  } else return { as: Get(type, name), onChange };
 }
 
 function Get(type, name) {
@@ -108,12 +88,14 @@ function Get(type, name) {
 function getExport() {
   let exportObj = {};
   for (let i = 0; i < idArray.length; i++) {
+    console.log([idArray[i], refArray[i].current, stateArray[i][0]]);
     Object.defineProperty(exportObj, idArray[i], {
       value: refArray[i].current,
       writable: true,
       enumerable: true,
     });
   }
+  console.log(exportObj);
   return exportObj;
 }
 
@@ -149,7 +131,6 @@ export default {
   Body,
   Section,
   Child,
-  Submit,
   getExport,
   reset,
   Reload,
