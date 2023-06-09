@@ -104,7 +104,7 @@ namespace FitManager.Webapi.Controllers
         [HttpPost("addinserat/{guid:Guid}")]
         public async Task<IActionResult> AddInserat([FromForm] IFormFile formFile, Guid guid)
         {
-            if(_db.Companies.Any(a => a.Guid == guid))
+            if (await _db.Companies.FirstAsync(a => a.Guid == guid) is null)
                 return BadRequest($"Firma {guid} gibt es nicht");
             if (!(await _db.Companies.Include(a => a.Package).FirstAsync(a => a.Guid == guid)).Package.Name.ToLower().Contains("inserat"))
                 return BadRequest("Firma hat kein Package das ein Inserat erlaubt");
@@ -122,10 +122,9 @@ namespace FitManager.Webapi.Controllers
         }
 
         [HttpPost("addlogo/{guid:Guid}")]
-        [Consumes("multipart/form-data")]
         public async Task<IActionResult> AddLogo([FromForm] IFormFile formFile, Guid guid)
         {
-            if(_db.Companies.Any(a => a.Guid == guid))
+            if (await _db.Companies.FirstAsync(a => a.Guid == guid) is null)
                 return BadRequest($"Firma {guid} gibt es nicht");
             string path = Path.Combine(Directory.GetCurrentDirectory(), "Files", $"{guid}");
             if(!Directory.Exists(path))
@@ -175,7 +174,7 @@ namespace FitManager.Webapi.Controllers
         [HttpGet("getFiles/{guid:Guid}")]
         public async Task<IActionResult> GetFiles(Guid guid, [FromQuery] string fileName)
         {
-            if(_db.Companies.Any(a => a.Guid == guid))
+            if (await _db.Companies.FirstAsync(a => a.Guid == guid) is null)
                 return BadRequest($"Firma {guid} gibt es nicht");
             var files = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(), "Files", $"{guid}"));
             if (files.Length == 0)
@@ -218,7 +217,7 @@ namespace FitManager.Webapi.Controllers
         [HttpPost("addmultiple/{guid:Guid}")]
         public async Task<IActionResult> UploadMultiple([FromForm] List<IFormFile> files, Guid guid)
         {
-            if(_db.Companies.Any(a => a.Guid == guid))
+            if (await _db.Companies.FirstAsync(a => a.Guid == guid) is null)
                 return BadRequest($"Firma {guid} gibt es nicht");
             string defaultPath = Path.Combine(Directory.GetCurrentDirectory(), "Files", $"{guid}");
             if (!Directory.Exists(defaultPath))
