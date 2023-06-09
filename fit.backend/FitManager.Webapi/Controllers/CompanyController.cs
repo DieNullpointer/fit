@@ -102,9 +102,14 @@ namespace FitManager.Webapi.Controllers
         }
 
         [HttpGet("filenames/{guid:Guid}")]
-        public IActionResult GetFileNames(Guid guid)
+        public async Task<IActionResult> GetFileNames(Guid guid)
         {
-            return Ok();
+            if (await _db.Companies.FirstAsync(a => a.Guid == guid) is null)
+                return BadRequest($"Firma {guid} gibt es nicht");
+            var files = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(), "Files", $"{guid}"));
+            if (files.Length == 0)
+                return BadRequest("Keine Dateien vorhanden");
+            return Ok(files);
         }
 
         [HttpPost("addinserat/{guid:Guid}")]
