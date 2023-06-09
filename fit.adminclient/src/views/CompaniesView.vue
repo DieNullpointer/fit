@@ -37,7 +37,7 @@ import Dialog from 'primevue/dialog';
                     <Button icon="pi pi-pencil" outlined rounded class="mr-2" @click="editCompany(slotProps.data)" />
                     <Button icon="pi pi-trash" outlined rounded severity="danger"
                         @click="confirmDeleteCompany(slotProps.data)" />
-                        <Button label="Download" @click="download(slotProps.data.guid)" />
+                    <Button label="Download" @click="download(slotProps.data.guid)" />
                 </template>
             </Column>
             <template #expansion="slotProps">
@@ -235,7 +235,6 @@ export default {
             }
         },
         async deleteCompany() {
-
             try {
                 await axios.delete(`company/delete/${this.company.guid}`)
                 this.hideDialog();
@@ -245,11 +244,7 @@ export default {
             }
         },
         async download(company) {
-            try {
-                await axios.download(`company/getFiles/${company}?fileName=all`)
-            } catch (e) {
-                console.log(e.response)
-            }
+            window.location.href=`https://localhost:5001/api/company/getFiles/${company}?fileName=all`
         },
         editCompany(item) {
             this.company.guid = item.guid;
