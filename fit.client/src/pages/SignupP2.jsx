@@ -123,6 +123,7 @@ export default function Signup() {
                     setError({ msg: errors.join("; ") });
                   } else {
                     console.log(response);
+                    APIConstants.sendMail(sessionStorage.getItem("companyGuid"));
                     navigate("/signup/finish");
                   }
                 }}

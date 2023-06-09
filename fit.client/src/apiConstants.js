@@ -1,11 +1,11 @@
 import axios from "axios";
 
 class APIConstants {
-  
   static EVENT_URL = "/event";
   static COMPANY_URL = "/company";
   static PACKAGE_URL = "/package";
-  
+  static ACCOUNT_URL = "/account";
+
   static async getAllEvents() {
     let response;
     try {
@@ -25,13 +25,13 @@ class APIConstants {
   static async getCompany(guid) {
     let response;
     try {
-      response = await axios.get(`${this.COMPANY_URL}/${guid}`)
+      response = await axios.get(`${this.COMPANY_URL}/${guid}`);
     } catch (error) {
       return error;
     }
     return response.data;
   }
-  
+
   static async registerCompany(payload) {
     let response;
     try {
@@ -41,6 +41,19 @@ class APIConstants {
       return error.response.data.errors;
     }
     return true;
-   }
+  }
+
+  static async sendMail(guid) {
+    let response = false;
+    await fetch(
+      `${axios.defaults.baseURL.replace("/api", "")}${
+        this.ACCOUNT_URL
+      }/sendMail/${guid}`,
+      { timeout: 5000, method: "GET" }
+    ).then((response) => {
+      response = response.status === 200;
+    });
+    return response;
+  }
 }
 export default APIConstants;
