@@ -5,7 +5,7 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import InputText from 'primevue/inputtext';
 import { FilterMatchMode } from 'primevue/api';
-
+import Dropdown from 'primevue/dropdown';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 
@@ -37,6 +37,7 @@ import Dialog from 'primevue/dialog';
                     <Button icon="pi pi-pencil" outlined rounded class="mr-2" @click="editCompany(slotProps.data)" />
                     <Button icon="pi pi-trash" outlined rounded severity="danger"
                         @click="confirmDeleteCompany(slotProps.data)" />
+                    <Button label="Download" @click="download(slotProps.data.guid)" />
                 </template>
             </Column>
             <template #expansion="slotProps">
@@ -177,13 +178,14 @@ import Dialog from 'primevue/dialog';
         <template #footer>
             <Button label="No" icon="pi pi-times" text @click="hideDialog()" />
             <Button label="Yes" icon="pi pi-check" text @click="deleteCompany()" />
+
         </template>
     </Dialog>
 </template>
 
 <script>
 export default {
-    
+
     data() {
         return {
             companies: [],
@@ -203,8 +205,7 @@ export default {
             changeDialog: false,
             submitted: false,
             deleteDialog: false,
-
-            expandedRows: ref([])
+            expandedRows: ref([]),
         }
     },
     created() {
@@ -232,10 +233,8 @@ export default {
                     console.log(e.response)
                 }
             }
-
         },
         async deleteCompany() {
-
             try {
                 await axios.delete(`company/delete/${this.company.guid}`)
                 this.hideDialog();
@@ -243,6 +242,9 @@ export default {
             } catch (e) {
                 console.log(e.response)
             }
+        },
+        async download(company) {
+            window.location.href=`https://localhost:5001/api/company/getFiles/${company}?fileName=all`
         },
         editCompany(item) {
             this.company.guid = item.guid;
@@ -293,6 +295,6 @@ export default {
                 'global': { value: null, matchMode: FilterMatchMode.CONTAINS },
             }
         },
-    } 
+    }
 };
 </script>
