@@ -161,7 +161,6 @@ export default function Signup() {
                         label="FIT"
                         required
                         {...Form.Child("autocomplete", "eventGuid", (e, newval) => {
-                          console.log(newval);
                           return newval.value || "0";
                         })}
                       />
