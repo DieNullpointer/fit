@@ -161,13 +161,8 @@ export default function Signup() {
                         label="FIT"
                         required
                         {...Form.Child("autocomplete", "eventGuid", (e, newval) => {
-                          const text = newval.text;
-                          let correctGuid = 1;
-                          events.forEach((ev) => {
-                            if (ev.text === text)
-                              return (correctGuid = ev.guid);
-                          });
-                          return correctGuid;
+                          console.log(newval);
+                          return newval.value || "0";
                         })}
                       />
                       <div className="md:ml-3">
@@ -181,13 +176,7 @@ export default function Signup() {
                             "autocomplete",
                             "packageGuid",
                             (e, newval) => {
-                              const text = newval.text;
-                              let correctGuid = 1;
-                              packages.forEach((p) => {
-                                if (p.text === text)
-                                  return (correctGuid = p.guid);
-                              });
-                              return correctGuid;
+                              return newval.value || "0";
                             }
                           )}
                         />

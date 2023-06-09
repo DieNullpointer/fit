@@ -50,6 +50,7 @@ export default function AutoComplete({
         autoHighlight
         fullWidth
         onChange={onChange}
+
         defaultValue={defaultValue}
         value={value}
         isOptionEqualToValue={(option, value) => {
