@@ -128,7 +128,6 @@ namespace BeamerProtector.Webapp.Controllers
         }
 
         [HttpGet("sendMail/{guid:Guid}")]
-        [Authorize]
         public async Task<IActionResult> SendMail(Guid guid)
         {
             var (accountName, refreshToken) = await _db.GetMailerAccount(_key);
