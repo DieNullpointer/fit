@@ -55,5 +55,15 @@ class APIConstants {
     });
     return response;
   }
+
+  static async getFileNames(guid) {
+    let response = false;
+    try {
+      response = await axios.get(`${this.COMPANY_URL}/fileNames/${guid}`);
+    } catch (error) {
+      return error.response.data.errors;
+    }
+    return response.data;
+  }
 }
 export default APIConstants;
