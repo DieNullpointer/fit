@@ -10,7 +10,7 @@ namespace FitManager.Application.Model
 {
     public class ContactPartner
     {
-        public ContactPartner(string title, string firstname, string lastname, string email, string telNr, string function, Company company, string? mobilNr = null, bool mainPartner = false)
+        public ContactPartner(string firstname, string lastname, string email, string telNr, string function, Company company, string? title = null, string? mobilNr = null, bool mainPartner = false)
         {
             Title = title;
             Firstname = firstname;
@@ -31,7 +31,7 @@ namespace FitManager.Application.Model
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public Guid Guid { get; set; }
-        public string Title { get; set; }
+        public string? Title { get; set; }
         public string Firstname { get; set; }
         public string Lastname { get; set; }
         public string Email { get; set; }

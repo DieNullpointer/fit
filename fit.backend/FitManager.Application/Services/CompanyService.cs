@@ -60,7 +60,7 @@ namespace FitManager.Application.Services
             if(register.partners.Where(a => a.mainPartner).Count() > 1) { throw new ServiceException("Nur ein Hauptansprechpartner erlaubt"); }
             foreach (var i in register.partners)
             {
-                await _db.ContactPartners.AddAsync(new ContactPartner(i.title, i.firstname, i.lastname, i.email, i.telNr, i.function, company, i.mobilNr, i.mainPartner));
+                await _db.ContactPartners.AddAsync(new ContactPartner(firstname: i.firstname, lastname: i.lastname, email: i.email, telNr: i.telNr, function: i.function, company: company, title: i.title, mobilNr: i.mobilNr, mainPartner: i.mainPartner));
             }
             await _db.Companies.AddAsync(company);
             try

@@ -7,23 +7,24 @@ using System.Threading.Tasks;
 
 namespace FitManager.Application.Dto
 {
-    public record PartnerCmd
+    public record ChangePartner
     (
+        Guid Guid,
         [StringLength(255, MinimumLength = 2, ErrorMessage = "Die Länge des Vornamens ist ungültig")]
-        string firstname,
+        string Firstname,
         [StringLength(255, MinimumLength = 2, ErrorMessage = "Die Länge des Nachnamens ist ungültig")]
-        string lastname,
+        string Lastname,
         [StringLength(255, MinimumLength = 2, ErrorMessage = "Die Länge des Vornamens ist ungültig")]
         [EmailAddress]
-        string email,
+        string Email,
         [StringLength(255, MinimumLength = 7, ErrorMessage = "Die Länge der Telefonnummer ist ungültig")]
-        string telNr,
+        string TelNr,
         [StringLength(255, MinimumLength = 5, ErrorMessage = "Die Länge der Funktion ist ungültig")]
-        string function,
+        string Function,
         [StringLength(255, MinimumLength = 2, ErrorMessage = "Die Länge des Titels ist ungültig")]
-        string? title = null,
+        string? Title = null,
         [StringLength(255, MinimumLength = 7, ErrorMessage = "Die Länge der Mobil ist ungültig")]
-        string? mobilNr = null,
-        bool mainPartner = false
+        string? MobilNr = null,
+        bool MainPartner = false
     );
 }

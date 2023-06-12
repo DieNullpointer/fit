@@ -129,7 +129,7 @@ namespace FitManager.Webapi.Controllers
             {
                 await formFile.CopyToAsync(stream);
             }
-            return Ok(new { FileName = $"Inserat-{guid}", formFile.Length });
+            return Redirect($"/companypage/{guid}");
         }
 
         [HttpPost("addlogo/{guid:Guid}")]
@@ -172,13 +172,20 @@ namespace FitManager.Webapi.Controllers
         public async Task<IActionResult> NewEvent([FromBody] SignInCmd sign)
         {
             var company = await _db.Companies.Include(a => a.Package).Include(a => a.Event).FirstAsync(a => a.Guid == sign.guid);
-            var events = await _db.Events.FirstAsync(a => a.Guid == sign.guid);
+            var events = await _db.Events.Include(a => a.Packages).FirstAsync(a => a.Guid == sign.eventGuid);
             if (events.Date < DateTime.Now)
                 return BadRequest("Keine Vergangenen Events zur Anmeldung möglich");
-            var package = await _db.Packages.FirstAsync(a => a.Guid == sign.guid);
+            var package = await _db.Packages.FirstAsync(a => a.Guid == sign.packageGuid);
+            if (!events.Packages.Contains(package))
+                return BadRequest("Package ist dem Event nicht zugewiesen");
             company.LastPackage = company.Package.Name;
             company.Event = events;
             company.Package = package;
+            company.HasPaid = false;
+            await _db.SaveChangesAsync();
+            var files = Path.Combine(Directory.GetCurrentDirectory(), "Files", $"{company.Guid}");
+            if(Directory.Exists(files))
+                Directory.Delete(files, true);
             return Ok(company.Guid);
         }
 
@@ -245,7 +252,7 @@ namespace FitManager.Webapi.Controllers
                 {
                     await f.CopyToAsync(stream);
                 }
-            }
+            }   
             return Redirect($"companypage/{guid}");
         }
     }
