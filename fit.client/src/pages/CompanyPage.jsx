@@ -14,6 +14,8 @@ export default function UploadPage() {
   const { company } = useParams();
   const [comp, setComp] = useState();
 
+  const [fileNames, setFileNames] = useState();
+
   useEffect(() => {
     init();
   }, [company]);
@@ -24,11 +26,34 @@ export default function UploadPage() {
 
     if (company) {
       let fetchedResults = await APIConstants.getCompany(company);
-      console.log(fetchedResults);
+      //console.log(fetchedResults);
       setComp(fetchedResults);
       sessionStorage.setItem("company", JSON.stringify(fetchedResults));
+
+      let fetchedFiles = await APIConstants.getFileNames(
+        sessionStorage.getItem("companyGuid")
+      );
+      setFileNames(fetchedFiles);
     }
   }
+
+  const logoUploaded = () => {
+    if (fileNames && fileNames?.filter((f) => f.includes("Logo")).length)
+      return (
+        <Typography variant="subtitle2" color="green">
+          &#x2713; hochgeladen
+        </Typography>
+      );
+  };
+
+  const inseratUploaded = () => {
+    if (fileNames && fileNames?.filter((f) => f.includes("Inserat")).length)
+      return (
+        <Typography variant="subtitle2" color="green">
+          &#x2713; hochgeladen
+        </Typography>
+      );
+  };
 
   return (
     <PageFrame margin className="bg-primary">
@@ -109,6 +134,7 @@ export default function UploadPage() {
                 id="logoupload"
                 action={`${axios.defaults.baseURL}${APIConstants.COMPANY_URL}/addlogo/${comp?.guid}`}
               />
+              {logoUploaded()}
               {comp?.package?.name.includes("Inserat") && (
                 <div>
                   <Typography variant="subtitle1" sx={{ marginTop: "23px" }}>
@@ -120,6 +146,7 @@ export default function UploadPage() {
                     id="inseratupload"
                     action={`${axios.defaults.baseURL}${APIConstants.COMPANY_URL}/addinserat/${comp?.guid}`}
                   />
+                  {inseratUploaded()}
                 </div>
               )}
               <Typography variant="subtitle1" sx={{ marginTop: "23px" }}>
@@ -133,11 +160,30 @@ export default function UploadPage() {
                 action={`${axios.defaults.baseURL}${APIConstants.COMPANY_URL}/addmultiple/${comp?.guid}`}
                 backendName="files"
               />
+              <Typography
+                sx={{ marginLeft: "5px" }}
+                color="gray"
+                variant="subtitle2"
+              >
+                hochgeladen:{" "}
+                {fileNames?.map((f) => {
+                  if (!(f.includes("Logo") || f.includes("Inserat"))) {
+                    var splitted = f.split("\\");
+                    return splitted[splitted.length - 1].replace(
+                      `-${comp?.guid}`,
+                      ""
+                    );
+                  }
+                })}
+              </Typography>
               <Typography variant="subtitle1" sx={{ marginTop: "23px" }}>
                 <b>Selbstdarstellung</b>
               </Typography>
               <div id="text-editor">
-                <RichTextEditor placeholder="Stellen Sie Ihre Firma vor" startValue={comp?.description || ""} />
+                <RichTextEditor
+                  placeholder="Stellen Sie Ihre Firma vor"
+                  startValue={comp?.description || ""}
+                />
               </div>
               <div className="flex justify-end">
                 <Button

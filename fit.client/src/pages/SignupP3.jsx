@@ -35,7 +35,7 @@ export default function Signup() {
             Sie werden in Kürze zum Firmenportal weitergeleitet... {seconds}
           </Typography>
           <Typography variant="subtitle1" gutterBottom>
-            Bitte bewahren Sie sich folgende domain auf: <br/><strong>{axios.defaults.baseURL}/companypage/{sessionStorage.getItem("companyGuid")}</strong>
+            Bitte bewahren Sie sich folgende domain auf: <br/><strong>{axios.defaults.baseURL.replace("/api", "")}/companypage/{sessionStorage.getItem("companyGuid")}</strong>
           </Typography>
           <div className="flex justify-center items-center">
           <img src="../alternative_spg_logo.png" alt="SPG Logo" width="320" />

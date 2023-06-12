@@ -35,7 +35,6 @@ export function SignupPerson({
             <Input
               id="in-title"
               label="Titel"
-              required
               purpose={"text"}
               full
               className="m-3"
