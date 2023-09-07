@@ -1,4 +1,5 @@
 ﻿using FitManager.Application.Infrastructure;
+using FitManager.Application.Services;
 using FitManager.Webapi.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -9,7 +10,10 @@ using Microsoft.Graph;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Net.Mail;
+using System.Net.Mime;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -158,6 +162,50 @@ namespace BeamerProtector.Webapp.Controllers
                     //new Recipient { EmailAddress = new EmailAddress { Address = me.Mail } }
                 //}
             };
+            await graph.Me
+                .SendMail(message, SaveToSentItems: false)
+                .Request()
+                .PostAsync();
+            await _db.SetMailerAccount(me.Mail, newRefreshToken, _key);
+            return Ok();
+        }
+
+        [HttpGet("sendInvite")]
+        public async Task<IActionResult> SendInvite()
+        {
+            var (accountName, refreshToken) = await _db.GetMailerAccount(_key);
+            if (refreshToken is null) { return BadRequest("No refresh token in payload."); }
+            var (authToken, newRefreshToken) = await _adClient.GetNewToken(refreshToken, "user.read offline_access mail.send");
+            if (newRefreshToken is null) { return BadRequest("No refresh token in payload."); }
+            var graph = _adClient.GetGraphServiceClientFromToken(authToken);
+            var me = await graph.Me.Request().GetAsync();
+
+            var events = await _db.Events.Include(a => a.Companies).Where(a => DateTime.UtcNow.Date <= a.Date).OrderBy(a => a.Date).FirstAsync();
+
+            var partners = _db.ContactPartners.ToList();
+            var recipients = new List<Recipient>();
+            foreach (var p in partners)
+            {
+                recipients.Add(new Recipient { EmailAddress = new EmailAddress { Address = p.Email } });
+            }
+            PdfGenerator pdfGenerator = new PdfGenerator();
+            //Attachment attachment = new Attachment(pdfGenerator.GenerateInvite("FIT24", new DateTime(day: 26, month: 11, year: 2024)));
+            var attachment = new FileAttachment();
+            attachment.ContentBytes = pdfGenerator.GenerateInvite(events.Name, events.Date);
+            var message = new Message
+            {
+                Subject = $"{events.Name} Einladung",
+                Body = new ItemBody
+                {
+                    ContentType = BodyType.Text,
+                    Content = $"Anbei finden Sie die Einladung zum {events.Name}. Die zweite Seite müssen Sie herunterladen und entweder per Mail schicken oder auf dem Firmenportal hochladen."
+                },
+                ToRecipients = recipients //new List<Recipient>()
+                                          //{
+                                          //new Recipient { EmailAddress = new EmailAddress { Address = me.Mail } }
+                                          //}
+            };
+            message.Attachments.Add(attachment);
             await graph.Me
                 .SendMail(message, SaveToSentItems: false)
                 .Request()

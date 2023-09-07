@@ -9,6 +9,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Org.BouncyCastle.Ocsp;
 using Syncfusion.Pdf.Barcode;
+using Syncfusion.Drawing;
+using Novell.Directory.Ldap.Utilclass;
+using System.Runtime.ConstrainedExecution;
 
 namespace FitManager.Application.Services
 {
@@ -17,6 +20,11 @@ namespace FitManager.Application.Services
         private static string _fontfile = Path.Combine("..", "FitManager.Application", "PdfTemplates", "Ubuntu-Regular.ttf");
         private static string _invoiceTemplate = Path.Combine("..", "FitManager.Application", "PdfTemplates", "briefpapier.pdf");
 
+        private static string _invite = Path.Combine("..", "FitManager.Application", "PdfTemplates", "invite.pdf");
+        private static string _calibriRegular = Path.Combine("..", "FitManager.Application", "PdfTemplates", "calibri-regular.ttf");
+        private static string _calibriBold = Path.Combine("..", "FitManager.Application", "PdfTemplates", "calibri-bold.ttf");
+        private static string _calibriBoldItalic = Path.Combine("..", "FitManager.Application", "PdfTemplates", "calibri-bold-italic.ttf");
+        private static string _calibriItalic = Path.Combine("..", "FitManager.Application", "PdfTemplates", "calibri-italic.ttf");
         /// <summary>
         /// Generates a PDF Document
         /// This method returns a byte array. You can return a file download as a FileResult
@@ -51,6 +59,62 @@ namespace FitManager.Application.Services
 
             using var stream = new MemoryStream();
             pdfDocument.Save(stream);
+            var content = stream.ToArray();
+            return content;
+        }
+
+        public byte[] GenerateInvite(string eventName, DateTime date)
+        {
+            if (!File.Exists(_invite))
+                throw new PdfGeneratorException($"Templatefile {_invite} does not exist.");
+            if (!File.Exists(_calibriBold))
+                throw new PdfGeneratorException($"Fontfile {_calibriBold} does not exist.");
+            if (!File.Exists(_calibriRegular))
+                throw new PdfGeneratorException($"Fontfile {_calibriRegular} does not exist.");
+            if (!File.Exists(_calibriBoldItalic))
+                throw new PdfGeneratorException($"Fontfile {_calibriBoldItalic} does not exist.");
+            if (!File.Exists(_calibriItalic))
+                throw new PdfGeneratorException($"Fontfile {_calibriItalic} does not exist.");
+
+
+            var fontBold11 = new PdfTrueTypeFont(_calibriBold, 11);
+            var fontBold12 = new PdfTrueTypeFont(_calibriBold, 12);
+            var font = new PdfTrueTypeFont(_calibriRegular, 11);
+
+            using var infile = new FileStream(_invite, FileMode.Open, FileAccess.Read);
+            using PdfLoadedDocument doc = new PdfLoadedDocument(infile);
+            using PdfDocument pdfDocument = new PdfDocument();
+            var page = doc.Pages[0];//pdfDocument.ImportPage(doc, 0);
+            page.Graphics.DrawString(eventName, fontBold11, PdfBrushes.Black, 285, 250);
+            string? weekDay = null;
+            if (date.DayOfWeek.ToString() == "Monday")
+                weekDay = "Montag";
+            if (date.DayOfWeek.ToString() == "Tuesday")
+                weekDay = "Dienstag";
+            if (date.DayOfWeek.ToString() == "Wednesday")
+                weekDay = "Mittwoch";
+            if (date.DayOfWeek.ToString() == "Thursday")
+                weekDay = "Donnerstag";
+            if (date.DayOfWeek.ToString() == "Friday")
+                weekDay = "Freitag";
+            if (date.DayOfWeek.ToString() == "Saturday")
+                weekDay = "Samstag";
+            if (date.DayOfWeek.ToString() == "Sunday")
+                weekDay = "Sonntag";
+            page.Graphics.DrawString($"{weekDay}, den {date.Day}. {date.ToString("MMMM")} {date.Year}", fontBold11, PdfBrushes.Red, 235, 263);
+            page.Graphics.DrawString($"{date.ToString("MMMM")} {date.Year}", font, PdfBrushes.Black, 460, 118);
+            page.Graphics.DrawString($"{date.Year}", fontBold11, PdfBrushes.Black, 358, 591 );
+            using var stream = new MemoryStream();
+            doc.Save(stream);
+
+            var page2 = doc.Pages[1];
+            page2.Graphics.DrawString($"zum Firmeninformationstag {eventName}, am {weekDay}, den {date.ToString("d")} an der HTL für Textilindustrie und", fontBold12, PdfBrushes.Black, 50, 105);
+            page2.Graphics.DrawString($"Datenverarbeitung, Spengergasse 20, 1050 Wien in der Zeit von 9‐18 Uhr.", fontBold12, PdfBrushes.Black, 100, 120);
+            page2.Graphics.DrawString($"{date.Year}", font, PdfBrushes.Black, 233, 536.5f);
+            page2.Graphics.DrawString($"{date.Year} Wird auf der Website publiziert)", font, PdfBrushes.Black, 171, 551.5f);
+            //Wird auf der Website publiziert)
+            //pdfDocument.Save(stream);
+            doc.Save(stream);
             var content = stream.ToArray();
             return content;
         }
